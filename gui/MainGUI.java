@@ -1,15 +1,24 @@
+package gui;
+import simulation.*;
+
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class MainGUI extends JFrame
     {
     private TypedPanel currentPanel;
+    private MainSimulation simulation;
+    private Border generalBorder;
 
-    public MainGUI() {
+    public MainGUI(MainSimulation sim) {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(960, 720));
+        setResizable(false);
         changeWindow(PanelType.TITLE_PANEL);
+
+        simulation = sim;
+        generalBorder = BorderFactory.createLineBorder(Color.black,2);
     }
     public void changeWindow(PanelType newType){
         //remove previous panel (the panel is always the first component added)
@@ -30,9 +39,15 @@ public class MainGUI extends JFrame
         pack();
         setVisible(true);
     }
+    public MainSimulation getSimulation() {
+        return simulation;
+    }
+    public Border getGeneralBorder(){
+        return generalBorder;
+        }
 
     public static void main(String[] args) {
-        MainGUI gui = new MainGUI();
+        MainGUI gui = new MainGUI(new MainSimulation(32,32));
     }
     }
 
