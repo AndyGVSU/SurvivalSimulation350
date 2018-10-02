@@ -1,0 +1,49 @@
+package simulation;
+
+public abstract class Entity {
+	
+	private int nutrients;
+	private String name; 
+	private int height;
+	private int width;
+
+	
+	public Entity(String name,int nutrients, int height, int width) {
+		System.out.println("Enity-----------------------------------------");
+		this.name = name;
+		this.nutrients = nutrients; 
+		this.height = height;
+		this.width = width;
+		
+	}
+	
+	public int setNutrients(int newNutrients) {
+		nutrients = newNutrients;
+		return nutrients;
+		
+	}
+	public int getNutrients() {
+		return nutrients;
+	}
+	
+	public int setHeight(int newheight) {
+		height = newheight;
+		return height;		
+	}
+	
+	public int getHeight() {
+		return height;
+	}
+	
+	public int setWidth(int newwidth) {
+		width = newwidth;
+		return width;
+			
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+	
+	
+}
