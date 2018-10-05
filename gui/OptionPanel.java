@@ -4,11 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class OptionPanel extends JPanel {
-    private MainGUI parent;
+public class OptionPanel extends TypedPanel {
 
-    public OptionPanel(MainGUI par){
-        parent = par;
+    OptionPanel(MainGUI par) {
+        super(par);
+    }
+
+    public void initGUI(){
         Color panelColor = Color.GRAY;
 
         //inner button panel
@@ -16,7 +18,6 @@ public class OptionPanel extends JPanel {
         GridLayout layout = new GridLayout(4,2);
         layout.setHgap(50);
         layout.setVgap(50);
-        innerPanel.setPreferredSize(new Dimension(260,420));
         innerPanel.setLayout(layout);
 
         //main option panel

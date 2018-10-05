@@ -10,8 +10,11 @@ public class SimPanel extends TypedPanel {
     private JPanel gridPanel;
     private JPanel optionPanel;
 
-    public SimPanel(MainGUI par){
+    SimPanel(MainGUI par) {
         super(par);
+    }
+
+    public void initGUI(){
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         int topHeight = 480;

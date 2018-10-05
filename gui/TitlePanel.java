@@ -10,10 +10,11 @@ public class TitlePanel extends TypedPanel {
     private JButton testButton2;
     private JButton testButton3;
 
-    public TitlePanel(MainGUI par) {
+    TitlePanel(MainGUI par) {
         super(par);
-        panelType = PanelType.TITLE_PANEL;
+    }
 
+    public void initGUI() {
         //sets title GUI layout
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 

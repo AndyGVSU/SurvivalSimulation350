@@ -2,15 +2,13 @@ package gui;
 
 import javax.swing.*;
 
-public class TypedPanel extends JPanel {
-    protected PanelType panelType;
-    protected MainGUI parent;
+abstract class TypedPanel extends JPanel {
+    MainGUI parent;
 
-    public TypedPanel(MainGUI par){
+    TypedPanel(MainGUI par){
         parent = par;
+        initGUI();
     }
 
-    public PanelType getPanelType(){
-        return panelType;
-    }
+    abstract void initGUI();
 }

@@ -6,15 +6,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class GridPanel extends JPanel {
+public class GridPanel extends TypedPanel {
     private int rows;
     private int columns;
     private MainSimulation simulation;
-    private MainGUI parent;
 
-    public GridPanel(MainGUI par) {
-        parent = par;
-        simulation = par.getSimulation();
+    GridPanel(MainGUI par) {
+        super(par);
+    }
+
+    public void initGUI() {
+        simulation = parent.getSimulation();
         rows = simulation.getRows();
         columns = simulation.getColumns();
 
@@ -24,7 +26,7 @@ public class GridPanel extends JPanel {
 
         for (int i = 0; i < rows; i++)
             for (int j = 0; j < columns; j++) {
-                JLabel grid = new JLabel("x");
+                JLabel grid = new JLabel();
                 grid.setBorder(BorderFactory.createLineBorder(Color.black,1));
                 grid.setPreferredSize(new Dimension(2, 2));
                 add(grid);
