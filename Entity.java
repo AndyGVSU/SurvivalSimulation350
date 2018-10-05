@@ -15,7 +15,12 @@ public abstract class Entity {
 		this.height = height;
 		this.width = width;
 		
+		
 	}
+	
+	public abstract int GrowthNeed();
+	public abstract int Growth();
+	
 	
 	public int setNutrients(int newNutrients) {
 		nutrients = newNutrients;
