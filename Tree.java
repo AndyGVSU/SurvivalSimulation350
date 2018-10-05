@@ -1,32 +1,40 @@
 package simulation;
 
-public class Plant extends Entity {
+public class Tree extends Entity {
 	
 	private int ab;
 	
-	
-	public Plant(String name,int nutrients, int height, int width,int ab ) {
+	public Tree(String name,int nutrients, int height, int width,int ab) {
 		super(name,nutrients,height,width);
 		
 	}
 	
 	
+	
 	@Override 
 	public int GrowthNeed() {
-		ab = 2 * getHeight() * getWidth();
+		ab = 5 * getHeight() * getWidth();
 		return ab;
 		
+		
 	}
-	
+
 	@Override
 	public int Growth() {
-		if(getNutrients() > 100) {
+		
+		if(getNutrients() > 500) {
 			setHeight(getHeight()+1);
 			
 		}
-		if(getNutrients() < 25) {
+		if(getNutrients() < 100) {
 			setHeight(getHeight()-1);	
 		}
+		
 		return 0;
 	}
+	
+	
+	
+	
+
 }
