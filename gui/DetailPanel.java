@@ -6,11 +6,15 @@ import java.awt.event.*;
 
 public class DetailPanel extends TypedPanel {
 
+    private EntityViewPanel viewPanel;
+
     DetailPanel(MainGUI par) {
         super(par);
     }
 
     public void initGUI(){
+        viewPanel = new EntityViewPanel(parent);
+
         setLayout(new BorderLayout());
         setBackground(Color.pink);
         setBorder(parent.getGeneralBorder());
@@ -33,7 +37,14 @@ public class DetailPanel extends TypedPanel {
         sliderPanel.add(new SliderPanel(parent,SliderType.WEATHER,
                 parent.getSimulation().getEnvironment().getWeatherRange(),"Weather Freq:",5,"%"));
 
-        add(sliderPanel,BorderLayout.WEST);
-    }
+        Component[] comp = sliderPanel.getComponents();
+        for (Component c : comp)
+            if (c instanceof SliderPanel)
+                ((SliderPanel) c).setAlignmentX(Box.LEFT_ALIGNMENT);
 
+        add(sliderPanel,BorderLayout.WEST);
+        add(Box.createRigidArea(new Dimension(30,1)));
+        add(viewPanel,BorderLayout.CENTER);
+    }
+    public void updateText() {viewPanel.updateText();}
 }

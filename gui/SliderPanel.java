@@ -35,16 +35,31 @@ public class SliderPanel extends TypedPanel {
         slider.setPaintTicks(true);
         slider.setPaintLabels(true);
         slider.addChangeListener(new SliderListener());
+        slider.setMaximumSize(new Dimension(200,50));
+
 
         identifierLabel = new JLabel(labelName);
         valueLabel = new JLabel("0");
+        valueLabel.setText(slider.getValue() + sliderUnit);
+
+        /*
+        //DEBUG -- VIEW BORDERS
+        slider.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.red),
+                slider.getBorder()));
+        identifierLabel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.red),
+                identifierLabel.getBorder()));
+        valueLabel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.red),
+                valueLabel.getBorder()));
+        */
 
         add(slider);
         add(Box.createRigidArea(new Dimension(10,1)));
         add(identifierLabel);
         add(Box.createRigidArea(new Dimension(10,1)));
         add(valueLabel);
-        add(Box.createRigidArea(new Dimension(20,1)));
     }
     private Hashtable<Integer, JLabel> makeSliderLabels(int lowBound, int highBound, int tickMarks, String extra){
         int ticks = tickMarks;
@@ -87,7 +102,6 @@ public class SliderPanel extends TypedPanel {
                     }
                 }
             }
-
         }
     }
 }

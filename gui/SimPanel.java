@@ -1,14 +1,17 @@
 package gui;
 
+import simulation.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
 public class SimPanel extends TypedPanel {
     private JPanel topPanel;
-    private JPanel detailPanel;
-    private JPanel gridPanel;
-    private JPanel optionPanel;
+    private DetailPanel detailPanel;
+    private GridPanel gridPanel;
+    private OptionPanel optionPanel;
+    private MainSimulation simulation;
 
     SimPanel(MainGUI par) {
         super(par);
@@ -39,4 +42,5 @@ public class SimPanel extends TypedPanel {
         topPanel.add(gridPanel);
         add(detailPanel);
     }
+    public DetailPanel getDetailPanel() {return detailPanel;}
 }
