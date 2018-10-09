@@ -1,5 +1,7 @@
 package gui;
 
+import simulation.MainSimulation;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -9,6 +11,15 @@ public class OptionPanel extends TypedPanel {
     OptionPanel(MainGUI par) {
         super(par);
     }
+    private JButton titleButton;
+    private JButton defaultsButton;
+    private JButton playButton;
+    private JButton pauseButton;
+    private JButton stepBackButton;
+    private JButton stepForwardButton;
+    private JButton saveButton;
+    private JButton loadButton;
+
 
     public void initGUI(){
         Color panelColor = Color.GRAY;
@@ -27,14 +38,14 @@ public class OptionPanel extends TypedPanel {
         setLayout(new BorderLayout());
 
         //add buttons
-        JButton titleButton = new JButton("TITLE");
-        JButton defaultsButton = new JButton("123");
-        JButton playButton = new JButton("PLAY");
-        JButton pauseButton = new JButton("PAUSE");
-        JButton stepBackButton = new JButton("<<");
-        JButton stepForwardButton = new JButton(">>");
-        JButton saveButton = new JButton("SAVE");
-        JButton loadButton = new JButton("LOAD");
+        titleButton = new JButton("TITLE");
+        defaultsButton = new JButton("123");
+        playButton = new JButton("PLAY");
+        pauseButton = new JButton("PAUSE");
+        stepBackButton = new JButton("<<");
+        stepForwardButton = new JButton(">>");
+        saveButton = new JButton("SAVE");
+        loadButton = new JButton("LOAD");
 
         add(Box.createRigidArea(new Dimension(1, 30)),BorderLayout.NORTH);
         add(Box.createRigidArea(new Dimension(1, 30)),BorderLayout.SOUTH);
@@ -56,7 +67,34 @@ public class OptionPanel extends TypedPanel {
     private class titleClick implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            parent.changeWindow(PanelType.TITLE_PANEL);
+            JButton source = (JButton) e.getSource();
+            MainSimulation simulation = parent.getSimulation();
+
+            if (source == titleButton)
+                parent.changeWindow(PanelType.TITLE_PANEL);
+            if (source == defaultsButton) {
+                //immediately bring up defaults?
+            }
+            if (source == playButton) {
+                parent.setPlaying(true);
+                simulation.setPlaying(true);
+            }
+            if (source == pauseButton) {
+                parent.setPlaying(false);
+                simulation.setPlaying(false);
+            }
+            if (source == stepBackButton) {
+                simulation.stepBackward();
+            }
+            if (source == stepForwardButton){
+                simulation.stepForward();
+            }
+            if (source == saveButton) {
+                simulation.save();
+            }
+            if (source == loadButton) {
+                simulation.load();
+            }
         }
     }
 }

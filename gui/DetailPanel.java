@@ -45,6 +45,8 @@ public class DetailPanel extends TypedPanel {
         add(sliderPanel,BorderLayout.WEST);
         add(Box.createRigidArea(new Dimension(30,1)));
         add(viewPanel,BorderLayout.CENTER);
+        add(new EntitySelectionPanel(parent),BorderLayout.EAST);
+
     }
     public void updateText() {viewPanel.updateText();}
 }

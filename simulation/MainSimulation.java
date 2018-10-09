@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class MainSimulation {
     private int rows;
     private int columns;
+    private boolean playing;
     private Entity[][] entityGrid;
     private ArrayList<EntityType[]> usedEntities;
     private int speed; //in deciseconds
@@ -38,6 +39,11 @@ public class MainSimulation {
 
     public int getSpeed() {return speed;}
     public int setSpeed(int s) {speed = s; return speed;}
-
+    public void setPlaying(boolean play) {playing = play;}
+    public boolean getPlaying() {return playing;}
+    public void stepForward() {}
+    public void stepBackward() {}
+    public void save() {};
+    public void load() {};
 
 }
