@@ -8,7 +8,7 @@ public abstract class Entity {
 	private int height;
 	private int width;
 
-	
+
 	public Entity(int nutrients, int height, int width) {
 		System.out.println("Enity-----------------------------------------");
 		this.name = name;
