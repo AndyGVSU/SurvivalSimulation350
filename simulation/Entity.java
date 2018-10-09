@@ -3,12 +3,13 @@ package simulation;
 public abstract class Entity {
 	
 	private int nutrients;
-	private String name; 
+	protected String name;
+	protected char symbol;
 	private int height;
 	private int width;
 
-	
-	public Entity(String name,int nutrients, int height, int width) {
+
+	public Entity(int nutrients, int height, int width) {
 		System.out.println("Enity-----------------------------------------");
 		this.name = name;
 		this.nutrients = nutrients; 
@@ -44,6 +45,10 @@ public abstract class Entity {
 	public int getWidth() {
 		return width;
 	}
-	
-	
+
+	public char getSymbol() {return symbol; }
+
+	public String toString() {
+		return "ENTITY TYPE: " + name;
+	}
 }

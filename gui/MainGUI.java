@@ -10,6 +10,9 @@ public class MainGUI extends JFrame
     private TypedPanel currentPanel;
     private MainSimulation simulation;
     private Border generalBorder;
+    private Entity currentEntity;
+
+    private boolean playing;
 
     public MainGUI(MainSimulation sim) {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -45,6 +48,19 @@ public class MainGUI extends JFrame
     public Border getGeneralBorder(){
         return generalBorder;
         }
+
+    public Entity getCurrentEntity(){
+        return currentEntity;
+    }
+    public Entity setCurrentEntity(Entity e){
+        currentEntity = e;
+        ((SimPanel) currentPanel).getDetailPanel().updateText();
+        return currentEntity;
+    }
+    public void setPlaying(boolean play) {
+        playing = play;
+    }
+    public boolean getPlaying() {return playing;}
 
     public static void main(String[] args) {
         MainGUI gui = new MainGUI(new MainSimulation(32,32));
