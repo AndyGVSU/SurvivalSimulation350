@@ -22,8 +22,8 @@ public class Animal extends Entity {
     private int lifespan;
     private int age;
 
-    public Animal(String name,int nutrients, int height, int width, int digestionTime, int length, int viewDistance, int speed, int nutrition) {
-        super(name,nutrients,height,width);
+    public Animal(int nutrients, int height, int width, int digestionTime, int length, int viewDistance, int speed, int nutrition) {
+        super(nutrients,height,width);
         age = 0;
         lifespan = findLifeSpan(height, width, length);
         nutrition = nutrition;
