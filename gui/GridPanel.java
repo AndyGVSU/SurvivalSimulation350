@@ -2,9 +2,16 @@ package gui;
 
 import simulation.MainSimulation;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing.JPanel;
+import javax.swing.BorderFactory;
+
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Color;
+import java.awt.Font;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 /**********************************************************************
  * Grid Panel for SurvivalSimulation350 GUI.
@@ -13,7 +20,9 @@ import java.awt.event.*;
  *
  * @author Anderson Hudson
  *********************************************************************/
-public class GridPanel extends TypedPanel {
+public class GridPanel extends JPanel implements TypedPanel {
+    /** The controlling GUI component. */
+    private MainGUI parent;
     /** Number of rows in the grid. */
     private int rows;
     /** Number of columns in the grid. */
@@ -23,11 +32,12 @@ public class GridPanel extends TypedPanel {
     /** Font used by the grid buttons. */
     private final Font gridFont = new Font("Times New Roman", Font.PLAIN, 9);
 
-    /** Defer to TypedPanel constructor.
+    /** Constructor.
      * @param par The controlling GUI object.
      */
     GridPanel(final MainGUI par) {
-        super(par);
+        parent = par;
+        initGUI();
     }
 
     /** Initializes GUI components. */

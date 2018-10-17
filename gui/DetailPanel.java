@@ -1,7 +1,13 @@
 package gui;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.BoxLayout;
+import javax.swing.Box;
+
+import java.awt.Color;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Component;
 
 /**********************************************************************
  * Bottom panel for SurvivalSimulation350 GUI.
@@ -10,8 +16,9 @@ import java.awt.*;
  *
  * @author Anderson Hudson
  *********************************************************************/
-public class DetailPanel extends TypedPanel {
-
+public class DetailPanel extends JPanel implements TypedPanel {
+    /** The controlling GUI component. */
+    private MainGUI parent;
     /** The entity viewing panel. */
     private EntityViewPanel viewPanel;
     /** Number of tick marks the sliders have. */
@@ -21,11 +28,12 @@ public class DetailPanel extends TypedPanel {
     /** Large spacing for layout. */
     private final int largeBoxSpace = 30;
 
-    /** Constructor defers to TypedPanel.
+    /** Constructor.
      * @param par The GUI controlling object
      * */
     DetailPanel(final MainGUI par) {
-        super(par);
+        parent = par;
+        initGUI();
     }
 
     /** Initialize all GUI components. */

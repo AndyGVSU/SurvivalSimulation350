@@ -7,5 +7,8 @@ package gui;
  * @author Anderson Hudson
  *********************************************************************/
 public enum PanelType {
-    TITLE_PANEL, SIMULATION_PANEL
+    /** Enum for the title panel. */
+    TITLE_PANEL,
+    /** Enum for the simulation panel. */
+    SIMULATION_PANEL
 }

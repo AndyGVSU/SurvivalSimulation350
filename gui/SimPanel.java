@@ -1,7 +1,9 @@
 package gui;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.BoxLayout;
+
+import java.awt.Dimension;
 
 /**********************************************************************
  * Simulation Panel for SurvivalSimulation350 GUI.
@@ -11,7 +13,9 @@ import java.awt.*;
  *
  * @author Anderson Hudson
  *********************************************************************/
-public class SimPanel extends TypedPanel {
+public class SimPanel extends JPanel implements TypedPanel {
+    /** The controlling GUI component. */
+    private MainGUI parent;
     /** Panel that contains options and simulation grid. */
     private JPanel topPanel;
     /** Panel that contains sliders, entity view/add. */
@@ -25,15 +29,16 @@ public class SimPanel extends TypedPanel {
     /** Height of detail panel. */
     private final int detailHeight = 240;
     /** Width of option panel. */
-    private final int optionWidth = MainGUI.WINDOW_WIDTH / 3;
+    private final int optionWidth =  MainGUI.WINDOW_WIDTH / 3;
     /** Width of grid panel. */
     private final int gridWidth = optionWidth * 2;
 
-    /** Defer to TypedPanel constructor.
+    /** Constructor.
      * @param par The controlling GUI object.
      */
     SimPanel(final MainGUI par) {
-        super(par);
+        parent = par;
+        initGUI();
     }
 
     /** Initialize GUI components. */

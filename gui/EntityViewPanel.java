@@ -1,7 +1,13 @@
 package gui;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.BoxLayout;
+import javax.swing.Box;
+
+import java.awt.Dimension;
+import java.awt.Font;
+
 
 /**********************************************************************
  * Entity Viewing Panel for SurvivalSimulation350 GUI.
@@ -9,8 +15,9 @@ import java.awt.*;
  *
  * @author Anderson Hudson
  *********************************************************************/
-public class EntityViewPanel extends TypedPanel {
-
+public class EntityViewPanel extends JPanel implements TypedPanel {
+    /** The controlling GUI component. */
+    private MainGUI parent;
     /** Image showing what the entity looks like. (currently text) */
     private JLabel entityImage;
     /** Size of entityImage component. */
@@ -23,15 +30,16 @@ public class EntityViewPanel extends TypedPanel {
     /** Blank space for layout. */
     private final Dimension blankSpace = new Dimension(20, 1);
 
-    /** Defer to TypedPanel constructor.
+    /** Constructor.
      * @param par The controlling GUI object.
      */
     EntityViewPanel(final MainGUI par) {
-        super(par);
+        parent = par;
+        initGUI();
     }
 
     /** Initialize GUI components. */
-    void initGUI() {
+    public void initGUI() {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
         entityImage = new JLabel("x");

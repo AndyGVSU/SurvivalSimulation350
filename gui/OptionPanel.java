@@ -2,9 +2,18 @@ package gui;
 
 import simulation.MainSimulation;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.Box;
+
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.BorderLayout;
+import java.awt.Color;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
 
 /**********************************************************************
  * Option Panel for SurvivalSimulation350 GUI.
@@ -13,8 +22,9 @@ import java.awt.event.*;
  *
  * @author Anderson Hudson
  *********************************************************************/
-public class OptionPanel extends TypedPanel {
-
+public class OptionPanel extends JPanel implements TypedPanel {
+    /** The controlling GUI component. */
+    private MainGUI parent;
     /** Button that sends the user to the title screen. */
     private JButton titleButton;
     /** Button that switches the simulation layout to a default. */
@@ -42,11 +52,12 @@ public class OptionPanel extends TypedPanel {
     /** Blank space (vertical). */
     private final Dimension verticalSpace = new Dimension(1, 30);
 
-    /** Defer to TypedPanel constructor.
+    /** Constructor.
      * @param par The controlling GUI object.
      */
     OptionPanel(final MainGUI par) {
-        super(par);
+        parent = par;
+        initGUI();
     }
 
     /** Initialize GUI components. */

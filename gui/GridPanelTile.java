@@ -1,6 +1,6 @@
 package gui;
 
-import javax.swing.*;
+import javax.swing.JButton;
 
 /**********************************************************************
  * Grid Panel Tile for SurvivalSimulation350 GUI.

@@ -1,7 +1,13 @@
 package gui;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.BoxLayout;
+import javax.swing.Box;
+
+import java.awt.Dimension;
+import java.awt.GridLayout;
 
 /**********************************************************************
  * Entity Selection Panel for SurvivalSimulation350 GUI.
@@ -9,8 +15,9 @@ import java.awt.*;
  *
  * @author Anderson Hudson
  *********************************************************************/
-public class EntitySelectionPanel extends TypedPanel {
-
+public class EntitySelectionPanel extends JPanel implements TypedPanel {
+    /** The controlling GUI component. */
+    private MainGUI parent;
     /** Number of rows on selection grid. */
     private final int rows = 2;
     /** Number of columns on selection grid. */
@@ -22,15 +29,16 @@ public class EntitySelectionPanel extends TypedPanel {
     /** Large layout space. */
     private final Dimension largeSpace = new Dimension(1, 80);
 
-    /** Defer to TypedPanel constructor.
+    /** Constructor.
      * @param par The controlling GUI object.
      */
     EntitySelectionPanel(final MainGUI par) {
-        super(par);
+        parent = par;
+        initGUI();
     }
 
     /** Initialize GUI components. */
-    void initGUI() {
+    public void initGUI() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(parent.getGeneralBorder());
 

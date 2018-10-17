@@ -1,9 +1,15 @@
 package gui;
-import simulation.*;
 
-import javax.swing.*;
+import simulation.MainSimulation;
+import simulation.Entity;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.BorderFactory;
 import javax.swing.border.Border;
-import java.awt.*;
+
+import java.awt.Dimension;
+import java.awt.Color;
 
 /**********************************************************************
  * MainGUI for SurvivalSimulation350 GUI.
@@ -21,7 +27,7 @@ public class MainGUI extends JFrame {
     /** The GUI's window width. */
     static final int WINDOW_WIDTH = 960;
     /** The current panel the GUI is displaying. */
-    private TypedPanel currentPanel;
+    private JPanel currentPanel;
     /** The simulation logic object, used by every GUI sub-panel. */
     private MainSimulation simulation;
     /** The decorative border used by all panels. */
@@ -31,11 +37,11 @@ public class MainGUI extends JFrame {
     /** Whether the simulation object is playing or not. */
     private boolean playing;
 
-    /** Basic constructor.
+    /** Constructor.
      * @param sim The simulation logic object. */
     public MainGUI(final MainSimulation sim) {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setPreferredSize(new Dimension(WINDOW_WIDTH,WINDOW_HEIGHT));
+        setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
         setResizable(false);
         changeWindow(PanelType.TITLE_PANEL);
 
