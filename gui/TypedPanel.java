@@ -1,17 +1,12 @@
 package gui;
 
-import javax.swing.*;
-
-abstract class TypedPanel extends JPanel {
-    MainGUI parent;
-
-    TypedPanel(){
-        //do nothing
-    }
-    TypedPanel(MainGUI par){
-        parent = par;
-        initGUI();
-    }
-
-    abstract void initGUI();
+/**********************************************************************
+ * Interface for all SurvivalSimulation350 GUI panels.
+ * Forces use of initGUI() method for components.
+ *
+ * @author Anderson Hudson
+ *********************************************************************/
+interface TypedPanel {
+    /** Initialize GUI components. */
+    void initGUI();
 }
