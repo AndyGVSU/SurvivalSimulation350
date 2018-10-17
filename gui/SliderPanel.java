@@ -6,14 +6,41 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.util.Hashtable;
 
+/**********************************************************************
+ * Slider Panel for SurvivalSimulation350 GUI.
+ * Provides a slider and displayed value for a
+ * simulation environment variable.
+ *
+ * @author Anderson Hudson
+ *********************************************************************/
 public class SliderPanel extends TypedPanel {
-    SliderType type;
+    /** The environment variable the slider controls. */
+    private SliderType type;
+    /** The range of the environment variable. */
     private int[] statRange;
+    /** The number of ticks displayed on the slider. */
     private int tickCount;
-    private String labelName, sliderUnit;
-    private JLabel identifierLabel, valueLabel;
+    /** The name displayed for the environment variable. */
+    private String labelName;
+    /** The labels for the environment variable tick marks. */
+    private String sliderUnit;
+    /** The label for the environment variable name. */
+    private JLabel identifierLabel;
+    /** The label for the environment variable value. */
+    private JLabel valueLabel;
+    /** The default size of the panel. */
+    private final Dimension defaultSize = new Dimension(200, 50);
 
-    SliderPanel(MainGUI par, SliderType t, int[] range, String name, int tickMarks, String tickUnit) {
+    /** Constructor. Note: super() cannot be called here.
+     * @param par The controlling GUI object.
+     * @param t The name of the environment variable.
+     * @param range The range of the environment variable.
+     * @param name The name displayed for the environment variable.
+     * @param tickMarks The number of ticks displayed on the slider.
+     * @param tickUnit The unit displayed on tick mark values.
+     */
+    SliderPanel(final MainGUI par, final SliderType t, final int[] range,
+                final String name, final int tickMarks, final String tickUnit) {
         parent = par;
         type = t;
         statRange = range;
@@ -23,19 +50,20 @@ public class SliderPanel extends TypedPanel {
         initGUI();
     }
 
+    /** Initialize GUI components. */
     void initGUI() {
-        setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
-        setPreferredSize(new Dimension(350,1));
+        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        setPreferredSize(new Dimension(350, 1));
 
         int minRange = statRange[0];
         int maxRange = statRange[1];
-        JSlider slider = new JSlider(SwingConstants.HORIZONTAL,minRange,maxRange,0);
-        slider.setLabelTable(makeSliderLabels(minRange,maxRange, tickCount,sliderUnit));
+        JSlider slider = new JSlider(SwingConstants.HORIZONTAL, minRange, maxRange, 0);
+        slider.setLabelTable(makeSliderLabels(minRange, maxRange, tickCount, sliderUnit));
         slider.setMajorTickSpacing(5);
         slider.setPaintTicks(true);
         slider.setPaintLabels(true);
         slider.addChangeListener(new SliderListener());
-        slider.setMaximumSize(new Dimension(200,50));
+        slider.setMaximumSize(defaultSize);
 
 
         identifierLabel = new JLabel(labelName);
@@ -56,11 +84,18 @@ public class SliderPanel extends TypedPanel {
         */
 
         add(slider);
-        add(Box.createRigidArea(new Dimension(10,1)));
+        add(Box.createRigidArea(new Dimension(10, 1)));
         add(identifierLabel);
-        add(Box.createRigidArea(new Dimension(10,1)));
+        add(Box.createRigidArea(new Dimension(10, 1)));
         add(valueLabel);
     }
+
+    /** Sets up slider labels manually.
+     * @param lowBound The minimum value for the slider.
+     * @param highBound The maximum value for the slider.
+     * @param tickMarks The number of tick marks for the slider.
+     * @param extra The "unit" for the slider tick mark values.
+     * */
     private Hashtable<Integer, JLabel> makeSliderLabels(int lowBound, int highBound, int tickMarks, String extra){
         int ticks = tickMarks;
         int increment = (highBound - lowBound) / tickMarks;
@@ -74,32 +109,32 @@ public class SliderPanel extends TypedPanel {
 
         return labels;
     }
+
+    /** Listens to slider movement and sets
+     * environment values in simulation accordingly. */
     private class SliderListener implements ChangeListener {
         @Override
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
             if (source.getValueIsAdjusting()){
+                int value;
                 switch(type) {
-                    case TEMPERATURE: {
-                        int value = parent.getSimulation().getEnvironment().setTemperature(source.getValue());
+                    case TEMPERATURE:
+                        value = parent.getSimulation().getEnvironment().setTemperature(source.getValue());
                         valueLabel.setText(Integer.toString(value) + sliderUnit);
                         break;
-                    }
-                    case WEATHER: {
-                        int value = parent.getSimulation().getEnvironment().setWeatherFreq(source.getValue());
+                    case WEATHER:
+                        value = parent.getSimulation().getEnvironment().setWeatherFreq(source.getValue());
                         valueLabel.setText(Integer.toString(value) + sliderUnit);
                         break;
-                    }
-                    case SUNLIGHT: {
-                        int value = parent.getSimulation().getEnvironment().setSunlight(source.getValue());
+                    case SUNLIGHT:
+                        value = parent.getSimulation().getEnvironment().setSunlight(source.getValue());
                         valueLabel.setText(Integer.toString(value) + sliderUnit);
                         break;
-                    }
-                    case SPEED: {
-                        int value = parent.getSimulation().setSpeed(source.getValue());
+                    case SPEED:
+                        value = parent.getSimulation().setSpeed(source.getValue());
                         valueLabel.setText(Integer.toString(value) + sliderUnit);
                         break;
-                    }
                 }
             }
         }
