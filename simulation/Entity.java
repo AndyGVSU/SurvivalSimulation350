@@ -2,19 +2,24 @@ package simulation;
 
 public abstract class Entity {
 	
-	private int nutrients;
+	int nutrients;
 	protected String name;
 	protected char symbol;
-	private int height;
-	private int width;
+	int height;
+	int width;
+	int entityID;
 
+	// Each entity knows its location. #Brendon
+	int row;
+	int col;
 
-	public Entity(int nutrients, int height, int width) {
+	public Entity(int nutrients, int height, int width, int row, int col, int entityID) {
 		// System.out.println("Enity-----------------------------------------");
 		this.nutrients = nutrients; 
 		this.height = height;
 		this.width = width;
-		
+		this.row = row;
+		this.col = col;
 	}
 	
 	public int setNutrients(int newNutrients) {
@@ -48,6 +53,6 @@ public abstract class Entity {
 	public char getSymbol() {return symbol; }
 
 	public String toString() {
-		return "ENTITY TYPE: " + name;
+		return "TYPE: " + name + " - " + entityID + " - R" + row + " - C" + col;
 	}
 }

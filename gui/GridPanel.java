@@ -84,24 +84,28 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
         // Keep this running until death.
         while(keepRunning) {
             if(simulation.getPlaying() == true) {
+                // Delay the ticker for debugging.
                 try {
                     Thread.sleep(simulation.getSpeed() * 10);
                 } catch (Exception e) { }
-                currentTime = Calendar.getInstance().get(Calendar.MILLISECOND);
+
                 // If longer than the "speed", do a tick.
+                currentTime = Calendar.getInstance().get(Calendar.MILLISECOND);
                 lastTime = currentTime;
                 System.out.println("Tick " + debuggingTickCount);
                 debuggingTickCount = debuggingTickCount + 1;
                 simulation.stepForward();
+
+                // End timer after 20 for debugging.
                 if (debuggingTickCount > 20) {
                     keepRunning = false;
-                    System.out.println("End of timer...")
+                    System.out.println("End of timer...");
                 }
             } else {
                 try {
                     Thread.sleep(simulation.getSpeed() * 10);
                 } catch (Exception e) {
-                    System.out.println("Error on Sleep()...")
+                    System.out.println("Error on Sleep()...");
                 }
             }
         }
