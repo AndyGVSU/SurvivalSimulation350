@@ -13,6 +13,8 @@ public class MainSimulation {
     private int[] speedRange;
     private Environment environment;
 
+    private int step = 0; // steps to iterate as "time"
+
     public MainSimulation(int r, int c) {
         rows = r;
         columns = c;
@@ -73,7 +75,9 @@ public class MainSimulation {
     public int setSpeed(int s) {speed = s; return speed;}
     public void setPlaying(boolean play) {playing = play;}
     public boolean getPlaying() {return playing;}
-    public void stepForward() {}
+    public void stepForward() {
+        step = step + 1;
+    }
     public void stepBackward() {}
     public void save() {};
     public void load() {};

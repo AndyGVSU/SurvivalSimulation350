@@ -10,7 +10,7 @@ public abstract class Entity {
 
 
 	public Entity(int nutrients, int height, int width) {
-		System.out.println("Enity-----------------------------------------");
+		// System.out.println("Enity-----------------------------------------");
 		this.nutrients = nutrients; 
 		this.height = height;
 		this.width = width;

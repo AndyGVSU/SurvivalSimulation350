@@ -59,6 +59,7 @@ public class MainGUI extends JFrame {
                 break;
             case SIMULATION_PANEL:
                 currentPanel = new SimPanel(this);
+                ((SimPanel) currentPanel).startGridThread(); // Sets the running thread.
                 break;
             default:
                 throw new IllegalArgumentException("INVALID PANEL TYPE");
