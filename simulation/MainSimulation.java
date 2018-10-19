@@ -9,7 +9,7 @@ public class MainSimulation {
     private boolean playing;
     private Entity[][] entityGrid;
     private ArrayList<EntityType[]> usedEntities;
-    private int speed; //in deciseconds
+    private int speed = 50; //in deciseconds TODO Temp as "50" Brendon
     private int[] speedRange;
     private Environment environment;
 

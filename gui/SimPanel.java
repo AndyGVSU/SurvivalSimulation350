@@ -33,6 +33,8 @@ public class SimPanel extends JPanel implements TypedPanel {
     /** Width of grid panel. */
     private final int gridWidth = optionWidth * 2;
 
+    private Thread t1; //TODO Temp Brendon
+
     /** Constructor.
      * @param par The controlling GUI object.
      */
@@ -55,9 +57,8 @@ public class SimPanel extends JPanel implements TypedPanel {
         optionPanel.setPreferredSize(new Dimension(optionWidth, topHeight));
 
         // Start the grid panel in its own thread for the sake of continuous updates. #Brendon
-        Thread t1 = new Thread(gridPanel = new GridPanel(parent));
+        t1 = new Thread(gridPanel = new GridPanel(parent));
         gridPanel.setPreferredSize(new Dimension(gridWidth, topHeight));
-        t1.start();
 
         detailPanel = new DetailPanel(parent);
         detailPanel.setPreferredSize(new Dimension(totalWidth, detailHeight));
@@ -70,7 +71,7 @@ public class SimPanel extends JPanel implements TypedPanel {
     }
 
     public void startGridThread() {
-        gridPanel.run(); // Sets the running thread.
+        t1.start(); // Sets the running thread.
     }
 
     /** @return The detail panel. */
