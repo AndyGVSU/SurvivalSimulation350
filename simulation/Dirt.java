@@ -7,4 +7,6 @@ public class Dirt extends Entity {
 		name = "DIRT";
 		symbol = 'D';
 	}
+
+	public void doStep() { }
 }

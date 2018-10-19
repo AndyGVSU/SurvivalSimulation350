@@ -44,4 +44,7 @@ public class Animal extends Entity {
     private int findLifeSpan(int height, int width, int length){
         return (height*width*length);
     }
+
+    // Added due to abstract in the entitiy.
+    public void doStep() { }
 }

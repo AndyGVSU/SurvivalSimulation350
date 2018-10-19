@@ -7,4 +7,6 @@ public class Air extends Entity {
 		name = "AIR";
 		symbol = '.';
 	}
+
+	public void doStep() { }
 }

@@ -93,7 +93,7 @@ public class MainSimulation {
         step = step + 1;
         // For each plant, call doStep().
         for(int i = 0; i < plantCount; i++) {
-            plantsArray[i].toString(); // TODO - Temp Brendon. Replace with Plant method.
+            plantsArray[i].doStep(); // TODO - Temp Brendon. Replace with Plant method.
         }
     }
     public void stepBackward() {}

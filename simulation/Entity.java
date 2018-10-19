@@ -8,6 +8,7 @@ public abstract class Entity {
 	int height;
 	int width;
 	int entityID;
+	protected int lifeSteps = 0; // Lifetime in "steps."
 
 	// Each entity knows its location. #Brendon
 	int row;
@@ -20,6 +21,7 @@ public abstract class Entity {
 		this.width = width;
 		this.row = row;
 		this.col = col;
+		this.entityID = entityID;
 	}
 	
 	public int setNutrients(int newNutrients) {
@@ -54,5 +56,9 @@ public abstract class Entity {
 
 	public String toString() {
 		return "TYPE: " + name + " - " + entityID + " - R" + row + " - C" + col;
+	}
+
+	public void doStep() {
+		lifeSteps = lifeSteps + 1;
 	}
 }
