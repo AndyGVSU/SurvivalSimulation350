@@ -46,6 +46,9 @@ public class GridPanel extends JPanel implements TypedPanel {
         rows = simulation.getRows();
         columns = simulation.getColumns();
 
+        // Call the new sample grid function on the simulation object. #Brendon
+        simulation.setDefaultOne(rows, columns);
+
         setLayout(new GridLayout(rows, columns));
         setBackground(Color.WHITE);
         setBorder(parent.getGeneralBorder());
