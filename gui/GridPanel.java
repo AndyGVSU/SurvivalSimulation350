@@ -35,6 +35,8 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
     /** Initial/Last time on system clock when thread starts. */
     private long lastTime;
 
+    private GridPanelTile[][] buttons;
+
     /** Constructor.
      * @param par The controlling GUI object.
      */
@@ -58,20 +60,20 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
         setBorder(parent.getGeneralBorder());
 
         GridListener buttonListen = new GridListener();
+        buttons = new GridPanelTile[rows][columns];
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 GridPanelTile grid = new GridPanelTile(i, j);
+                buttons[i][j] = grid;
                 grid.setBorder(BorderFactory.createLineBorder(Color.black, 1));
                 grid.setPreferredSize(new Dimension(2, 2));
                 grid.addActionListener(buttonListen);
-                grid.setText(Character.toString(
-                        parent.getSimulation().getEntity(i, j).getSymbol()));
                 grid.setFont(gridFont);
                 add(grid);
             }
         }
-
+        updateDisplay();
         simulation.setPlaying(true); // DEBUGGING TEMP #Brendon
     }
 
@@ -95,6 +97,7 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
                 System.out.println("Tick " + debuggingTickCount);
                 debuggingTickCount = debuggingTickCount + 1;
                 simulation.stepForward();
+                updateDisplay();
 
                 // End timer after 20 for debugging.
                 if (debuggingTickCount > 20) {
@@ -107,6 +110,14 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
                 } catch (Exception e) {
                     System.out.println("Error on Sleep()...");
                 }
+            }
+        }
+    }
+    public void updateDisplay() {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                buttons[i][j].setText(Character.toString(
+                        parent.getSimulation().getEntity(i, j).getSymbol()));
             }
         }
     }

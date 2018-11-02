@@ -1,8 +1,10 @@
 package simulation;
 
 public abstract class Entity {
-	
+
+	protected MainSimulation simulation;
 	int nutrients;
+	int nutrientGrowthRequirement;
 	protected String name;
 	protected char symbol;
 	int height;
@@ -14,8 +16,9 @@ public abstract class Entity {
 	int row;
 	int col;
 
-	public Entity(int nutrients, int height, int width, int row, int col, int entityID) {
+	public Entity(MainSimulation sim, int nutrients, int height, int width, int row, int col, int entityID) {
 		// System.out.println("Enity-----------------------------------------");
+		this.simulation = sim;
 		this.nutrients = nutrients; 
 		this.height = height;
 		this.width = width;
@@ -56,6 +59,16 @@ public abstract class Entity {
 
 	public String toString() {
 		return "TYPE: " + name + " - " + entityID + " - R" + row + " - C" + col;
+	}
+
+	public Entity checkAdjacent(AdjacentEntities direction, int row, int col) {
+		switch(direction) {
+			case UP: return simulation.getEntity(row - 1, col);
+			case DOWN: return simulation.getEntity(row + 1, col);
+			case LEFT: return simulation.getEntity(row, col - 1);
+			case RIGHT: return simulation.getEntity(row, col + 1);
+		}
+		return null;
 	}
 
 	public void doStep() {

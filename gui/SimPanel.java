@@ -70,6 +70,8 @@ public class SimPanel extends JPanel implements TypedPanel {
         add(detailPanel);
     }
 
+    public void updateGridPanel() {gridPanel.updateDisplay();}
+
     public void startGridThread() {
         t1.start(); // Sets the running thread.
     }

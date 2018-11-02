@@ -1,6 +1,8 @@
 package simulation;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.Random;
 
 public class MainSimulation {
@@ -27,11 +29,13 @@ public class MainSimulation {
         speedRange = new int[]{0,50};
         environment = new Environment();
 
+        /*
         for (int i = 0; i < rows; i++)
             for (int j = 0; j < columns; j++) {
-                entityGrid[i][j] = new Plant(0, 0, 0, i, j, entityIDs);
+                entityGrid[i][j] = new Plant(this, 0, 0, 0, i, j, entityIDs);
                 entityIDs = entityIDs + 1;
             }
+        */
     }
 
     // Changes the simulation up for a sample run. After initialization. #Brendon
@@ -42,14 +46,14 @@ public class MainSimulation {
         // Setting the air entities
         for (int i = 0; i < rows - 5; i++) // Leave the bottom 5 for dirt
             for (int j = 0; j < columns; j++) {
-                entityGrid[i][j] = new Air(0, 0, 0, i, j, entityIDs);
+                entityGrid[i][j] = new Air(this, 0, 0, 0, i, j, entityIDs);
                 entityIDs = entityIDs + 1;
             }
 
         // Setting the bottom dirt layers
         for (int i = rows - 5; i < rows; i++)
             for (int j = 0; j < columns; j++) {
-                entityGrid[i][j] = new Dirt(0, 0, 0, i, j, entityIDs);
+                entityGrid[i][j] = new Dirt(this, 0, 0, 0, i, j, entityIDs);
                 entityIDs = entityIDs + 1;
             }
 
@@ -62,7 +66,7 @@ public class MainSimulation {
             while(true) {
                 int Result = rand.nextInt(High-Low) + Low;
                 if (!(entityGrid[rows - 6][Result] instanceof Plant)) {
-                    entityGrid[rows - 6][Result] = new Plant(0,0,0, rows - 6, Result, entityIDs);
+                    entityGrid[rows - 6][Result] = new Grass(this, 20,0,0, rows - 6, Result, entityIDs);
                     entityIDs = entityIDs + 1;
                     plantsArray[plantCount] = entityGrid[rows - 6][Result];
                     plantCount = plantCount + 1;
@@ -73,7 +77,13 @@ public class MainSimulation {
     }
 
     public Entity getEntity(int row, int col){
+        if (row < 0 || row > rows || col < 0 || col > columns)
+            return null;
         return entityGrid[row][col];
+    }
+    public Entity setEntity(int row, int col, Entity e) {
+        entityGrid[row][col] = e;
+        return e;
     }
 
     public int getRows(){
@@ -90,14 +100,15 @@ public class MainSimulation {
     public void setPlaying(boolean play) {playing = play;}
     public boolean getPlaying() {return playing;}
     public void stepForward() {
-        step = step + 1;
+        step++;
         // For each plant, call doStep().
-        for(int i = 0; i < plantCount; i++) {
-            plantsArray[i].doStep(); // TODO - Temp Brendon. Replace with Plant method.
+        for(int i = 0; i < rows; i++) {
+            for(int j = 0; j < columns; j++) {
+                entityGrid[i][j].doStep();
+            }
         }
     }
     public void stepBackward() {}
     public void save() {};
     public void load() {};
-
 }
