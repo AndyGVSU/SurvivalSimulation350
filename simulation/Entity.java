@@ -2,6 +2,7 @@ package simulation;
 
 public abstract class Entity {
 
+	static int nextID = 0;
 	protected MainSimulation simulation;
 	int nutrients;
 	int nutrientGrowthRequirement;
@@ -16,15 +17,14 @@ public abstract class Entity {
 	int row;
 	int col;
 
-	public Entity(MainSimulation sim, int nutrients, int height, int width, int row, int col, int entityID) {
-		// System.out.println("Enity-----------------------------------------");
+	public Entity(MainSimulation sim, int nutrients, int height, int width, int row, int col) {
 		this.simulation = sim;
 		this.nutrients = nutrients; 
 		this.height = height;
 		this.width = width;
 		this.row = row;
 		this.col = col;
-		this.entityID = entityID;
+		this.entityID = Entity.nextID++;
 	}
 	
 	public int setNutrients(int newNutrients) {
@@ -58,7 +58,7 @@ public abstract class Entity {
 	public char getSymbol() {return symbol; }
 
 	public String toString() {
-		return "TYPE: " + name + " - " + entityID + " - R" + row + " - C" + col;
+		return "TYPE: " + name + "\nID: " + entityID + "\nRow: " + row + "\nColumn: " + col;
 	}
 
 	public Entity checkAdjacent(AdjacentEntities direction, int row, int col) {

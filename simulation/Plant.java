@@ -3,8 +3,8 @@ package simulation;
 
 public class Plant extends Entity {
 
-	public Plant(MainSimulation sim, int nutrients, int height, int width, int row, int col, int entityID) {
-		super(sim,nutrients,height,width,row,col,entityID);
+	public Plant(MainSimulation sim, int nutrients, int height, int width, int row, int col) {
+		super(sim,nutrients,height,width,row,col);
 		name = "PLANT";
 		symbol = 'P';
 	}

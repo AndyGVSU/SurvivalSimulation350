@@ -46,15 +46,13 @@ public class MainSimulation {
         // Setting the air entities
         for (int i = 0; i < rows - 5; i++) // Leave the bottom 5 for dirt
             for (int j = 0; j < columns; j++) {
-                entityGrid[i][j] = new Air(this, 0, 0, 0, i, j, entityIDs);
-                entityIDs = entityIDs + 1;
+                entityGrid[i][j] = new Air(this, 0, 0, 0, i, j);
             }
 
         // Setting the bottom dirt layers
         for (int i = rows - 5; i < rows; i++)
             for (int j = 0; j < columns; j++) {
-                entityGrid[i][j] = new Dirt(this, 0, 0, 0, i, j, entityIDs);
-                entityIDs = entityIDs + 1;
+                entityGrid[i][j] = new Dirt(this, 0, 0, 0, i, j);
             }
 
         // Set some default plants
@@ -66,7 +64,7 @@ public class MainSimulation {
             while(true) {
                 int Result = rand.nextInt(High-Low) + Low;
                 if (!(entityGrid[rows - 6][Result] instanceof Plant)) {
-                    entityGrid[rows - 6][Result] = new Grass(this, 20,0,0, rows - 6, Result, entityIDs);
+                    entityGrid[rows - 6][Result] = new Grass(this, 20,0,0, rows - 6, Result);
                     entityIDs = entityIDs + 1;
                     plantsArray[plantCount] = entityGrid[rows - 6][Result];
                     plantCount = plantCount + 1;

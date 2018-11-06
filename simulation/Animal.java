@@ -22,8 +22,8 @@ public class Animal extends Entity {
     private int lifespan;
     private int age;
 
-    public Animal(MainSimulation sim, int nutrients, int height, int width, int digestionTime, int length, int viewDistance, int speed, int nutrition, int row, int col, int entityID) {
-        super(sim, nutrients,height,width,row,col,entityID);
+    public Animal(MainSimulation sim, int nutrients, int height, int width, int digestionTime, int length, int viewDistance, int speed, int nutrition, int row, int col) {
+        super(sim, nutrients,height,width,row,col);
         age = 0;
         lifespan = findLifeSpan(height, width, length);
         nutrition = nutrition;
