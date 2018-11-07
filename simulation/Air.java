@@ -2,8 +2,8 @@ package simulation;
 
 public class Air extends Entity {
 
-	public Air(int nutrients, int height, int width, int row, int col, int entityID) {
-		super(nutrients,height,width,row,col,entityID);
+	public Air(MainSimulation sim, Entity parent, int depth, int row, int col) {
+		super(sim,parent,depth,row,col);
 		name = "AIR";
 		symbol = '.';
 	}

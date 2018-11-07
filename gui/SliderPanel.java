@@ -10,7 +10,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.JSlider;
 
-import java.awt.Dimension;
+import java.awt.*;
 
 import java.util.Hashtable;
 
@@ -46,6 +46,11 @@ public class SliderPanel extends JPanel implements TypedPanel {
     private final Dimension panelDefaultSize = new Dimension(350, 1);
     /** Blank space for layout. */
     private final Dimension blankSpace = new Dimension(10, 1);
+    /** The slider this panel uses. **/
+    private JSlider slider;
+    /** The font used for the panel's sliders **/
+    private final Font sliderFont =
+            new Font("Times New Roman", Font.BOLD, 8);
 
     /** Constructor.
      * @param par The controlling GUI object.
@@ -73,7 +78,7 @@ public class SliderPanel extends JPanel implements TypedPanel {
 
         int minRange = statRange[0];
         int maxRange = statRange[1];
-        JSlider slider = new JSlider(JSlider.HORIZONTAL,
+        slider = new JSlider(JSlider.HORIZONTAL,
                 minRange, maxRange, 0);
         slider.setLabelTable(makeSliderLabels(
                 minRange, maxRange, tickCount, sliderUnit));
@@ -82,7 +87,7 @@ public class SliderPanel extends JPanel implements TypedPanel {
         slider.setPaintLabels(true);
         slider.addChangeListener(new SliderListener());
         slider.setMaximumSize(sliderDefaultSize);
-
+        //slider.setFont(sliderFont);
 
         identifierLabel = new JLabel(labelName);
         valueLabel = new JLabel("0");
@@ -100,6 +105,7 @@ public class SliderPanel extends JPanel implements TypedPanel {
                 BorderFactory.createLineBorder(Color.red),
                 valueLabel.getBorder()));
         */
+        manualUpdate();
 
         add(slider);
         add(Box.createRigidArea(blankSpace));
@@ -167,6 +173,25 @@ public class SliderPanel extends JPanel implements TypedPanel {
                         throw new IllegalArgumentException("INVALID TYPE");
                 }
             }
+        }
+    }
+    public void manualUpdate() {
+        Environment env = parent.getSimulation().getEnvironment();
+        switch (type) {
+            case TEMPERATURE:
+                slider.setValue(env.getTemperature());
+                break;
+            case WEATHER:
+                slider.setValue(env.getWeatherFreq());
+                break;
+            case SUNLIGHT:
+                slider.setValue(env.getSunlight());
+                break;
+            case SPEED:
+                slider.setValue(parent.getSimulation().getSpeed());
+                break;
+            default:
+                throw new IllegalArgumentException("INVALID TYPE");
         }
     }
 }

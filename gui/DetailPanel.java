@@ -1,5 +1,7 @@
 package gui;
 
+import javafx.scene.control.Slider;
+
 import javax.swing.JPanel;
 import javax.swing.BoxLayout;
 import javax.swing.Box;
@@ -27,6 +29,8 @@ public class DetailPanel extends JPanel implements TypedPanel {
     private final int smallBoxSpace = 10;
     /** Large spacing for layout. */
     private final int largeBoxSpace = 30;
+    /** The slider panel. **/
+    private JPanel sliderPanel;
 
     /** Constructor.
      * @param par The GUI controlling object
@@ -44,7 +48,7 @@ public class DetailPanel extends JPanel implements TypedPanel {
         setBackground(Color.pink);
         setBorder(parent.getGeneralBorder());
 
-        JPanel sliderPanel = new JPanel();
+        sliderPanel = new JPanel();
         sliderPanel.setLayout(new BoxLayout(sliderPanel, BoxLayout.Y_AXIS));
 
         Dimension blankSpace = new Dimension(1, smallBoxSpace);
@@ -83,5 +87,10 @@ public class DetailPanel extends JPanel implements TypedPanel {
     /** Update the text of the entity viewing panel. */
     public void updateText() {
         viewPanel.updateText();
+    }
+    public void updateSliders() {
+        for (Component p : sliderPanel.getComponents())
+            if (p instanceof SliderPanel)
+                ((SliderPanel) p).manualUpdate();
     }
 }

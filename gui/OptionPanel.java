@@ -2,14 +2,9 @@ package gui;
 
 import simulation.MainSimulation;
 
-import javax.swing.JPanel;
-import javax.swing.JButton;
-import javax.swing.Box;
+import javax.swing.*;
 
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.*;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -93,6 +88,9 @@ public class OptionPanel extends JPanel implements TypedPanel {
         add(Box.createRigidArea(horizontalSpace), BorderLayout.EAST);
         add(innerPanel, BorderLayout.CENTER);
 
+        playButton.setBackground(Color.LIGHT_GRAY);
+        pauseButton.setBackground(Color.RED);
+
         innerPanel.add(titleButton);
         innerPanel.add(defaultsButton);
         innerPanel.add(playButton);
@@ -102,7 +100,10 @@ public class OptionPanel extends JPanel implements TypedPanel {
         innerPanel.add(saveButton);
         innerPanel.add(loadButton);
 
-        titleButton.addActionListener(new ButtonClick());
+        ButtonClick listener = new ButtonClick();
+        for (Component c : innerPanel.getComponents())
+            if (c instanceof JButton)
+                ((JButton) c).addActionListener(listener);
     }
     /** Listener for user mouse click for all buttons. */
     private class ButtonClick implements ActionListener {
@@ -121,16 +122,21 @@ public class OptionPanel extends JPanel implements TypedPanel {
             if (source == playButton) {
                 parent.setPlaying(true);
                 simulation.setPlaying(true);
+                playButton.setBackground(Color.green);
+                pauseButton.setBackground(Color.LIGHT_GRAY);
             }
             if (source == pauseButton) {
                 parent.setPlaying(false);
                 simulation.setPlaying(false);
+                playButton.setBackground(Color.LIGHT_GRAY);
+                pauseButton.setBackground(Color.RED);
             }
             if (source == stepBackButton) {
                 simulation.stepBackward();
             }
             if (source == stepForwardButton) {
                 simulation.stepForward();
+                parent.updateDisplay();
             }
             if (source == saveButton) {
                 simulation.save();

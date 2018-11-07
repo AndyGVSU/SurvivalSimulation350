@@ -35,6 +35,8 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
     /** Initial/Last time on system clock when thread starts. */
     private long lastTime;
 
+    private GridPanelTile[][] buttons;
+
     /** Constructor.
      * @param par The controlling GUI object.
      */
@@ -58,21 +60,20 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
         setBorder(parent.getGeneralBorder());
 
         GridListener buttonListen = new GridListener();
+        buttons = new GridPanelTile[rows][columns];
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 GridPanelTile grid = new GridPanelTile(i, j);
+                buttons[i][j] = grid;
                 grid.setBorder(BorderFactory.createLineBorder(Color.black, 1));
                 grid.setPreferredSize(new Dimension(2, 2));
                 grid.addActionListener(buttonListen);
-                grid.setText(Character.toString(
-                        parent.getSimulation().getEntity(i, j).getSymbol()));
                 grid.setFont(gridFont);
                 add(grid);
             }
         }
-
-        simulation.setPlaying(true); // DEBUGGING TEMP #Brendon
+        //simulation.setPlaying(true); // DEBUGGING TEMP #Brendon
     }
 
     // This method allows the grid to update itself over time. #Brendon
@@ -83,7 +84,10 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
         boolean keepRunning = true;
         // Keep this running until death.
         while(keepRunning) {
-            if(simulation.getPlaying() == true) {
+            System.out.println("Running");
+            System.out.println(simulation.getPlaying());
+
+            if(simulation.getPlaying()) {
                 // Delay the ticker for debugging.
                 try {
                     Thread.sleep(simulation.getSpeed() * 10);
@@ -95,18 +99,29 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
                 System.out.println("Tick " + debuggingTickCount);
                 debuggingTickCount = debuggingTickCount + 1;
                 simulation.stepForward();
+                parent.updateDisplay();
 
                 // End timer after 20 for debugging.
+                /*
                 if (debuggingTickCount > 20) {
                     keepRunning = false;
                     System.out.println("End of timer...");
                 }
+                */
             } else {
                 try {
                     Thread.sleep(simulation.getSpeed() * 10);
                 } catch (Exception e) {
                     System.out.println("Error on Sleep()...");
                 }
+            }
+        }
+    }
+    public void updateDisplay() {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                buttons[i][j].setText(Character.toString(
+                        parent.getSimulation().getEntity(i, j).getSymbol()));
             }
         }
     }

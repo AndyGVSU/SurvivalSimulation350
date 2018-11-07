@@ -2,11 +2,9 @@ package simulation;
 
 public class Dirt extends Entity {
 
-	public Dirt(int nutrients, int height, int width, int row, int col, int entityID) {
-		super(nutrients,height,width,row,col,entityID);
+	public Dirt(MainSimulation sim, Entity parent, int depth, int row, int col) {
+		super(sim,parent,depth,row,col);
 		name = "DIRT";
 		symbol = 'D';
 	}
-
-	public void doStep() { }
 }
