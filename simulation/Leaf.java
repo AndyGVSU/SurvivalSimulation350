@@ -1,8 +1,8 @@
 package simulation;
 
-public class Leaf extends Entity {
-    public Leaf(MainSimulation sim, int nutrients, int height, int width, int row, int col) {
-        super(sim, nutrients, height, width, row, col);
+public class Leaf extends Collector {
+    public Leaf(MainSimulation sim, Entity parent, int depth, int row, int col) {
+        super(sim,parent,depth,row,col);
         name = "LEAF";
         symbol = 'l';
     }

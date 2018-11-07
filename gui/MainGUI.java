@@ -100,6 +100,10 @@ public class MainGUI extends JFrame {
         return playing;
     }
 
+    public void updateDisplay() {
+        ((SimPanel) currentPanel).updateDisplay();
+    }
+
     /** Instantiate the GUI.
      * @param args Command-line arguments. */
     public static void main(final String[] args) {

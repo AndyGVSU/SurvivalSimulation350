@@ -13,6 +13,10 @@ public class Environment {
         temperatureRange = new int[]{-50, 150};
         sunlightRange = new int[]{0,100};
         weatherRange = new int[]{0,100};
+
+        temperature = 72;
+        sunlight = 100;
+        weatherFreq = 0;
     }
 
     public int[] getTemperatureRange() { return temperatureRange; }

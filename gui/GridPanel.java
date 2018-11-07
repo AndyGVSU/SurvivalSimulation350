@@ -73,8 +73,7 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
                 add(grid);
             }
         }
-        updateDisplay();
-        simulation.setPlaying(true); // DEBUGGING TEMP #Brendon
+        //simulation.setPlaying(true); // DEBUGGING TEMP #Brendon
     }
 
     // This method allows the grid to update itself over time. #Brendon
@@ -85,7 +84,10 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
         boolean keepRunning = true;
         // Keep this running until death.
         while(keepRunning) {
-            if(simulation.getPlaying() == true) {
+            System.out.println("Running");
+            System.out.println(simulation.getPlaying());
+
+            if(simulation.getPlaying()) {
                 // Delay the ticker for debugging.
                 try {
                     Thread.sleep(simulation.getSpeed() * 10);
@@ -97,13 +99,15 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
                 System.out.println("Tick " + debuggingTickCount);
                 debuggingTickCount = debuggingTickCount + 1;
                 simulation.stepForward();
-                updateDisplay();
+                parent.updateDisplay();
 
                 // End timer after 20 for debugging.
+                /*
                 if (debuggingTickCount > 20) {
                     keepRunning = false;
                     System.out.println("End of timer...");
                 }
+                */
             } else {
                 try {
                     Thread.sleep(simulation.getSpeed() * 10);

@@ -4,5 +4,6 @@ enum AdjacentEntities {
     UP,
     RIGHT,
     LEFT,
-    DOWN
+    DOWN,
+    HERE
 }

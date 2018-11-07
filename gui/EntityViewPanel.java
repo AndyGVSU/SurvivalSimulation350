@@ -63,6 +63,9 @@ public class EntityViewPanel extends JPanel implements TypedPanel {
     public void updateText() {
         entityImage.setText(
                 Character.toString(parent.getCurrentEntity().getSymbol()));
-        entityInfo.setText(parent.getCurrentEntity().toString());
+        //this is needed to display new line characters correctly in JLabel
+        String newText = "<html>" + parent.getCurrentEntity().toString() + "</html>";
+        newText = newText.replaceAll("\n","<br/>");
+        entityInfo.setText(newText);
     }
 }
