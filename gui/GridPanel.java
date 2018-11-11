@@ -52,9 +52,6 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
         columns = simulation.getColumns();
         lastTime = Calendar.getInstance().get(Calendar.MILLISECOND); // For timer. #Brendon
 
-        // Call the new sample grid function on the simulation object. #Brendon
-        simulation.setDefaultOne(rows, columns);
-
         setLayout(new GridLayout(rows, columns));
         setBackground(Color.WHITE);
         setBorder(parent.getGeneralBorder());

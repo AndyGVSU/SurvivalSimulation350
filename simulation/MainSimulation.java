@@ -1,5 +1,6 @@
 package simulation;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -13,6 +14,7 @@ public class MainSimulation {
     private int speed = 50; //in deciseconds TODO Temp as "50" Brendon
     private int[] speedRange;
     private Environment environment;
+    private SimulationRecord record;
 
     /** Keeps track of plant dependencies */
     private ArrayList<ArrayList<Entity>> depthPlant;
@@ -21,7 +23,8 @@ public class MainSimulation {
     // For updating existing plants with doStep().
     private Entity[] plantsArray;
     private int plantCount = 0;
-    private int step = 0; // steps to iterate as "time"
+    private int totalSteps = 0;
+    private int currentStep = 0; // steps to iterate as "time"
     private int entityIDs = 0; // IDs to give to each entity.
 
     public MainSimulation(int r, int c) {
@@ -30,24 +33,21 @@ public class MainSimulation {
         entityGrid = new Entity[rows][columns];
         speedRange = new int[]{0,100};
         environment = new Environment();
+        record = new SimulationRecord();
         depthPlant = new ArrayList<>();
         depthCollector = new ArrayList<>();
 
         playing = false;
-        /*
-        for (int i = 0; i < rows; i++)
-            for (int j = 0; j < columns; j++) {
-                entityGrid[i][j] = new Plant(this, 0, 0, 0, i, j, entityIDs);
-                entityIDs = entityIDs + 1;
-            }
-        */
+        setDefaultOne();
+        try {
+            record.writeStep(currentStep, entityGrid);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // Changes the simulation up for a sample run. After initialization. #Brendon
-    public void setDefaultOne(int r, int c) {
-        rows = r;
-        columns = c;
-
+    public void setDefaultOne() {
         // Setting the air entities
         for (int i = 0; i < rows - 5; i++) // Leave the bottom 5 for dirt
             for (int j = 0; j < columns; j++) {
@@ -107,6 +107,10 @@ public class MainSimulation {
             depthPlant.get(depth).add(e);
     }
 
+    public void replaceEntity(int row, int col, Entity e) {
+        entityGrid[row][col] = e;
+    }
+
     public int getRows(){
         return rows;
     }
@@ -125,15 +129,42 @@ public class MainSimulation {
         nutrientTransfer();
         growthManage();
 
-        step++;
+        currentStep++;
+        if (currentStep > totalSteps) {
+            totalSteps++;
+            for(int i = 0; i < rows; i++) {
+                for(int j = 0; j < columns; j++) {
+                    entityGrid[i][j].doStep();
+                }
+            }
+            try {
+                record.writeStep(currentStep, entityGrid);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            try {
+                record.readStep(currentStep, this);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         // For each plant, call doStep().
-        for(int i = 0; i < rows; i++) {
-            for(int j = 0; j < columns; j++) {
-                entityGrid[i][j].doStep();
+
+
+    }
+    public void stepBackward() {
+        if (currentStep > 0) {
+            currentStep--;
+            try {
+                record.readStep(currentStep,this);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
-    public void stepBackward() {}
     public void save() {};
     public void load() {};
 
@@ -209,5 +240,15 @@ public class MainSimulation {
                 }
                 //else
                     //die
+    }
+
+    public int getCurrentStep() {
+        return currentStep;
+    }
+    public int getTotalSteps() {
+        return totalSteps;
+    }
+    public SimulationRecord getRecord() {
+        return record;
     }
 }

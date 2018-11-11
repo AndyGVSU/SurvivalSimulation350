@@ -133,13 +133,26 @@ public class OptionPanel extends JPanel implements TypedPanel {
             }
             if (source == stepBackButton) {
                 simulation.stepBackward();
+                parent.updateDisplay();
             }
             if (source == stepForwardButton) {
                 simulation.stepForward();
                 parent.updateDisplay();
             }
             if (source == saveButton) {
-                simulation.save();
+                //Create a file chooser
+                final JFileChooser fc = new JFileChooser();
+                fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                fc.setDialogTitle("Choose a Simulation Directory:");
+                //In response to a button click:
+                int returnVal = fc.showOpenDialog(parent);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    parent.getSimulation().getRecord().setDirectory(
+                            fc.getSelectedFile().getAbsolutePath());
+                    simulation.save();
+                }
+
+
             }
             if (source == loadButton) {
                 simulation.load();

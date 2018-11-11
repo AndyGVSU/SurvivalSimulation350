@@ -75,8 +75,7 @@ public class SimPanel extends JPanel implements TypedPanel {
     public void updateDisplay() {
         gridPanel.updateDisplay();
         detailPanel.updateSliders();
-        if (parent.getCurrentEntity() != null)
-            detailPanel.updateText();
+        detailPanel.updateText();
     }
 
     public void startGridThread() {

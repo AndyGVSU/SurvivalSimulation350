@@ -1,10 +1,6 @@
 package gui;
 
-import javafx.scene.control.Slider;
-
-import javax.swing.JPanel;
-import javax.swing.BoxLayout;
-import javax.swing.Box;
+import javax.swing.*;
 
 import java.awt.Color;
 import java.awt.BorderLayout;
@@ -31,6 +27,8 @@ public class DetailPanel extends JPanel implements TypedPanel {
     private final int largeBoxSpace = 30;
     /** The slider panel. **/
     private JPanel sliderPanel;
+    /** The step panel **/
+    private JLabel stepLabel;
 
     /** Constructor.
      * @param par The GUI controlling object
@@ -78,15 +76,26 @@ public class DetailPanel extends JPanel implements TypedPanel {
             }
         }
 
+        stepLabel = new JLabel();
+        stepLabel.setText("Step 0 / 0");
+
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+
+
         add(sliderPanel, BorderLayout.WEST);
         add(Box.createRigidArea(new Dimension(largeBoxSpace, 1)));
-        add(viewPanel, BorderLayout.CENTER);
+        add(centerPanel);
+        centerPanel.add(stepLabel);
+        centerPanel.add(viewPanel);
         add(new EntitySelectionPanel(parent), BorderLayout.EAST);
     }
 
-    /** Update the text of the entity viewing panel. */
+    /** Update the text of the entity viewing panel and step panel. */
     public void updateText() {
         viewPanel.updateText();
+        stepLabel.setText("Step: " + parent.getSimulation().getCurrentStep() +
+                " / " + parent.getSimulation().getTotalSteps());
     }
     public void updateSliders() {
         for (Component p : sliderPanel.getComponents())
