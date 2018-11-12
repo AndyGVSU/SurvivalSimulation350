@@ -51,8 +51,6 @@ public class EntityViewPanel extends JPanel implements TypedPanel {
         entityInfo.setBorder(parent.getGeneralBorder());
         entityInfo.setFont(viewPanelFont);
 
-        setBorder(parent.getGeneralBorder());
-
         add(Box.createRigidArea(blankSpace));
         add(entityImage);
         add(Box.createRigidArea(blankSpace));

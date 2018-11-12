@@ -84,6 +84,7 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
             System.out.println("Running");
             System.out.println(simulation.getPlaying());
 
+            int c,r;
             if(simulation.getPlaying()) {
                 // Delay the ticker for debugging.
                 try {
@@ -96,6 +97,7 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
                 System.out.println("Tick " + debuggingTickCount);
                 debuggingTickCount = debuggingTickCount + 1;
                 simulation.stepForward();
+                parent.updateCurrentEntity();
                 parent.updateDisplay();
 
                 // End timer after 20 for debugging.

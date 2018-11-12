@@ -82,6 +82,11 @@ public class SimPanel extends JPanel implements TypedPanel {
         t1.start(); // Sets the running thread.
     }
 
+    public void lockGUI(boolean lock) {
+        detailPanel.lockGUI(lock);
+        optionPanel.lockGUI(lock);
+    }
+
     /** @return The detail panel. */
     public DetailPanel getDetailPanel() {
         return detailPanel;

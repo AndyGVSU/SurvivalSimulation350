@@ -9,7 +9,6 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-
 /**********************************************************************
  * Option Panel for SurvivalSimulation350 GUI.
  * Allows the user to perform multiple administrative tasks for the
@@ -105,6 +104,18 @@ public class OptionPanel extends JPanel implements TypedPanel {
             if (c instanceof JButton)
                 ((JButton) c).addActionListener(listener);
     }
+
+    public void lockGUI(boolean lock) {
+        titleButton.setEnabled(!lock);
+        defaultsButton.setEnabled(!lock);
+        playButton.setEnabled(!lock);
+        pauseButton.setEnabled(lock);
+        stepBackButton.setEnabled(!lock);
+        stepForwardButton.setEnabled(!lock);
+        saveButton.setEnabled(!lock);
+        loadButton.setEnabled(!lock);
+    }
+
     /** Listener for user mouse click for all buttons. */
     private class ButtonClick implements ActionListener {
         @Override
@@ -120,24 +131,30 @@ public class OptionPanel extends JPanel implements TypedPanel {
                 //immediately bring up defaults?
             }
             if (source == playButton) {
-                parent.setPlaying(true);
-                simulation.setPlaying(true);
-                playButton.setBackground(Color.green);
-                pauseButton.setBackground(Color.LIGHT_GRAY);
+                if (!parent.getPlaying()) {
+                    parent.setPlaying(true);
+                    simulation.setPlaying(true);
+                    playButton.setBackground(Color.green);
+                    pauseButton.setBackground(Color.LIGHT_GRAY);
+                }
             }
             if (source == pauseButton) {
-                parent.setPlaying(false);
-                simulation.setPlaying(false);
-                playButton.setBackground(Color.LIGHT_GRAY);
-                pauseButton.setBackground(Color.RED);
+                if (parent.getPlaying()) {
+                    parent.setPlaying(false);
+                    simulation.setPlaying(false);
+                    playButton.setBackground(Color.LIGHT_GRAY);
+                    pauseButton.setBackground(Color.RED);
+                }
             }
             if (source == stepBackButton) {
                 simulation.stepBackward();
                 parent.updateDisplay();
+                parent.updateCurrentEntity();
             }
             if (source == stepForwardButton) {
                 simulation.stepForward();
                 parent.updateDisplay();
+                parent.updateCurrentEntity();
             }
             if (source == saveButton) {
                 //Create a file chooser
@@ -151,8 +168,6 @@ public class OptionPanel extends JPanel implements TypedPanel {
                             fc.getSelectedFile().getAbsolutePath());
                     simulation.save();
                 }
-
-
             }
             if (source == loadButton) {
                 simulation.load();

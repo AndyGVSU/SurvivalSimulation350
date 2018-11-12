@@ -125,13 +125,13 @@ public class MainSimulation {
     public void setPlaying(boolean play) {playing = play;}
     public boolean getPlaying() {return playing;}
     public void stepForward() {
-        nutrientReceive();
-        nutrientTransfer();
-        growthManage();
-
         currentStep++;
         if (currentStep > totalSteps) {
             totalSteps++;
+            nutrientReceive();
+            nutrientTransfer();
+            growthManage();
+
             for(int i = 0; i < rows; i++) {
                 for(int j = 0; j < columns; j++) {
                     entityGrid[i][j].doStep();

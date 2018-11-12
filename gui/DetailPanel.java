@@ -29,6 +29,8 @@ public class DetailPanel extends JPanel implements TypedPanel {
     private JPanel sliderPanel;
     /** The step panel **/
     private JLabel stepLabel;
+    /** The entity adding panel. **/
+    private JPanel entityAddPanel;
 
     /** Constructor.
      * @param par The GUI controlling object
@@ -82,13 +84,14 @@ public class DetailPanel extends JPanel implements TypedPanel {
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
 
+        entityAddPanel = new EntitySelectionPanel(parent);
 
         add(sliderPanel, BorderLayout.WEST);
         add(Box.createRigidArea(new Dimension(largeBoxSpace, 1)));
         add(centerPanel);
         centerPanel.add(stepLabel);
         centerPanel.add(viewPanel);
-        add(new EntitySelectionPanel(parent), BorderLayout.EAST);
+        add(entityAddPanel, BorderLayout.EAST);
     }
 
     /** Update the text of the entity viewing panel and step panel. */
@@ -101,5 +104,14 @@ public class DetailPanel extends JPanel implements TypedPanel {
         for (Component p : sliderPanel.getComponents())
             if (p instanceof SliderPanel)
                 ((SliderPanel) p).manualUpdate();
+    }
+
+    public void lockGUI(boolean lock) {
+        for (Component c : sliderPanel.getComponents()) {
+            if (c instanceof SliderPanel) {
+                ((SliderPanel) c).lockGUI(lock);
+            }
+        }
+        //entityAddPanel.lockGUI(lock);
     }
 }

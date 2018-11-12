@@ -150,31 +150,33 @@ public class SliderPanel extends JPanel implements TypedPanel {
                 switch (type) {
                     case TEMPERATURE:
                         value = env.setTemperature(source.getValue());
-                        valueLabel.setText(Integer.toString(value)
-                                + sliderUnit);
+                        //valueLabel.setText(Integer.toString(value)
+                        //        + sliderUnit);
                         break;
                     case WEATHER:
                         value = env.setWeatherFreq(source.getValue());
-                        valueLabel.setText(Integer.toString(value)
-                                + sliderUnit);
+                        //valueLabel.setText(Integer.toString(value)
+                        //        + sliderUnit);
                         break;
                     case SUNLIGHT:
                         value = env.setSunlight(source.getValue());
-                        valueLabel.setText(Integer.toString(value)
-                                + sliderUnit);
+                        //valueLabel.setText(Integer.toString(value)
+                        //        + sliderUnit);
                         break;
                     case SPEED:
                         value = parent.getSimulation().
                                 setSpeed(source.getValue());
-                        valueLabel.setText(Integer.toString(value)
-                                + sliderUnit);
+                        //valueLabel.setText(Integer.toString(value)
+                        //        + sliderUnit);
                         break;
                     default:
                         throw new IllegalArgumentException("INVALID TYPE");
                 }
             }
+            updateText();
         }
     }
+
     public void manualUpdate() {
         Environment env = parent.getSimulation().getEnvironment();
         switch (type) {
@@ -193,5 +195,14 @@ public class SliderPanel extends JPanel implements TypedPanel {
             default:
                 throw new IllegalArgumentException("INVALID TYPE");
         }
+        updateText();
+    }
+
+    private void updateText() {
+        valueLabel.setText(slider.getValue() + sliderUnit);
+    }
+
+    public void lockGUI(boolean lock) {
+        slider.setEnabled(!lock);
     }
 }
