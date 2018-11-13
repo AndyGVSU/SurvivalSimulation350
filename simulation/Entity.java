@@ -1,9 +1,11 @@
 package simulation;
 
-public abstract class Entity {
+import java.io.Serializable;
 
-	static int nextID = 0;
-	protected MainSimulation simulation;
+public abstract class Entity implements Serializable {
+
+	//static int nextID = 0;
+	protected transient MainSimulation simulation;
 	int nutrients;
 	int nutrientGrowthRequirement;
 	protected String name;
@@ -23,7 +25,7 @@ public abstract class Entity {
 		this.depth = depth;
 		this.row = row;
 		this.col = col;
-		this.entityID = Entity.nextID++;
+		//this.entityID = Entity.nextID++;
 	}
 	
 	public void setNutrients(int newNutrients) {
@@ -47,7 +49,7 @@ public abstract class Entity {
 
 	public String toString() {
 		return "TYPE: " + name +
-				"\nID: " + entityID +
+				//"\nID: " + entityID +
 				"\nNutrients: " + nutrients +
 				"\nDepth: " + depth +
 				"\nLifetime: " + lifeSteps +
@@ -81,4 +83,17 @@ public abstract class Entity {
 	public boolean canLive() {
 		return (nutrients >= nutrientGrowthRequirement);
 	}
+
+	public int getRow() {
+		return row;
+	}
+	public int getColumn() {
+		return col;
+	}
+
+	public void setSimulation(MainSimulation sim) {
+		if (simulation == null)
+			simulation = sim;
+	}
+
 }

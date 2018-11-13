@@ -46,6 +46,7 @@ public class MainGUI extends JFrame {
         changeWindow(PanelType.TITLE_PANEL);
 
         simulation = sim;
+        currentEntity = simulation.getEntity(0,0);
         generalBorder = BorderFactory.createLineBorder(Color.black, 2);
     }
     /** Change to a new sub-panel.
@@ -87,13 +88,19 @@ public class MainGUI extends JFrame {
      * @return The newly selected current entity.*/
     public Entity setCurrentEntity(final Entity e) {
         currentEntity = e;
-        ((SimPanel) currentPanel).getDetailPanel().updateText();
+        updateDisplay();
         return currentEntity;
+    }
+    public void updateCurrentEntity() {
+        int r = getCurrentEntity().getRow();
+        int c = getCurrentEntity().getColumn();
+        setCurrentEntity(simulation.getEntity(r,c));
     }
     /** Sets whether the GUI is playing.
      * @param play */
     public void setPlaying(final boolean play) {
         playing = play;
+        lockGUI(playing);
     }
     /** @return whether the GUI is playing. */
     public boolean getPlaying() {
@@ -104,6 +111,9 @@ public class MainGUI extends JFrame {
         ((SimPanel) currentPanel).updateDisplay();
     }
 
+    public void lockGUI(boolean lock) {
+        ((SimPanel) currentPanel).lockGUI(lock);
+    }
     /** Instantiate the GUI.
      * @param args Command-line arguments. */
     public static void main(final String[] args) {
