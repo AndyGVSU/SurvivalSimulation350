@@ -78,7 +78,6 @@ public class OptionPanel extends JPanel implements TypedPanel {
         pauseButton = new JButton("PAUSE");
         stepBackButton = new JButton("<<");
         stepForwardButton = new JButton(">>");
-        saveButton = new JButton("SAVE");
         loadButton = new JButton("LOAD");
 
         add(Box.createRigidArea(verticalSpace), BorderLayout.NORTH);
@@ -96,7 +95,6 @@ public class OptionPanel extends JPanel implements TypedPanel {
         innerPanel.add(pauseButton);
         innerPanel.add(stepBackButton);
         innerPanel.add(stepForwardButton);
-        innerPanel.add(saveButton);
         innerPanel.add(loadButton);
 
         ButtonClick listener = new ButtonClick();
@@ -112,7 +110,6 @@ public class OptionPanel extends JPanel implements TypedPanel {
         pauseButton.setEnabled(lock);
         stepBackButton.setEnabled(!lock);
         stepForwardButton.setEnabled(!lock);
-        saveButton.setEnabled(!lock);
         loadButton.setEnabled(!lock);
     }
 
@@ -156,7 +153,7 @@ public class OptionPanel extends JPanel implements TypedPanel {
                 parent.updateDisplay();
                 parent.updateCurrentEntity();
             }
-            if (source == saveButton) {
+            if (source == loadButton) {
                 //Create a file chooser
                 final JFileChooser fc = new JFileChooser();
                 fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -166,11 +163,9 @@ public class OptionPanel extends JPanel implements TypedPanel {
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     parent.getSimulation().getRecord().setDirectory(
                             fc.getSelectedFile().getAbsolutePath());
-                    simulation.save();
+                    parent.getSimulation().reset();
+                    parent.updateDisplay();
                 }
-            }
-            if (source == loadButton) {
-                simulation.load();
             }
         }
     }

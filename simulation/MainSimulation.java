@@ -20,30 +20,19 @@ public class MainSimulation {
     private ArrayList<ArrayList<Entity>> depthPlant;
     private ArrayList<ArrayList<Entity>> depthCollector;
 
-    // For updating existing plants with doStep().
-    private Entity[] plantsArray;
     private int plantCount = 0;
-    private int totalSteps = 0;
-    private int currentStep = 0; // steps to iterate as "time"
-    private int entityIDs = 0; // IDs to give to each entity.
+    private int totalSteps;
+    private int currentStep; // steps to iterate as "time"
 
     public MainSimulation(int r, int c) {
         rows = r;
         columns = c;
-        entityGrid = new Entity[rows][columns];
         speedRange = new int[]{0,100};
-        environment = new Environment();
         record = new SimulationRecord();
-        depthPlant = new ArrayList<>();
-        depthCollector = new ArrayList<>();
 
         playing = false;
-        setDefaultOne();
-        try {
-            record.writeStep(currentStep, entityGrid);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        reset();
     }
 
     // Changes the simulation up for a sample run. After initialization. #Brendon
@@ -70,7 +59,6 @@ public class MainSimulation {
                 int Result = rand.nextInt(High-Low) + Low;
                 if (!(entityGrid[rows - 6][Result] instanceof Plant)) {
                     setEntity(rows - 6, Result, new Grass(this,null,0, rows - 6, Result));
-                    entityIDs = entityIDs + 1;
                     plantCount = plantCount + 1;
                     break;
                 }
@@ -98,7 +86,7 @@ public class MainSimulation {
         if (previous instanceof Plant)
             depthPlant.get(depth).remove(previous);
 
-        entityGrid[row][col] = e;
+        replaceEntity(row, col, e);
 
         //add new entity
         if (e instanceof Collector)
@@ -138,7 +126,7 @@ public class MainSimulation {
                 }
             }
             try {
-                record.writeStep(currentStep, entityGrid);
+                record.writeStep(currentStep, this);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -250,5 +238,32 @@ public class MainSimulation {
     }
     public SimulationRecord getRecord() {
         return record;
+    }
+
+    public void reset() {
+        currentStep = 0;
+        totalSteps = 0;
+        environment = new Environment();
+        entityGrid = new Entity[rows][columns];
+        depthPlant = new ArrayList<>();
+        depthCollector = new ArrayList<>();
+
+        setDefaultOne();
+
+        if (!record.simulationExists()) {
+            try {
+                record.writeStep(currentStep, this);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            try {
+                record.readStep(currentStep, this);
+                totalSteps = record.readTotalSteps();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
