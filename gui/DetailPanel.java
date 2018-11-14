@@ -1,6 +1,10 @@
 package gui;
 
-import javax.swing.*;
+import javafx.scene.control.Slider;
+
+import javax.swing.JPanel;
+import javax.swing.BoxLayout;
+import javax.swing.Box;
 
 import java.awt.Color;
 import java.awt.BorderLayout;
@@ -27,10 +31,6 @@ public class DetailPanel extends JPanel implements TypedPanel {
     private final int largeBoxSpace = 30;
     /** The slider panel. **/
     private JPanel sliderPanel;
-    /** The step panel **/
-    private JLabel stepLabel;
-    /** The entity adding panel. **/
-    private JPanel entityAddPanel;
 
     /** Constructor.
      * @param par The GUI controlling object
@@ -78,40 +78,19 @@ public class DetailPanel extends JPanel implements TypedPanel {
             }
         }
 
-        stepLabel = new JLabel();
-        stepLabel.setText("Step 0 / 0");
-
-        JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-
-        entityAddPanel = new EntitySelectionPanel(parent);
-
         add(sliderPanel, BorderLayout.WEST);
         add(Box.createRigidArea(new Dimension(largeBoxSpace, 1)));
-        add(centerPanel);
-        centerPanel.add(stepLabel);
-        centerPanel.add(viewPanel);
-        add(entityAddPanel, BorderLayout.EAST);
+        add(viewPanel, BorderLayout.CENTER);
+        add(new EntitySelectionPanel(parent), BorderLayout.EAST);
     }
 
-    /** Update the text of the entity viewing panel and step panel. */
+    /** Update the text of the entity viewing panel. */
     public void updateText() {
         viewPanel.updateText();
-        stepLabel.setText("Step: " + parent.getSimulation().getCurrentStep() +
-                " / " + parent.getSimulation().getTotalSteps());
     }
     public void updateSliders() {
         for (Component p : sliderPanel.getComponents())
             if (p instanceof SliderPanel)
                 ((SliderPanel) p).manualUpdate();
-    }
-
-    public void lockGUI(boolean lock) {
-        for (Component c : sliderPanel.getComponents()) {
-            if (c instanceof SliderPanel) {
-                ((SliderPanel) c).lockGUI(lock);
-            }
-        }
-        //entityAddPanel.lockGUI(lock);
     }
 }

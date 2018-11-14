@@ -52,8 +52,11 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
         columns = simulation.getColumns();
         lastTime = Calendar.getInstance().get(Calendar.MILLISECOND); // For timer. #Brendon
 
+        // Call the new sample grid function on the simulation object. #Brendon
+        simulation.setDefaultOne(rows, columns);
+
         setLayout(new GridLayout(rows, columns));
-        setBackground(Color.WHITE);
+        setBackground(Color.BLACK);
         setBorder(parent.getGeneralBorder());
 
         GridListener buttonListen = new GridListener();
@@ -81,10 +84,9 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
         boolean keepRunning = true;
         // Keep this running until death.
         while(keepRunning) {
-            System.out.println("Running");
-            System.out.println(simulation.getPlaying());
+           // System.out.println("Running");
+            //System.out.println(simulation.getPlaying());
 
-            int c,r;
             if(simulation.getPlaying()) {
                 // Delay the ticker for debugging.
                 try {
@@ -97,7 +99,6 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
                 System.out.println("Tick " + debuggingTickCount);
                 debuggingTickCount = debuggingTickCount + 1;
                 simulation.stepForward();
-                parent.updateCurrentEntity();
                 parent.updateDisplay();
 
                 // End timer after 20 for debugging.
@@ -121,6 +122,8 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
             for (int j = 0; j < columns; j++) {
                 buttons[i][j].setText(Character.toString(
                         parent.getSimulation().getEntity(i, j).getSymbol()));
+                
+                buttons[i][j].setForeground(parent.getSimulation().getEntity(i, j).getColor());
             }
         }
     }
