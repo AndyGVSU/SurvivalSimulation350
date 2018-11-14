@@ -1,11 +1,10 @@
 package simulation;
 
-import java.awt.Color;
+import java.io.Serializable;
 
-public abstract class Entity {
+public abstract class Entity implements Serializable {
 
-	static int nextID = 0;
-	protected MainSimulation simulation;
+	protected transient MainSimulation simulation;
 	int nutrients;
 	int survivalRequirement;
 	int growPlantRequirement;
@@ -13,10 +12,9 @@ public abstract class Entity {
 	int growRootRequirement;
 	protected String name;
 	protected char symbol;
-	protected Color color;
+	protected int color;
 	int depth;
 	private Entity parent;
-	protected int entityID;
 	protected int lifeSteps = 0; // Lifetime in "steps."
 
 	// Each entity knows its location. #Brendon
@@ -29,7 +27,6 @@ public abstract class Entity {
 		this.depth = depth;
 		this.row = row;
 		this.col = col;
-		this.entityID = Entity.nextID++;
 	}
 
 	public void setNutrients(int newNutrients) {
@@ -52,7 +49,7 @@ public abstract class Entity {
 		return symbol;
 	}
 
-	public Color getColor() {
+	public int getColor() {
 		return color;
 	}
 
@@ -61,7 +58,7 @@ public abstract class Entity {
 	}
 
 	public String toString() {
-		return "TYPE: " + name + "\nID: " + entityID + "\nNutrients: " + nutrients + "\nDepth: " + depth
+		return "TYPE: " + name + "\nID: " + "\nNutrients: " + nutrients + "\nDepth: " + depth
 				+ "\nLifetime: " + lifeSteps + "\nRow: " + row + "\nColumn: " + col;
 	}
 

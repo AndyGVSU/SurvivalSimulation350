@@ -1,5 +1,6 @@
 package gui;
 
+import simulation.Entity;
 import simulation.MainSimulation;
 
 import javax.swing.JPanel;
@@ -34,6 +35,8 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
     private final Font gridFont = new Font("Times New Roman", Font.PLAIN, 9);
     /** Initial/Last time on system clock when thread starts. */
     private long lastTime;
+    /** Grid colors. **/
+    private Color[] entityColors;
 
     private GridPanelTile[][] buttons;
 
@@ -51,6 +54,7 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
         rows = simulation.getRows();
         columns = simulation.getColumns();
         lastTime = Calendar.getInstance().get(Calendar.MILLISECOND); // For timer. #Brendon
+        entityColors = new Color[]{Color.GREEN,Color.CYAN,Color.ORANGE,Color.green,Color.WHITE};
 
         setLayout(new GridLayout(rows, columns));
         setBackground(Color.WHITE);
@@ -63,6 +67,7 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
             for (int j = 0; j < columns; j++) {
                 GridPanelTile grid = new GridPanelTile(i, j);
                 buttons[i][j] = grid;
+                grid.setBackground(Color.BLACK);
                 grid.setBorder(BorderFactory.createLineBorder(Color.black, 1));
                 grid.setPreferredSize(new Dimension(2, 2));
                 grid.addActionListener(buttonListen);
@@ -119,8 +124,10 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
     public void updateDisplay() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
+                Entity e = parent.getSimulation().getEntity(i, j);
                 buttons[i][j].setText(Character.toString(
-                        parent.getSimulation().getEntity(i, j).getSymbol()));
+                        e.getSymbol()));
+                buttons[i][j].setForeground(entityColors[e.getColor()]);
             }
         }
     }

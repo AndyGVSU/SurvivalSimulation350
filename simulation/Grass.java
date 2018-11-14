@@ -1,11 +1,8 @@
 package simulation;
 
-import java.awt.Color;
-
 public class Grass extends Plant {
 	
 	private final int SURVIVAL_REQ = 3;
-	
 	private final int PLANT_REQ = 20;
 	private final int ROOT_REQ = 5;
 	private final int LEAF_REQ = 10;
@@ -21,7 +18,7 @@ public class Grass extends Plant {
 		growRootRequirement = ROOT_REQ;
 		
 		
-		color = Color.GREEN;
+		color = 0;
 
 	}
 	

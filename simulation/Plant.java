@@ -1,15 +1,11 @@
 package simulation;
 
-import java.awt.Color;
-
 public abstract class Plant extends Entity {
 
 	public Plant(MainSimulation sim, Entity parent, int depth, int row, int col) {
 		super(sim,parent,depth,row,col);
 		name = "PLANT";
 		symbol = 'P';
-		color = Color.GREEN;
-		
 
 		//A plant must be placed above Dirt
 		Entity e = checkAdjacent(AdjacentEntities.DOWN,row,col);
