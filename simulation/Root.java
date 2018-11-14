@@ -5,5 +5,7 @@ public class Root extends Collector {
         super(sim,parent,depth,row,col);
         name = "ROOTS";
         symbol = 'R';
+        color = 4;
+   
     }
 }

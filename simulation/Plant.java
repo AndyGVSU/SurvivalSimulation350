@@ -1,6 +1,5 @@
 package simulation;
 
-
 public abstract class Plant extends Entity {
 
 	public Plant(MainSimulation sim, Entity parent, int depth, int row, int col) {
@@ -27,7 +26,7 @@ public abstract class Plant extends Entity {
 		*/
 	}
 
-	public abstract void grow();
+	public abstract void growPlant();
 	public abstract void growLeaf();
 	public abstract void growRoot();
 }

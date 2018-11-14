@@ -6,5 +6,6 @@ public class Dirt extends Entity {
 		super(sim,parent,depth,row,col);
 		name = "DIRT";
 		symbol = 'D';
+		color = 2;
 	}
 }
