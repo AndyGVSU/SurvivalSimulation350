@@ -1,6 +1,6 @@
 package simulation;
 
-import java.io.Serializable;
+import java.awt.Color;
 
 public class Air extends Entity {
 
@@ -8,6 +8,7 @@ public class Air extends Entity {
 		super(sim,parent,depth,row,col);
 		name = "AIR";
 		symbol = '.';
+		color = Color.cyan;
 	}
 
 	public void doStep() { }
