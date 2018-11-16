@@ -1,5 +1,7 @@
 package simulation;
 
+import sun.util.resources.ParallelListResourceBundle;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -69,7 +71,8 @@ public class MainSimulation {
 	}
 
 	public Entity getEntity(int row, int col) {
-		if (row < 0 || row > rows || col < 0 || col > columns)
+		// "col > columns" -> "col >= columns" for the case of a right-most leaf error.
+		if (row < 0 || row > rows || col < 0 || col >= columns)
 			return null;
 		return entityGrid[row][col];
 	}
@@ -187,6 +190,7 @@ public class MainSimulation {
 
 	;
 
+	// Generates nutrients to leaves and roots from environment
 	private void nutrientReceive() {
 
 		//generate root nutrients
@@ -250,18 +254,24 @@ public class MainSimulation {
 		for (ArrayList<Entity> elist : copy)
 			for (Entity e : elist)
 				if (e.canLive()) {
-					// if plant has enough nutrients to grow another Plant,
-					if (e.canGrowPlant()) {
-						((Plant) e).growPlant();
+					// Plant-based boolean to see if the stem should grow.
+					// Allows for limitations of growth speed and max-height
+					// specific to varying plant-types.
+					if (((Plant)e).canGrowPlant()) {
+						((Plant)e).growPlant();
 					}
+
 					if (e.canGrowLeaf()) {
 						((Plant) e).growLeaf();
 					}
 
-					if (e.canGrowRoot()) {
-						((Plant) e).growRoot();
+					// Plant-based boolean on if the root should grow
+					// Brendon would suggest expanding this to leaf and stem.
+					// The depth-zero plant will be responsible for limiting root
+					// growth.
+					if (((Plant)e).canGrowRoot() && ((Plant)e).getDepth() == 0) {
+						((Plant)e).growRoot();
 					}
-
 				}
 
 		// if else plant has enough nutrients to grow a Root

@@ -86,8 +86,8 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
         boolean keepRunning = true;
         // Keep this running until death.
         while(keepRunning) {
-            System.out.println("Running");
-            System.out.println(simulation.getPlaying());
+            // System.out.println("Running"); // Debugging
+            // System.out.println(simulation.getPlaying());
 
             int c,r;
             if(simulation.getPlaying()) {

@@ -29,4 +29,9 @@ public abstract class Plant extends Entity {
 	public abstract void growPlant();
 	public abstract void growLeaf();
 	public abstract void growRoot();
+	/** Each type of plant may have unique behavior of root growth.
+	 *  This method returns to the MainSimulation true/false if can grow. */
+	public abstract boolean canGrowRoot();
+	/** Unique check for each plant-type to see if can grow more stem. */
+	public abstract boolean canGrowPlant();
 }

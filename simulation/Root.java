@@ -6,6 +6,5 @@ public class Root extends Collector {
         name = "ROOTS";
         symbol = 'R';
         color = 4;
-   
     }
 }
