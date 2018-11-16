@@ -194,7 +194,7 @@ public class MainSimulation {
 			for (int j = 0; j < columns; j++) {
 				Entity e = entityGrid[i][j];
 				if (e instanceof Root)
-					e.setNutrients(e.getDepth() * NUTRIENTS_ROOT_BASE);
+					e.setNutrients(e.getNutrients() + e.getDepth() * NUTRIENTS_ROOT_BASE);
 			}
 		//give sunlight
 		int sunlight;
@@ -203,7 +203,7 @@ public class MainSimulation {
 			for (int i = 0; i < rows; i++) {
 				Entity e = entityGrid[i][j];
 				if (e instanceof Leaf) {
-					e.setNutrients(sunlight);
+					e.setNutrients(e.getNutrients() + sunlight);
 					sunlight /= NUTRIENTS_SUNLIGHT_DIMINISH;
 				}
 			}
