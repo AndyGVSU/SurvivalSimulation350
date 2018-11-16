@@ -1,7 +1,5 @@
 package simulation;
 
-import sun.util.resources.ParallelListResourceBundle;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
