@@ -7,7 +7,7 @@ public abstract class Entity implements Serializable {
 	protected transient MainSimulation simulation;
 	int nutrients;
 	/** Max number of nutrients allowed to be held. */
-	int maxNutrients = 30;
+	int maxNutrients = 100;
 	int survivalRequirement;
 	int growPlantRequirement;
 	int growLeafRequirement;
@@ -40,15 +40,18 @@ public abstract class Entity implements Serializable {
 	public void setNutrients(int newNutrients) {
 		// Brendon would like to see roots, stems, and leaves having their
 		// own max values of nutrients.
-		if (nutrients + newNutrients > maxNutrients) {
+		if (newNutrients > maxNutrients)
 			nutrients = maxNutrients;
-		} else {
-			nutrients += newNutrients;
-		}
+		else
+			nutrients = newNutrients;
 	}
 
 	public void addNutrients(int newNutrients) {
-		setNutrients(newNutrients + nutrients);
+		if (nutrients + newNutrients > maxNutrients) {
+			nutrients = maxNutrients;
+		} else {
+			nutrients = newNutrients;
+		}
 	}
 
 	public void useNutrients() {

@@ -1,5 +1,6 @@
 package simulation;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -173,7 +174,7 @@ public class MainSimulation {
 			try {
 				record.readStep(currentStep, this);
 			} catch (Exception e) {
-				e.printStackTrace();
+				reset();
 			}
 		}
 	}
@@ -196,7 +197,7 @@ public class MainSimulation {
 			for (int j = 0; j < columns; j++) {
 				Entity e = entityGrid[i][j];
 				if (e instanceof Root)
-					e.setNutrients(e.getNutrients() + e.getDepth() * NUTRIENTS_ROOT_BASE);
+					e.setNutrients(e.getDepth() * NUTRIENTS_ROOT_BASE);
 			}
 		//give sunlight
 		int sunlight;
@@ -205,7 +206,7 @@ public class MainSimulation {
 			for (int i = 0; i < rows; i++) {
 				Entity e = entityGrid[i][j];
 				if (e instanceof Leaf) {
-					e.setNutrients(e.getNutrients() + sunlight);
+					e.setNutrients(sunlight);
 					sunlight /= NUTRIENTS_SUNLIGHT_DIMINISH;
 				}
 			}
@@ -225,9 +226,9 @@ public class MainSimulation {
 		ArrayList<Entity> entityDepthList = depthCollector.get(d);
 		while (d != 0) {
 			for (Entity e : entityDepthList) {
-				e.getParent().addNutrients(e.getNutrients());
+				if (e.getNutrients() > 0)
+					e.getParent().addNutrients(e.getNutrients());
 			}
-
 			d--;
 			entityDepthList = depthCollector.get(d);
 		}
