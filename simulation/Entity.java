@@ -6,6 +6,8 @@ public abstract class Entity implements Serializable {
 
 	protected transient MainSimulation simulation;
 	int nutrients;
+	/** Max number of nutrients allowed to be held. */
+	int maxNutrients = 30;
 	int survivalRequirement;
 	int growPlantRequirement;
 	int growLeafRequirement;
@@ -13,6 +15,7 @@ public abstract class Entity implements Serializable {
 	protected String name;
 	protected char symbol;
 	protected int color;
+	/** Depth is "distance" from initial plant-entity. "0" depth is main plant. */
 	int depth;
 	private Entity parent;
 	protected int lifeSteps = 0; // Lifetime in "steps."
@@ -29,12 +32,23 @@ public abstract class Entity implements Serializable {
 		this.col = col;
 	}
 
+	/** Adds nutrients to entity up to its max number of holdable nutrients.
+	 *  Roots and leaves hold certain nutrients. Stems are just stable pathways
+	 *  for nutrients to flow through. Roots hold sugars (carbs), leaves hold
+	 *  magnesium and other things (leaf color change is due to tree moving
+	 *  nutrients before dropping them). */
 	public void setNutrients(int newNutrients) {
-		nutrients = newNutrients;
+		// Brendon would like to see roots, stems, and leaves having their
+		// own max values of nutrients.
+		if (nutrients + newNutrients > maxNutrients) {
+			nutrients = maxNutrients;
+		} else {
+			nutrients += newNutrients;
+		}
 	}
 
 	public void addNutrients(int newNutrients) {
-		setNutrients(newNutrients + getNutrients());
+		setNutrients(newNutrients + nutrients);
 	}
 
 	public void useNutrients() {
@@ -103,19 +117,20 @@ public abstract class Entity implements Serializable {
 		return (nutrients >= 0);
 	}
 
+	/*
 	public boolean canGrowPlant() {
 		return (nutrients >= growPlantRequirement);
 
 	}
+	*/
 
 	public boolean canGrowLeaf() {
 		return (nutrients >= growLeafRequirement);
 
 	}
 
-	public boolean canGrowRoot() {
-		return (nutrients >= growRootRequirement);
-
-	}
+	/* public boolean canGrowRoot() {
+		// return (nutrients >= growRootRequirement);
+	} */
 
 }
