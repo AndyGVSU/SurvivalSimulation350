@@ -196,7 +196,7 @@ public class MainSimulation {
 			for (int j = 0; j < columns; j++) {
 				Entity e = entityGrid[i][j];
 				if (e instanceof Root)
-					e.setNutrients(e.getNutrients() + e.getDepth() * NUTRIENTS_ROOT_BASE);
+					e.setNutrients(e.getDepth() * NUTRIENTS_ROOT_BASE);
 			}
 		//give sunlight
 		int sunlight;
@@ -205,7 +205,7 @@ public class MainSimulation {
 			for (int i = 0; i < rows; i++) {
 				Entity e = entityGrid[i][j];
 				if (e instanceof Leaf) {
-					e.setNutrients(e.getNutrients() + sunlight);
+					e.setNutrients(sunlight);
 					sunlight /= NUTRIENTS_SUNLIGHT_DIMINISH;
 				}
 			}
@@ -226,6 +226,7 @@ public class MainSimulation {
 		while (d != 0) {
 			for (Entity e : entityDepthList) {
 				e.getParent().addNutrients(e.getNutrients());
+				e.setNutrients(0);
 			}
 
 			d--;
@@ -270,6 +271,10 @@ public class MainSimulation {
 					if (((Plant)e).canGrowRoot() && ((Plant)e).getDepth() == 0) {
 						((Plant)e).growRoot();
 					}
+				}
+				else{
+					if(e instanceof Plant)
+						((Plant)e).die();
 				}
 
 		// if else plant has enough nutrients to grow a Root
