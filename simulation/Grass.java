@@ -48,6 +48,7 @@ public class Grass extends Plant {
 
 	/** Allows for root growth if nutrients are available and roots aren't at max. */
 	public boolean canGrowRoot() {
+		// Specifies the original-grass as responsible for this logic.
 		if (depth == 0 &&
 				nutrients >= growRootRequirement &&
 				rootsGrown < maxRoots - 1 &&
@@ -161,6 +162,19 @@ public class Grass extends Plant {
 			}
 			tempRow++;
 		}
+	}
+
+	/**
+	 *  This method is called on a "stem" plant entity. This method is only
+     *  called in the case that canGrowFruit() returns TRUE. This method
+     *  destroys a left or right leaf then creates a fruit entity in its place.
+	 */
+	public void growFruit() {
+        if (checkAdjacent(AdjacentEntities.LEFT, row, col) instanceof Leaf) {
+            Fruit f = new Fruit(simulation, simulation.getEntity(row, col),
+                    depth + 1, row , col - 1);
+            simulation.setEntity(row, col-1, f);
+        }
 	}
 
 	public ArrayList<Entity> die() {

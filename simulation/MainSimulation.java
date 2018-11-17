@@ -276,6 +276,13 @@ public class MainSimulation {
 				iter.remove();
 			else {
 				if (e.canLive()) {
+
+				    // Calls on stem to see if it can produce a fruit to its
+                    // left or right.
+                    if (((Plant) e).canGrowFruit()) {
+                        ((Plant) e).growFruit();
+                    }
+
 					// Plant-based boolean to see if the stem should grow.
 					// Allows for limitations of growth speed and max-height
 					// specific to varying plant-types.
@@ -291,7 +298,7 @@ public class MainSimulation {
 					// Brendon would suggest expanding this to leaf and stem.
 					// The depth-zero plant will be responsible for limiting root
 					// growth.
-					if (((Plant) e).canGrowRoot() && e.getDepth() == 0) {
+					if (((Plant) e).canGrowRoot()) {
 						((Plant) e).growRoot();
 					}
 				} else {

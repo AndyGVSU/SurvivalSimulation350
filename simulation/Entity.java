@@ -7,7 +7,7 @@ public abstract class Entity implements Serializable {
 	protected transient MainSimulation simulation;
 	int nutrients;
 	/** Max number of nutrients allowed to be held. */
-	int maxNutrients = 200;
+	int maxNutrients = 500;
 	int survivalRequirement;
 	protected String name;
 	protected char symbol;

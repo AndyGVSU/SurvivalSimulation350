@@ -54,7 +54,7 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
         rows = simulation.getRows();
         columns = simulation.getColumns();
         lastTime = Calendar.getInstance().get(Calendar.MILLISECOND); // For timer. #Brendon
-        entityColors = new Color[]{Color.GREEN,Color.CYAN,Color.ORANGE,Color.green,Color.WHITE};
+        entityColors = new Color[]{Color.GREEN,Color.CYAN,Color.ORANGE,Color.green,Color.WHITE,Color.RED};
 
         setLayout(new GridLayout(rows, columns));
         setBackground(Color.BLACK);

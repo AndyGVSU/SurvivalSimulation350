@@ -9,6 +9,8 @@ public abstract class Plant extends Entity {
     int growLeafRequirement;
     int growRootRequirement;
 
+    final private int fruitCreationThreshold = maxNutrients - 100;
+
     /** The furthest a stem is allowed to be from the "seed". This is "max-height". **/
     protected int maxStemDepth;
     /** Number of roots grown. Keeps track for plant-unique max roots. **/
@@ -54,9 +56,23 @@ public abstract class Plant extends Entity {
 	public abstract void growPlant();
 	public abstract void growLeaf();
 	public abstract void growRoot();
+	public abstract void growFruit();
 	/** Each type of plant may have unique behavior of root growth.
 	 *  This method returns to the MainSimulation true/false if can grow. */
 	public abstract boolean canGrowRoot();
+
+	/**
+	 * @return	returns TRUE if this plant-stem has the availability to grow
+	 * 			a fruit to its left or right leaf.
+	 *
+	 * 			- Checks for the plant-entity's depth
+	 * 			- Checks for the plant-entity's nutrient-level
+	 * 			- Checks for a left or right leaf
+	 */
+	public boolean canGrowFruit() {
+		return (depth > 2 && nutrients >= fruitCreationThreshold
+				&& ((checkAdjacent(AdjacentEntities.RIGHT, row, col) instanceof Leaf) || (checkAdjacent(AdjacentEntities.LEFT, row, col) instanceof Leaf)));
+	}
 
     /** Allows for root growth if nutrients are available and stem isn't at max depth. */
     public boolean canGrowPlant() {
