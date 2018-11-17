@@ -223,6 +223,9 @@ public class MainSimulation {
 				else if (e instanceof Air) {
 					e.setNutrients(sunlight);
 				}
+				else if (e instanceof Fruit) {
+                    sunlight /= NUTRIENTS_SUNLIGHT_DIMINISH;
+                }
 			}
 		}
 	}
@@ -260,6 +263,10 @@ public class MainSimulation {
 	}
 
 	private void growthManage() {
+
+		// Fruit list
+
+
 		// copy the list; grow() adds to the depthPlant list
 		ArrayList<Entity> copy = new ArrayList<>();
 		for (ArrayList<Entity> elist : depthPlant)
@@ -301,6 +308,8 @@ public class MainSimulation {
 						((Plant) e).growRoot();
 					}
 				} else {
+
+
 					//only the depth-zero plant can die (to totally eliminate the plant)
 					if (e instanceof Plant && e.getDepth() == 0)
 						deletedItems.addAll(((Plant) e).die());
