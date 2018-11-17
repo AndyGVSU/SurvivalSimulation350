@@ -57,7 +57,7 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
         entityColors = new Color[]{Color.GREEN,Color.CYAN,Color.ORANGE,Color.green,Color.WHITE};
 
         setLayout(new GridLayout(rows, columns));
-        setBackground(Color.WHITE);
+        setBackground(Color.BLACK);
         setBorder(parent.getGeneralBorder());
 
         GridListener buttonListen = new GridListener();

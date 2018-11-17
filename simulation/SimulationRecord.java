@@ -1,7 +1,5 @@
 package simulation;
 
-//import com.sun.tools.javac.Main;
-
 import java.io.*;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -9,7 +7,7 @@ import java.nio.file.Path;
 
 public class SimulationRecord {
 
-    private String directory ="simulation";
+    private String directory ="sim01";
     private final String fileID = "sim";
     private final String fileExtension = ".txt";
     private final String totalStepsID = "total";
@@ -18,11 +16,11 @@ public class SimulationRecord {
         Path filepath = FileSystems.getDefault().getPath(directory);
         FileOutputStream fout;
 
-        if (Files.exists(filepath))
-            fout = new FileOutputStream(
-                    directory + "\\" + fileID + String.valueOf(step) + fileExtension);
-        else
-            throw new IOException();
+        if (!Files.exists(filepath))
+            Files.createDirectory(filepath);
+
+        fout = new FileOutputStream(
+        directory + "\\" + fileID + String.valueOf(step) + fileExtension);
 
         ObjectOutputStream objOut = new ObjectOutputStream(fout);
 

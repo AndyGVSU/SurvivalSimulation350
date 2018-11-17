@@ -1,5 +1,6 @@
 package simulation;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -173,7 +174,7 @@ public class MainSimulation {
 			try {
 				record.readStep(currentStep, this);
 			} catch (Exception e) {
-				e.printStackTrace();
+				reset();
 			}
 		}
 	}
@@ -225,10 +226,9 @@ public class MainSimulation {
 		ArrayList<Entity> entityDepthList = depthCollector.get(d);
 		while (d != 0) {
 			for (Entity e : entityDepthList) {
-				e.getParent().addNutrients(e.getNutrients());
-				e.setNutrients(0);
+				if (e.getNutrients() > 0)
+					e.getParent().addNutrients(e.getNutrients());
 			}
-
 			d--;
 			entityDepthList = depthCollector.get(d);
 		}

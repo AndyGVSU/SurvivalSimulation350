@@ -17,7 +17,7 @@ public class Grass extends Plant {
 	/** Number of roots grown. Keeps track for plant-unique max roots. */
 	private int rootsGrown = 0;
 	/** Max number of roots for this particular plant. */
-	private final int maxRoots = 3;
+	private final int maxRoots = 11;
 	/** A root may be grown only within every X ticks. */
 	private final int rootGrowthTimer = 5;
 	private int rootGrowthTickCount = 0;
@@ -61,10 +61,12 @@ public class Grass extends Plant {
 		hasGrownPlant = true;
 
 		// Which "grass" is this being called on? Debugging.
+		/*
 		System.out.println("Grass");
 		System.out.println("  Row: " + row);
 		System.out.println("  Col: " + col);
 		System.out.println("  Depth: " + depth);
+		*/
 
 		if (checkAdjacent(AdjacentEntities.UP, row, col) instanceof Air) {
 			Grass g = new Grass(simulation, null, depth + 1, row - 1, col);
@@ -114,11 +116,36 @@ public class Grass extends Plant {
 
 		while (tempRow < simulation.getRows()-1) {
 			// Check for dirt spots below the depth-zero grass to add another root.
-			if (checkAdjacent(AdjacentEntities.DOWN, tempRow, col) instanceof Dirt) {
-				Root r = new Root(simulation, simulation.getEntity(tempRow-1, col), rootsGrown+1, tempRow + 1, col);
-				nutrientsFrom.add(r);
+			if(checkAdjacent(AdjacentEntities.DOWN, tempRow, col) instanceof Dirt) {
+        
+				Root r = new Root(simulation, simulation.getEntity(tempRow-1, col), tempRow - row + 1, tempRow + 1, col);
+				System.out.println("DOWNROOT");
+				System.out.println(r.getRow() + " - " + r.getColumn() + " Current Position");
+				System.out.println(r.getParent().getRow() + " - " + r.getParent().getColumn() + " Parents Position");
+				// System.out.println(r.getParent().getParent().getRow() + " - " + r.getParent().getParent().getColumn() + " Parents Parents Row");
 				simulation.setEntity(tempRow + 1, col, r);
-				break;	
+				break;
+			}
+
+			if(checkAdjacent(AdjacentEntities.RIGHT, tempRow, col) instanceof Dirt && tempRow > row + 1){
+
+				Root r = new Root(simulation, simulation.getEntity(tempRow, col), tempRow - row + 1, tempRow , col+1);
+				System.out.println("RIGHTROOT");
+				System.out.println(r.getRow() + " - " + r.getColumn() + " Current Position");
+				System.out.println(r.getParent().getRow() + " - " + r.getParent().getColumn() + " Parents Position");
+				//System.out.println(r.getParent().getParent().getRow() + " - " + r.getParent().getParent().getColumn() + " Parents Parents Row");
+				simulation.setEntity(r.getRow(), r.getColumn(), r);
+				break;
+			}
+
+			if(checkAdjacent(AdjacentEntities.LEFT, tempRow, col) instanceof Dirt && tempRow > row + 1){
+				Root r = new Root(simulation, simulation.getEntity(tempRow, col), tempRow - row + 1, tempRow, col-1);
+				System.out.println("LEFTROOT");
+				System.out.println(r.getRow() + " - " + r.getColumn() + " Current Position");
+				System.out.println(r.getParent().getRow() + " - " + r.getParent().getColumn() + " Parents Position");
+				//System.out.println(r.getParent().getParent().getRow() + " - " + r.getParent().getParent().getColumn() + " Parents Parents Row");
+				simulation.setEntity(tempRow , col-1, r);
+				break;
 			}
 			tempRow++;
 		}
