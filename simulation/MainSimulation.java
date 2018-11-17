@@ -34,6 +34,7 @@ public class MainSimulation {
 		speedRange = new int[]{0, 100};
 		record = new SimulationRecord();
 
+
 		playing = false;
 
 		reset();
@@ -80,6 +81,7 @@ public class MainSimulation {
 	public void setEntity(int row, int col, Entity e) {
 		int depth = e.getDepth();
 		Entity previous = getEntity(row, col);
+		int prevDepth = previous.getDepth();
 
 		if (depthCollector.size() <= depth)
 			depthCollector.add(new ArrayList<>());
@@ -88,9 +90,9 @@ public class MainSimulation {
 
 		//remove previous entity
 		if (previous instanceof Collector)
-			depthCollector.get(depth).remove(previous);
+			depthCollector.get(prevDepth).remove(previous);
 		if (previous instanceof Plant)
-			depthPlant.get(depth).remove(previous);
+			depthPlant.get(prevDepth).remove(previous);
 
 		replaceEntity(row, col, e);
 
@@ -210,11 +212,8 @@ public class MainSimulation {
 				Entity e = entityGrid[i][j];
 				if (e instanceof Leaf) {
 					if (sunlight == 0) {
-						depthCollector.remove(e);
-						int r = e.getRow();
-						int c = e.getColumn();
-						setEntity(r,c,
-								new Air(this,null,0,r,c));
+						setEntity(i,j,
+								new Air(this,null,0,i,j));
 					}
 					else {
 						e.setNutrients(sunlight);
@@ -322,6 +321,10 @@ public class MainSimulation {
 		entityGrid = new Entity[rows][columns];
 		depthPlant = new ArrayList<>();
 		depthCollector = new ArrayList<>();
+
+		for(int r = 0; r < rows; r++)
+			for (int c = 0; c < columns; c++)
+				replaceEntity(r,c,new Air(this,null,0,r,c));
 
 		setDefaultOne();
 
