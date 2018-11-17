@@ -209,8 +209,20 @@ public class MainSimulation {
 			for (int i = 0; i < rows; i++) {
 				Entity e = entityGrid[i][j];
 				if (e instanceof Leaf) {
+					if (sunlight == 0) {
+						depthCollector.remove(e);
+						int r = e.getRow();
+						int c = e.getColumn();
+						setEntity(r,c,
+								new Air(this,null,0,r,c));
+					}
+					else {
+						e.setNutrients(sunlight);
+						sunlight /= NUTRIENTS_SUNLIGHT_DIMINISH;
+					}
+				}
+				else if (e instanceof Air) {
 					e.setNutrients(sunlight);
-					sunlight /= NUTRIENTS_SUNLIGHT_DIMINISH;
 				}
 			}
 		}
@@ -255,7 +267,7 @@ public class MainSimulation {
 			copy.addAll(elist);
 
 		//go through plants, ascending by depth
-		Entity e = null;
+		Entity e;
 		ArrayList<Entity> deletedItems = new ArrayList<>();
 		for (Iterator<Entity> iter = copy.iterator(); iter.hasNext();) {
 			e = iter.next();

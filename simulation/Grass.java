@@ -61,6 +61,14 @@ public class Grass extends Plant {
 		}
 	}
 
+	public boolean canGrowLeaf() {
+		Entity left = checkAdjacent(AdjacentEntities.LEFT,row,col);
+		Entity right = checkAdjacent(AdjacentEntities.RIGHT,row,col);
+		return (nutrients >= growLeafRequirement &&
+				(left instanceof Air && left.getNutrients() > 0) ||
+				 right instanceof Air && right.getNutrients() > 0);
+	}
+
 	@Override
 	public void growPlant() {
 		// Which "grass" is this being called on? Debugging.
@@ -74,7 +82,6 @@ public class Grass extends Plant {
 		if (checkAdjacent(AdjacentEntities.UP, row, col) instanceof Air) {
 			Grass g = new Grass(simulation, null, depth + 1, row - 1, col);
 			this.setFlowTo(g);
-			// Leaf l = new Leaf(simulation, this, depth + 1, row, col - 1);
 			simulation.setEntity(row - 1, col, g);
 		}
 	}

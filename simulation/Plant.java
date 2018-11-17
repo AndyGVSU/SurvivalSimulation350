@@ -66,8 +66,5 @@ public abstract class Plant extends Entity {
                 depth < maxStemDepth-1);
     }
 
-    public boolean canGrowLeaf() {
-        return (nutrients >= growLeafRequirement);
-
-    }
+    public abstract boolean canGrowLeaf();
 }
