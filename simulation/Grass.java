@@ -170,10 +170,12 @@ public class Grass extends Plant {
      *  destroys a left or right leaf then creates a fruit entity in its place.
 	 */
 	public void growFruit() {
-        if (checkAdjacent(AdjacentEntities.LEFT, row, col) instanceof Leaf) {
+		Entity e = checkAdjacent(AdjacentEntities.LEFT, row, col);
+        if (e instanceof Leaf) {
             Fruit f = new Fruit(simulation, simulation.getEntity(row, col),
                     depth + 1, row , col - 1);
             simulation.setEntity(row, col-1, f);
+            nutrientsFrom.remove(e);
         }
 	}
 
