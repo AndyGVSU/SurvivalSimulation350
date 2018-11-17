@@ -7,26 +7,23 @@ public abstract class Entity implements Serializable {
 	protected transient MainSimulation simulation;
 	int nutrients;
 	/** Max number of nutrients allowed to be held. */
-	int maxNutrients = 100;
+	int maxNutrients = 200;
 	int survivalRequirement;
-	int growPlantRequirement;
-	int growLeafRequirement;
-	int growRootRequirement;
 	protected String name;
 	protected char symbol;
 	protected int color;
 	/** Depth is "distance" from initial plant-entity. "0" depth is main plant. */
 	int depth;
-	private Entity parent;
+	private Entity flowTo;
 	protected int lifeSteps = 0; // Lifetime in "steps."
 
 	// Each entity knows its location. #Brendon
 	int row;
 	int col;
 
-	public Entity(MainSimulation sim, Entity parent, int depth, int row, int col) {
+	public Entity(MainSimulation sim, Entity flow, int depth, int row, int col) {
 		this.simulation = sim;
-		this.parent = parent;
+		this.flowTo = flow;
 		this.depth = depth;
 		this.row = row;
 		this.col = col;
@@ -42,6 +39,8 @@ public abstract class Entity implements Serializable {
 		// own max values of nutrients.
 		if (newNutrients > maxNutrients)
 			nutrients = maxNutrients;
+		else if (newNutrients < 0)
+			nutrients = 0;
 		else
 			nutrients = newNutrients;
 	}
@@ -50,7 +49,7 @@ public abstract class Entity implements Serializable {
 		if (nutrients + newNutrients > maxNutrients) {
 			nutrients = maxNutrients;
 		} else {
-			nutrients = newNutrients;
+			nutrients += newNutrients;
 		}
 	}
 
@@ -99,14 +98,14 @@ public abstract class Entity implements Serializable {
 		lifeSteps++;
 	}
 
-	public Entity getParent() {
-		return parent;
+	public Entity getFlowTo() {
+		return flowTo;
 	}
 
 	/** setParent can only be called once on an entity **/
 	public void setFlowTo(Entity p) {
-		if (getParent() == null)
-			parent = p;
+		if (getFlowTo() == null)
+			flowTo = p;
 	}
 
 	public int getRow() { return row; }
@@ -116,8 +115,11 @@ public abstract class Entity implements Serializable {
 	public void setSimulation(MainSimulation s) { simulation = s; }
 
 	public boolean canLive() {
+		return (nutrients > 0);
+	}
 
-		return (nutrients >= 0);
+	public int getLifeSteps() {
+		return lifeSteps;
 	}
 
 	/*
@@ -126,11 +128,6 @@ public abstract class Entity implements Serializable {
 
 	}
 	*/
-
-	public boolean canGrowLeaf() {
-		return (nutrients >= growLeafRequirement);
-
-	}
 
 	/* public boolean canGrowRoot() {
 		// return (nutrients >= growRootRequirement);

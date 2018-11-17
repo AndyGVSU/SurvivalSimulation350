@@ -3,6 +3,7 @@ package simulation;
 import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 public class MainSimulation {
@@ -196,8 +197,10 @@ public class MainSimulation {
 		for (int i = 0; i < rows; i++)
 			for (int j = 0; j < columns; j++) {
 				Entity e = entityGrid[i][j];
-				if (e instanceof Root)
-					e.setNutrients(e.getDepth() * NUTRIENTS_ROOT_BASE);
+				if (e instanceof Root) {
+					e.setNutrients(e.getDepth() * NUTRIENTS_ROOT_BASE - e.getLifeSteps());
+				}
+
 			}
 		//give sunlight
 		int sunlight;
@@ -227,7 +230,7 @@ public class MainSimulation {
 		while (d != 0) {
 			for (Entity e : entityDepthList) {
 				if (e.getNutrients() > 0)
-					e.getParent().addNutrients(e.getNutrients());
+					e.getFlowTo().addNutrients(e.getNutrients());
 			}
 			d--;
 			entityDepthList = depthCollector.get(d);
@@ -239,28 +242,36 @@ public class MainSimulation {
 			entityDepthList = depthPlant.get(d);
 			for (Entity e : entityDepthList) {
 				e.useNutrients();
-				if (e.getParent() != null)
-					e.getParent().addNutrients(e.getNutrients());
+				if (e.getFlowTo() != null)
+					e.getFlowTo().addNutrients(e.getNutrients());
 			}
 		}
 	}
 
 	private void growthManage() {
 		// copy the list; grow() adds to the depthPlant list
-		ArrayList<ArrayList<Entity>> copy = new ArrayList<>();
-		copy.addAll(depthPlant);
+		ArrayList<Entity> copy = new ArrayList<>();
+		for (ArrayList<Entity> elist : depthPlant)
+			copy.addAll(elist);
 
-		for (ArrayList<Entity> elist : copy)
-			for (Entity e : elist)
+		//go through plants, ascending by depth
+		Entity e = null;
+		ArrayList<Entity> deletedItems = new ArrayList<>();
+		for (Iterator<Entity> iter = copy.iterator(); iter.hasNext();) {
+			e = iter.next();
+
+			if (deletedItems.contains(e))
+				iter.remove();
+			else {
 				if (e.canLive()) {
 					// Plant-based boolean to see if the stem should grow.
 					// Allows for limitations of growth speed and max-height
 					// specific to varying plant-types.
-					if (((Plant)e).canGrowPlant()) {
-						((Plant)e).growPlant();
+					if (((Plant) e).canGrowPlant()) {
+						((Plant) e).growPlant();
 					}
 
-					if (e.canGrowLeaf()) {
+					if (((Plant) e).canGrowLeaf()) {
 						((Plant) e).growLeaf();
 					}
 
@@ -268,17 +279,16 @@ public class MainSimulation {
 					// Brendon would suggest expanding this to leaf and stem.
 					// The depth-zero plant will be responsible for limiting root
 					// growth.
-					if (((Plant)e).canGrowRoot() && ((Plant)e).getDepth() == 0) {
-						((Plant)e).growRoot();
+					if (((Plant) e).canGrowRoot() && e.getDepth() == 0) {
+						((Plant) e).growRoot();
 					}
+				} else {
+					//only the depth-zero plant can die (to totally eliminate the plant)
+					if (e instanceof Plant && e.getDepth() == 0)
+						deletedItems.addAll(((Plant) e).die());
 				}
-				else{
-					if(e instanceof Plant)
-						((Plant)e).die();
-				}
-
-		// if else plant has enough nutrients to grow a Root
-		// growRoot(); (roots aren't prioritized as heavily)
+			}
+		}
 	}
 
 	public int getCurrentStep() {
