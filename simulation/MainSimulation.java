@@ -272,6 +272,10 @@ public class MainSimulation {
 						((Plant)e).growRoot();
 					}
 				}
+				else{
+					if(e instanceof Plant)
+						((Plant)e).die();
+				}
 
 		// if else plant has enough nutrients to grow a Root
 		// growRoot(); (roots aren't prioritized as heavily)

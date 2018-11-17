@@ -43,6 +43,7 @@ public class Grass extends Plant {
 		growRootRequirement = ROOT_REQ;
 
 		color = 0;
+		flowTo = null;
 	}
 
 	/** Allows for root growth if nutrients are available and stem isn't at max depth. */
@@ -69,7 +70,7 @@ public class Grass extends Plant {
 
 		if (checkAdjacent(AdjacentEntities.UP, row, col) instanceof Air) {
 			Grass g = new Grass(simulation, null, depth + 1, row - 1, col);
-			this.setParent(g);
+			this.setFlowTo(g);
 			// Leaf l = new Leaf(simulation, this, depth + 1, row, col - 1);
 			simulation.setEntity(row - 1, col, g);
 		}
@@ -81,12 +82,14 @@ public class Grass extends Plant {
 		if (checkAdjacent(AdjacentEntities.LEFT, row, col) instanceof Air) {
 
 			Leaf l = new Leaf(simulation, this, depth+1, row, col - 1);
+			nutrientsFrom.add(l);
 			simulation.setEntity(row, col - 1, l);
 		}
 
 		else if (checkAdjacent(AdjacentEntities.RIGHT, row, col) instanceof Air) {
 
 			Leaf l = new Leaf(simulation, this, depth+1, row, col + 1);
+			nutrientsFrom.add(l);
 			simulation.setEntity(row, col + 1, l);
 
 		}
@@ -113,15 +116,13 @@ public class Grass extends Plant {
 
 		while (tempRow < simulation.getRows()-1) {
 			// Check for dirt spots below the depth-zero grass to add another root.
-
 			if(checkAdjacent(AdjacentEntities.DOWN, tempRow, col) instanceof Dirt) {
-
+        
 				Root r = new Root(simulation, simulation.getEntity(tempRow-1, col), tempRow - row + 1, tempRow + 1, col);
 				System.out.println("DOWNROOT");
 				System.out.println(r.getRow() + " - " + r.getColumn() + " Current Position");
 				System.out.println(r.getParent().getRow() + " - " + r.getParent().getColumn() + " Parents Position");
 				// System.out.println(r.getParent().getParent().getRow() + " - " + r.getParent().getParent().getColumn() + " Parents Parents Row");
-
 				simulation.setEntity(tempRow + 1, col, r);
 				break;
 			}
@@ -161,4 +162,14 @@ public class Grass extends Plant {
 			return false;
 		}
 	}
+
+	public void die(){
+	    if(flowTo instanceof Plant) {
+            ((Plant)flowTo).die();
+        }
+	    for(Collector c : nutrientsFrom){
+	        simulation.setEntity(c.getRow(), c.getColumn(), new Air(simulation, null, c.getDepth(), c.getRow(), c.getColumn()));
+        }
+        simulation.setEntity(getRow(), getColumn(), new Air(simulation, null, getDepth(), getRow(), getColumn()));
+    }
 }

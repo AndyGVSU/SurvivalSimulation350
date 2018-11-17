@@ -104,7 +104,7 @@ public abstract class Entity implements Serializable {
 	}
 
 	/** setParent can only be called once on an entity **/
-	public void setParent(Entity p) {
+	public void setFlowTo(Entity p) {
 		if (getParent() == null)
 			parent = p;
 	}

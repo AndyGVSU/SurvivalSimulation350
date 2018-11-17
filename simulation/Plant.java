@@ -1,9 +1,14 @@
 package simulation;
 
+import java.util.ArrayList;
+
 public abstract class Plant extends Entity {
+	protected Entity flowTo;
+	protected ArrayList<Collector> nutrientsFrom;
 
 	public Plant(MainSimulation sim, Entity parent, int depth, int row, int col) {
 		super(sim,parent,depth,row,col);
+		nutrientsFrom = new ArrayList<>();
 		name = "PLANT";
 		symbol = 'P';
 
@@ -25,6 +30,8 @@ public abstract class Plant extends Entity {
 		}
 		*/
 	}
+
+	public abstract void die();
 
 	public abstract void growPlant();
 	public abstract void growLeaf();
