@@ -23,6 +23,7 @@ public class MainSimulation {
 	 */
 	private ArrayList<ArrayList<Entity>> depthPlant;
 	private ArrayList<ArrayList<Entity>> depthCollector;
+	private ArrayList<Fruit> fruitList;
 
 	private int plantCount = 0;
 	private int totalSteps;
@@ -89,6 +90,8 @@ public class MainSimulation {
 			depthPlant.add(new ArrayList<>());
 
 		//remove previous entity
+		if (previous instanceof Fruit)
+			fruitList.remove(previous);
 		if (previous instanceof Collector)
 			depthCollector.get(prevDepth).remove(previous);
 		if (previous instanceof Plant)
@@ -97,6 +100,8 @@ public class MainSimulation {
 		replaceEntity(row, col, e);
 
 		//add new entity
+		if (e instanceof Fruit)
+			fruitList.add(e);
 		if (e instanceof Collector)
 			depthCollector.get(depth).add(e);
 		if (e instanceof Plant)
@@ -147,6 +152,8 @@ public class MainSimulation {
 			nutrientReceive();
 			nutrientTransfer();
 			growthManage();
+
+			// TODO - Add a fruit manage functionality - Brendon
 
 			for (int i = 0; i < rows; i++) {
 				for (int j = 0; j < columns; j++) {

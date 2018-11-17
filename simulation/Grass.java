@@ -173,7 +173,7 @@ public class Grass extends Plant {
 		Entity e = checkAdjacent(AdjacentEntities.LEFT, row, col);
         if (e instanceof Leaf) {
             Fruit f = new Fruit(simulation, simulation.getEntity(row, col),
-                    depth + 1, row , col - 1);
+                    0, row , col - 1);
             simulation.setEntity(row, col-1, f);
             nutrientsFrom.remove(e);
         }
