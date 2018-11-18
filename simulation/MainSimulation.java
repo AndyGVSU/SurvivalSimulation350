@@ -319,9 +319,11 @@ public class MainSimulation {
 						((Plant) e).growRoot();
 					}
 				} else {
-					//only the depth-zero plant can die (to totally eliminate the plant)
-					if (e instanceof Plant && e.getDepth() == 0)
+					// only the depth-zero plant can die (to totally eliminate
+					// the plant)
+					if (e instanceof Plant && e.getDepth() == 0) {
 						deletedItems.addAll(((Plant) e).die());
+					}
 				}
 			}
 		}
@@ -335,23 +337,89 @@ public class MainSimulation {
 	 *  2. Is the plant the fruit is connected to dead? Drop fruit.
 	 */
 	public void fruitManage() {
-		// Iterate through all the fruits currently existing
-		for (Entity f : fruitList) {
 
-			// If the fruit has lasted a certain amount of time..
-			if (f.getLifeSteps() > ((Fruit)f).getFruitDropTime()) {
-				System.out.println("Fruit - r" + f.row + " - c" + f.col
-						+ " - PLANT TIMER DROP");
-			}
 
-			// If the plant that the fruit is connected to is gone..
-			// This checks for difference between lifesteps of flowto() and
-			//   the new entity's lifesteps.
-			if (f.getFlowTo().getLifeSteps() != getEntity(f.getFlowTo().getRow(), f.getFlowTo().getColumn()).getLifeSteps()) {
-				System.out.println("Fruit - r" + f.row + " - c" + f.col
-						+ " - PLANT DEAD");
+
+		// copy the list
+		/*
+		ArrayList<Entity> copyFruitList = new ArrayList<>();
+		for (Entity tempCopy : fruitList) {
+			copyFruitList.add(tempCopy);
+		}
+		*/
+
+		// fruits to remove
+		// ArrayList<Entity> fruitToDelete = new ArrayList<>();
+
+		/*
+		for(int i = 0; i<myList.size(); i++){
+			System.out.println(myList.get(i));
+			if(myList.get(i).equals("3")){
+				myList.remove(i);
+				i--;
+				myList.add("6");
 			}
 		}
+
+		 */
+
+		// synchronized(this) {
+		// Iterate through all the fruits currently existing
+		// Iterator<Entity> iterA = fruitList.iterator();
+		// synchronized(fruitList) {
+			// while (iterA.hasNext()) {
+			for (int i = 0; i < fruitList.size(); i++) {
+				System.out.println("At begin of loop.");
+				System.out.println("fruitList.size == " + fruitList.size())
+				Entity f = fruitList.get(i);
+				// Entity f = iterA.next();
+				// iterator.remove();
+
+				// for (Entity f : fruitList) {
+
+				// If the fruit has lasted a certain amount of time..
+				if (f.getLifeSteps() > ((Fruit) f).getFruitDropTime()) {
+					System.out.println("Fruit - r" + f.row + " - c" + f.col
+							+ " - PLANT TIMER DROP");
+					((Fruit) f).seedDrop();
+					System.out.println("Before remove()");
+					System.out.println("fruitList.size() == " + fruitList.size());
+					System.out.println("i == " + i);
+					// new
+					fruitList.remove(i);
+					// i--;
+					// fruitToDelete.add(f);
+					// iterA.remove();
+					System.out.println("After remove()");
+					System.out.println("fruitList.size() == " + fruitList.size());
+					System.out.println("i == " + i);
+					continue;
+				}
+
+				// If the plant that the fruit is connected to is gone..
+				// This checks for difference between lifesteps of flowto() and
+				//   the new entity's lifesteps.
+				if (f.getFlowTo().getLifeSteps()
+						!= getEntity(f.getFlowTo().getRow(),
+						f.getFlowTo().getColumn()).getLifeSteps()) {
+					System.out.println("Fruit - r" + f.row + " - c" + f.col
+							+ " - PLANT DEAD");
+					((Fruit) f).seedDrop();
+					// new
+					fruitList.remove(i);
+					//i--;
+					//fruitToDelete.add(f);
+					// iterA.remove();
+				}
+			}
+		// }
+			/*
+			// Delete the chosen fruits
+			for (int i = 0; i < fruitToDelete.size(); i++) {
+				fruitList.remove(fruitToDelete.get(i));
+			}
+			*/
+		// }
 	}
 
 	public int getCurrentStep() {
