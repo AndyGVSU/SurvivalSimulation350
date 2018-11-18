@@ -23,7 +23,7 @@ public class MainSimulation {
 	 */
 	private ArrayList<ArrayList<Entity>> depthPlant;
 	private ArrayList<ArrayList<Entity>> depthCollector;
-	private ArrayList<Fruit> fruitList;
+	private ArrayList<Entity> fruitList = new ArrayList<Entity>(rows*columns);
 
 	private int plantCount = 0;
 	private int totalSteps;
@@ -79,7 +79,7 @@ public class MainSimulation {
 		return entityGrid[row][col];
 	}
 
-	public void setEntity(int row, int col, Entity e) {
+	public void setEntity(final int row, final int col, final Entity e) {
 		int depth = e.getDepth();
 		Entity previous = getEntity(row, col);
 		int prevDepth = previous.getDepth();
@@ -90,22 +90,28 @@ public class MainSimulation {
 			depthPlant.add(new ArrayList<>());
 
 		//remove previous entity
-		if (previous instanceof Fruit)
+		if (previous instanceof Fruit) {
 			fruitList.remove(previous);
-		if (previous instanceof Collector)
+		}
+		if (previous instanceof Collector) {
 			depthCollector.get(prevDepth).remove(previous);
-		if (previous instanceof Plant)
+		}
+		if (previous instanceof Plant) {
 			depthPlant.get(prevDepth).remove(previous);
+		}
 
 		replaceEntity(row, col, e);
 
 		//add new entity
-		if (e instanceof Fruit)
+		if (e instanceof Fruit) {
 			fruitList.add(e);
-		if (e instanceof Collector)
+		}
+		if (e instanceof Collector) {
 			depthCollector.get(depth).add(e);
-		if (e instanceof Plant)
+		}
+		if (e instanceof Plant) {
 			depthPlant.get(depth).add(e);
+		}
 	}
 
 	public void replaceEntity(int row, int col, Entity e) {
@@ -152,6 +158,7 @@ public class MainSimulation {
 			nutrientReceive();
 			nutrientTransfer();
 			growthManage();
+			fruitManage();
 
 			// TODO - Add a fruit manage functionality - Brendon
 
@@ -271,9 +278,6 @@ public class MainSimulation {
 
 	private void growthManage() {
 
-		// Fruit list
-
-
 		// copy the list; grow() adds to the depthPlant list
 		ArrayList<Entity> copy = new ArrayList<>();
 		for (ArrayList<Entity> elist : depthPlant)
@@ -315,12 +319,37 @@ public class MainSimulation {
 						((Plant) e).growRoot();
 					}
 				} else {
-
-
 					//only the depth-zero plant can die (to totally eliminate the plant)
 					if (e instanceof Plant && e.getDepth() == 0)
 						deletedItems.addAll(((Plant) e).die());
 				}
+			}
+		}
+	}
+
+	/**
+	 *  This method oversees the functionality of all the fruit-entities
+	 *  currently on the view. Brendon.
+	 *
+	 *  1. Should a fruit drop based on time? Drop a fruit.
+	 *  2. Is the plant the fruit is connected to dead? Drop fruit.
+	 */
+	public void fruitManage() {
+		// Iterate through all the fruits currently existing
+		for (Entity f : fruitList) {
+
+			// If the fruit has lasted a certain amount of time..
+			if (f.getLifeSteps() > ((Fruit)f).getFruitDropTime()) {
+				System.out.println("Fruit - r" + f.row + " - c" + f.col
+						+ " - PLANT TIMER DROP");
+			}
+
+			// If the plant that the fruit is connected to is gone..
+			// This checks for difference between lifesteps of flowto() and
+			//   the new entity's lifesteps.
+			if (f.getFlowTo().getLifeSteps() != getEntity(f.getFlowTo().getRow(), f.getFlowTo().getColumn()).getLifeSteps()) {
+				System.out.println("Fruit - r" + f.row + " - c" + f.col
+						+ " - PLANT DEAD");
 			}
 		}
 	}

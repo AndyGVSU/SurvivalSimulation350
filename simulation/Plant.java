@@ -70,8 +70,9 @@ public abstract class Plant extends Entity {
 	 * 			- Checks for a left or right leaf
 	 */
 	public boolean canGrowFruit() {
+		// return false;
 		return (depth > 2 && nutrients >= fruitCreationThreshold
-				&& ((checkAdjacent(AdjacentEntities.RIGHT, row, col) instanceof Leaf) || (checkAdjacent(AdjacentEntities.LEFT, row, col) instanceof Leaf)));
+				&& /*((checkAdjacent(AdjacentEntities.RIGHT, row, col) instanceof Leaf) ||*/ (checkAdjacent(AdjacentEntities.LEFT, row, col) instanceof Leaf));
 	}
 
     /** Allows for root growth if nutrients are available and stem isn't at max depth. */

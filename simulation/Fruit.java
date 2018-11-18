@@ -12,6 +12,12 @@ public class Fruit extends Entity {
         color = 5;
     }
 
+    private int fruitDropTime = 5;
+
+    public int getFruitDropTime() {
+        return fruitDropTime;
+    }
+
     /**
      *  This method is called on a "stem" plant entity. This method is only
      *  called in the case that canGrowFruit() returns TRUE. This method
