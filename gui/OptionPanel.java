@@ -8,6 +8,7 @@ import java.awt.*;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 /**********************************************************************
  * Option Panel for SurvivalSimulation350 GUI.
@@ -161,8 +162,13 @@ public class OptionPanel extends JPanel implements TypedPanel {
                 //In response to a button click:
                 int returnVal = fc.showOpenDialog(parent);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    parent.getSimulation().getRecord().setDirectory(
-                            fc.getSelectedFile().getAbsolutePath());
+                    try {
+                        parent.getSimulation().getRecord().setDirectory(
+                                fc.getSelectedFile().toString());
+                    }
+                    catch (IOException ex) {
+                        //handle failure
+                    }
                     parent.getSimulation().reset();
                     parent.updateDisplay();
                 }

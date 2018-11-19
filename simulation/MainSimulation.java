@@ -32,7 +32,13 @@ public class MainSimulation {
 		rows = r;
 		columns = c;
 		speedRange = new int[]{0, 100};
-		record = new SimulationRecord();
+
+		try {
+			record = new SimulationRecord();
+		}
+		catch (IOException e) {
+			System.exit(1);
+		}
 
 
 		playing = false;
