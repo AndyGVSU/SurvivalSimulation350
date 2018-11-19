@@ -48,6 +48,7 @@ public class MainGUI extends JFrame {
         simulation = sim;
         currentEntity = simulation.getEntity(0,0);
         generalBorder = BorderFactory.createLineBorder(Color.black, 2);
+        playing = false;
     }
     /** Change to a new sub-panel.
      * @param newType the new PanelType to switch to.*/
