@@ -20,7 +20,7 @@ import java.util.ArrayList;
  */
 public class Grass extends Plant {
 
-	/** Number of nutrients used to live another step. Should be low. */
+    /** Number of nutrients used to live another step. Should be low. */
 	private final int survivalREQ = 1;
 	/** Number of nutrients used to grow another plant-stem. */
 	private final int plantREQ = 20;
@@ -125,7 +125,7 @@ public class Grass extends Plant {
 			simulation.setEntity(row - 1, col, g);
 		}
 	}
-	
+
 	@Override
 	/**
 	 * This handles the creation of a leaf-entity to the right or
@@ -150,58 +150,46 @@ public class Grass extends Plant {
 	}
 
 	@Override
-	// Brendon - Root growth is largely at the surface and wide.
-	// 			 Root growth seems largely blasted at first then slowly expands.
-	//             faster than stem at first, then stem uses root's nutrients to
-	//             grow.
-	// https://www.youtube.com/watch?v=w77zPAtVTuI
-	// https://content.ces.ncsu.edu/print_image/6419
-	// https://content.ces.ncsu.edu/extension-gardener-handbook/11-woody-ornamentals
-	/** Called on the "grass" entity at depth == 0. This grows a root somewhere
-	 *  below this grass entity. Brendon. **/
+	/** Called on the "grass" entity at depth == 0. This grows a
+	 *  root somewhere below this grass entity.
+	 */
 	public void growRoot() {
+		// Setting this helper variable to the current-entity's row.
 		int tempRow = row;
 
-		// Which "grass" is this being called on? Debugging.
-		// System.out.println("Grass");
-		// System.out.println("  Row: " + tempRow);
-		// System.out.println("  Col: " + col);
-		// System.out.println("  Depth: " + depth);
-
-		while (tempRow < simulation.getRows()-1) {
-			// Check for dirt spots below the depth-zero grass to add another root.
-			if(checkAdjacent(AdjacentEntities.DOWN, tempRow, col) instanceof Dirt) {
-        
-				Root r = new Root(simulation, simulation.getEntity(tempRow, col), tempRow - row + 1, tempRow + 1, col);
-				//System.out.println("DOWNROOT");
-				//System.out.println(r.getRow() + " - " + r.getColumn()
-				// + " Current Position");
-				//System.out.println(r.getParent().getRow() + " - " + r.getParent().getColumn() + " Parents Position");
-				// System.out.println(r.getParent().getParent().getRow() + " - " + r.getParent().getParent().getColumn() + " Parents Parents Row");
+        // Check for dirt spots below the depth-zero grass to
+        // add another root. Iterate down rows, below the main
+        // grass-entity.
+		while (tempRow < simulation.getRows() - 1) {
+		    // Check below the current space for dirt-entity
+			if (checkAdjacent(AdjacentEntities.DOWN, tempRow, col)
+                    instanceof Dirt) {
+				Root r = new Root(simulation,
+                        simulation.getEntity(tempRow, col),
+                        tempRow - row + 1, tempRow + 1, col);
 				simulation.setEntity(tempRow + 1, col, r);
 				nutrientsFrom.add(r);
 				break;
 			}
-
-			if(checkAdjacent(AdjacentEntities.RIGHT, tempRow, col) instanceof Dirt && tempRow > row + 1){
-
-				Root r = new Root(simulation, simulation.getEntity(tempRow, col), tempRow - row + 1, tempRow , col+1);
-				//System.out.println("RIGHTROOT");
-				//System.out.println(r.getRow() + " - " + r.getColumn() + " Current Position");
-				//System.out.println(r.getParent().getRow() + " - " + r.getParent().getColumn() + " Parents Position");
-				//System.out.println(r.getParent().getParent().getRow() + " - " + r.getParent().getParent().getColumn() + " Parents Parents Row");
-				simulation.setEntity(r.getRow(), r.getColumn(), r);
+            // Check to the right of current space for dirt-entity
+			if (checkAdjacent(AdjacentEntities.RIGHT, tempRow, col)
+                    instanceof Dirt && tempRow > row + 1) {
+				Root r = new Root(simulation,
+                        simulation.getEntity(tempRow, col),
+                        tempRow - row + 1,
+                        tempRow, col + 1);
+				simulation.setEntity(r.getRow(),
+                        r.getColumn(), r);
 				nutrientsFrom.add(r);
 				break;
 			}
-
-			if(checkAdjacent(AdjacentEntities.LEFT, tempRow, col) instanceof Dirt && tempRow > row + 1){
-				Root r = new Root(simulation, simulation.getEntity(tempRow, col), tempRow - row + 1, tempRow, col-1);
-				//System.out.println("LEFTROOT");
-				//System.out.println(r.getRow() + " - " + r.getColumn() + " Current Position");
-				//System.out.println(r.getParent().getRow() + " - " + r.getParent().getColumn() + " Parents Position");
-				//System.out.println(r.getParent().getParent().getRow() + " - " + r.getParent().getParent().getColumn() + " Parents Parents Row");
-				simulation.setEntity(tempRow , col-1, r);
+            // Check to the left of current space for dirt-entity
+			if (checkAdjacent(AdjacentEntities.LEFT, tempRow, col)
+                    instanceof Dirt && tempRow > row + 1) {
+				Root r = new Root(simulation,
+                        simulation.getEntity(tempRow, col),
+                        tempRow - row + 1, tempRow, col - 1);
+				simulation.setEntity(tempRow, col - 1, r);
 				nutrientsFrom.add(r);
 				break;
 			}
@@ -218,30 +206,43 @@ public class Grass extends Plant {
 		Entity e = checkAdjacent(AdjacentEntities.LEFT, row, col);
         if (e instanceof Leaf) {
             Fruit f = new Fruit(simulation, simulation.getEntity(row, col),
-                    0, row , col - 1);
+                    0, row, col - 1);
             simulation.setEntity(row, col - 1, f);
             nutrientsFrom.remove(e);
         }
 	}
 
+    /**
+     * Handles the complete death of a plant.
+     * @return  Returns a list of the deleted plant-entities.
+     * @see     MainSimulation.java growthManage()
+     */
 	public ArrayList<Entity> die() {
 		ArrayList<Entity> deletedPlants = new ArrayList<>();
 
-		if(getFlowTo() instanceof Plant) {
+		if (getFlowTo() instanceof Plant) {
 			deletedPlants.addAll(((Plant) getFlowTo()).die());
         }
-	    for(Collector c : nutrientsFrom) {
+
+        // Replace collector-entitites connected to the main
+        // grass-entities with air or dirt.
+	    for (Collector c : nutrientsFrom) {
 	    	Entity replace = null;
 	    	if (c instanceof Leaf) {
-				replace = new Air(simulation, null, 0, c.getRow(), c.getColumn());
+				replace = new Air(simulation, null,
+                        0, c.getRow(), c.getColumn());
+			} else if (c instanceof Root) {
+				replace = new Dirt(simulation, null,
+                        0, c.getRow(), c.getColumn());
 			}
-	    	else if (c instanceof Root) {
-				replace = new Dirt(simulation, null, 0, c.getRow(), c.getColumn());
-			}
-			simulation.setEntity(c.getRow(), c.getColumn(), replace);
+			simulation.setEntity(c.getRow(), c.getColumn(),
+                    replace);
         }
+
+        // Replace the current entity with air
         simulation.setEntity(getRow(), getColumn(),
-			new Air(simulation, null, getDepth(), getRow(), getColumn()));
+			new Air(simulation, null, getDepth(),
+                    getRow(), getColumn()));
 
 	    deletedPlants.add(this);
 	    return deletedPlants;

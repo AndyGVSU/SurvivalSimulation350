@@ -121,16 +121,4 @@ public abstract class Entity implements Serializable {
 	public int getLifeSteps() {
 		return lifeSteps;
 	}
-
-	/*
-	public boolean canGrowPlant() {
-		return (nutrients >= growPlantRequirement);
-
-	}
-	*/
-
-	/* public boolean canGrowRoot() {
-		// return (nutrients >= growRootRequirement);
-	} */
-
 }
