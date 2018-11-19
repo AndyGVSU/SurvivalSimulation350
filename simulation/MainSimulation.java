@@ -370,7 +370,7 @@ public class MainSimulation {
 			// while (iterA.hasNext()) {
 			for (int i = 0; i < fruitList.size(); i++) {
 				System.out.println("At begin of loop.");
-				System.out.println("fruitList.size == " + fruitList.size())
+				System.out.println("fruitList.size == " + fruitList.size());
 				Entity f = fruitList.get(i);
 				// Entity f = iterA.next();
 				// iterator.remove();
@@ -381,12 +381,14 @@ public class MainSimulation {
 				if (f.getLifeSteps() > ((Fruit) f).getFruitDropTime()) {
 					System.out.println("Fruit - r" + f.row + " - c" + f.col
 							+ " - PLANT TIMER DROP");
-					((Fruit) f).seedDrop();
+					((Fruit) f).seedDrop(); // This removes it from the grid.
+									// The fruitList is updated when the setEntity is called.
+									// .seedDrop calls setEntity.
 					System.out.println("Before remove()");
 					System.out.println("fruitList.size() == " + fruitList.size());
 					System.out.println("i == " + i);
 					// new
-					fruitList.remove(i);
+					// fruitList.remove(i);
 					// i--;
 					// fruitToDelete.add(f);
 					// iterA.remove();
@@ -406,7 +408,7 @@ public class MainSimulation {
 							+ " - PLANT DEAD");
 					((Fruit) f).seedDrop();
 					// new
-					fruitList.remove(i);
+					// fruitList.remove(i);
 					//i--;
 					//fruitToDelete.add(f);
 					// iterA.remove();

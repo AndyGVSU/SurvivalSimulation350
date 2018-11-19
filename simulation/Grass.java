@@ -2,57 +2,89 @@ package simulation;
 
 import java.util.ArrayList;
 
+/**
+ *  The Grass-Entity is a specific "species" of the Plant-Entity. Within the
+ *  entire system, the grass entity is responsible for much of the plant's
+ *  entire behavior. Within the grid, the grass-entity is the "stem" of the
+ *  plant.
+ *
+ *  The bottom grass-entity of "depth 0" is responsible for root growth and
+ *  oversight.
+ *
+ *  The entire plant dies if the bottom grass-entity has zero nutrients.
+ *
+ *  Each plant-entity passes its nutrient value upward to the total nutrient
+ *  value of the plant-entity above it. The total nutrient value is equal to
+ *  the sum of the leaf-nutrients (left and right) feeding into it, as well as
+ *  the root nutrients.
+ */
 public class Grass extends Plant {
 
 	/** Number of nutrients used to live another step. Should be low. */
-	private final int SURVIVAL_REQ = 1;
+	private final int survivalREQ = 1;
 	/** Number of nutrients used to grow another plant-stem. */
-	private final int PLANT_REQ = 20;
+	private final int plantREQ = 20;
 	/** Number of nutrients used to grow another root. */
-	private final int ROOT_REQ = 5;
+	private final int rootREQ = 5;
 	/** Number of nutrients used to create another leaf. */
-	private final int LEAF_REQ = 10;
+	private final int leafREQ = 10;
 	/** Maximum depth of plant blocks. **/
-	private final int STEM_DEPTH = 5;
+	private final int stemDEPTH = 8;
 	/** Maximum number of roots. **/
-	private final int MAX_ROOTS = 11;
+	private final int maxROOTS = 5;
 	/** Time in steps between root growth attempts. **/
-	private final int ROOT_INTERVAL = 4;
+	private final int rootINTERVAL = 4;
 	/** Time in steps between plant growth attempts. **/
-	private final int PLANT_INTERVAL = 5;
+	private final int plantINTERVAL = 5;
 
-	/** Is this stem, the top one? Should grown be applied from here?
-	 *  When creating a new stem, make the old one false and new one true. */
-	private boolean isTopStem = true;
+	/** Is this stem, the top one? Should fruit be grown from here?
+	 *  When creating a new stem, make the old one false and
+	 *  new one true. */
+	private boolean isTopStem = true; // Unimplemented - Brendon Nov 18
 
-	public Grass(MainSimulation sim, Entity flow, int depth, int row, int col) {
+	/**
+	 * The contructor method of the grass entity. This sets GUI colors and
+	 * letters. It also establishes max values and grass behavior variables.
+	 * @param sim   The simulation object that contains the entire system.
+	 * @param flow  A "copy" of the entity that this grass was born from.
+	 * @param depth The distance of this entity from the original plant
+	 *              entity.
+	 * @param row   The "y" coordinate of this entity.
+	 * @param col   The "x" coordinate of this entity.
+	 */
+	public Grass(final MainSimulation sim, final Entity flow,
+			 final int depth, final int row, final int col) {
 		super(sim, flow, depth, row, col);
 		name = "GRASS";
 		symbol = 'G';
 
-		// These are currently used in MainSimulation() to check for possible growth.
-		survivalRequirement = SURVIVAL_REQ;
-		growPlantRequirement = PLANT_REQ;
-		growLeafRequirement = LEAF_REQ;
-		growRootRequirement = ROOT_REQ;
+		// These are currently used in MainSimulation() to
+		// check for possible growth.
+		survivalRequirement = survivalREQ;
+		growPlantRequirement = plantREQ;
+		growLeafRequirement = leafREQ;
+		growRootRequirement = rootREQ;
 
-		maxStemDepth = STEM_DEPTH;
-		maxRoots = MAX_ROOTS;
-		rootGrowthInterval = ROOT_INTERVAL;
-		plantGrowthInterval = PLANT_INTERVAL;
+		maxStemDepth = stemDEPTH;
+		maxRoots = maxROOTS;
+		rootGrowthInterval = rootINTERVAL;
+		plantGrowthInterval = plantINTERVAL;
 
 		color = 0;
 	}
 
-
-
-	/** Allows for root growth if nutrients are available and roots aren't at max. */
+	/**
+	 * Allows for root growth if nutrients are available and roots
+	 * aren't at max.
+	 * @return	Returns TRUE if this entire plant is allowed to
+	 * 			grow another root during this tick.
+	 */
 	public boolean canGrowRoot() {
 		// Specifies the original-grass as responsible for this logic.
-		if (depth == 0 &&
-				nutrients >= growRootRequirement &&
-				rootsGrown < maxRoots - 1 &&
-				rootGrowthTickCount >= rootGrowthInterval) {
+		if (depth == 0
+				&& nutrients >= growRootRequirement
+				&& rootsGrown < maxRoots - 1
+				&& rootGrowthTickCount >= rootGrowthInterval) {
 			rootsGrown++;
 			rootGrowthTickCount = 0;
 			return true;
@@ -62,44 +94,56 @@ public class Grass extends Plant {
 		}
 	}
 
+	/**
+	 * Allows for leaf growth. This method limits leaf growth to when
+	 * the called-on plant-entity has the required nutrients.
+	 * @return	TRUE if this plant-entity will be allowed to spawn
+	 * 			a leaf to either the right or left.
+	 * @see 	MainSimulation.java growthManage()
+	 */
 	public boolean canGrowLeaf() {
-		Entity left = checkAdjacent(AdjacentEntities.LEFT,row,col);
-		Entity right = checkAdjacent(AdjacentEntities.RIGHT,row,col);
-		return (nutrients >= growLeafRequirement &&
-				(left instanceof Air && left.getNutrients() > 0) ||
-				 right instanceof Air && right.getNutrients() > 0);
+		Entity left = checkAdjacent(AdjacentEntities.LEFT, row, col);
+		Entity right = checkAdjacent(AdjacentEntities.RIGHT, row, col);
+		return (nutrients >= growLeafRequirement
+				&& (left instanceof Air
+					&& left.getNutrients() > 0)
+					|| right instanceof Air
+					&& right.getNutrients() > 0);
 	}
 
 	@Override
+	/**
+	 * This handles the creation of a new plant-entity above the
+	 * current plant-entity.
+	 */
 	public void growPlant() {
-		// Which "grass" is this being called on? Debugging.
-		/*
-		System.out.println("Grass");
-		System.out.println("  Row: " + row);
-		System.out.println("  Col: " + col);
-		System.out.println("  Depth: " + depth);
-		*/
-
-		if (checkAdjacent(AdjacentEntities.UP, row, col) instanceof Air) {
-			Grass g = new Grass(simulation, null, depth + 1, row - 1, col);
+		if (checkAdjacent(AdjacentEntities.UP, row, col)
+				instanceof Air) {
+			Grass g = new Grass(simulation,
+					null, depth + 1, row - 1, col);
 			this.setFlowTo(g);
 			simulation.setEntity(row - 1, col, g);
 		}
 	}
-	//Leafs can't grow leaves
+	
 	@Override
+	/**
+	 * This handles the creation of a leaf-entity to the right or
+	 * left of a current plant-entity. It first tries to grow to the
+	 * left--if taken, grows a leaf to the right of the current
+	 * plant-entity.
+	 */
 	public void growLeaf() {
-		
-		if (checkAdjacent(AdjacentEntities.LEFT, row, col) instanceof Air) {
-
-			Leaf l = new Leaf(simulation, this, depth+1, row, col - 1);
+		if (checkAdjacent(AdjacentEntities.LEFT, row, col)
+				instanceof Air) {
+			Leaf l = new Leaf(simulation, this,
+					depth + 1, row, col - 1);
 			nutrientsFrom.add(l);
 			simulation.setEntity(row, col - 1, l);
-		}
-
-		else if (checkAdjacent(AdjacentEntities.RIGHT, row, col) instanceof Air) {
-
-			Leaf l = new Leaf(simulation, this, depth+1, row, col + 1);
+		} else if (checkAdjacent(AdjacentEntities.RIGHT, row, col)
+				instanceof Air) {
+			Leaf l = new Leaf(simulation, this,
+					depth + 1, row, col + 1);
 			nutrientsFrom.add(l);
 			simulation.setEntity(row, col + 1, l);
 		}
@@ -130,7 +174,8 @@ public class Grass extends Plant {
         
 				Root r = new Root(simulation, simulation.getEntity(tempRow, col), tempRow - row + 1, tempRow + 1, col);
 				//System.out.println("DOWNROOT");
-				//System.out.println(r.getRow() + " - " + r.getColumn() + " Current Position");
+				//System.out.println(r.getRow() + " - " + r.getColumn()
+				// + " Current Position");
 				//System.out.println(r.getParent().getRow() + " - " + r.getParent().getColumn() + " Parents Position");
 				// System.out.println(r.getParent().getParent().getRow() + " - " + r.getParent().getParent().getColumn() + " Parents Parents Row");
 				simulation.setEntity(tempRow + 1, col, r);
@@ -174,7 +219,7 @@ public class Grass extends Plant {
         if (e instanceof Leaf) {
             Fruit f = new Fruit(simulation, simulation.getEntity(row, col),
                     0, row , col - 1);
-            simulation.setEntity(row, col-1, f);
+            simulation.setEntity(row, col - 1, f);
             nutrientsFrom.remove(e);
         }
 	}
