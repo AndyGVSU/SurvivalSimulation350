@@ -27,7 +27,7 @@ public class SimulationRecord {
         objOut.writeObject(null); //end of file
         objOut.close();
 
-        writeTotalSteps(sim);
+        writeTotalSteps(sim.getTotalSteps());
     }
 
     public void readStep(int step, MainSimulation sim) throws IOException, ClassNotFoundException {
@@ -58,12 +58,12 @@ public class SimulationRecord {
         return true;
     }
 
-    public void writeTotalSteps(MainSimulation sim) throws IOException {
+    public void writeTotalSteps(int totalSteps) throws IOException {
         File newTotal = new File(directory,totalStepsID + fileExtension);
 
         FileOutputStream fout = new FileOutputStream(newTotal);
         ObjectOutputStream intWrite = new ObjectOutputStream(fout);
-        intWrite.writeInt(sim.getTotalSteps());
+        intWrite.writeInt(totalSteps);
         intWrite.close();
     }
 
@@ -81,7 +81,36 @@ public class SimulationRecord {
     public void setDirectory(String newDir) throws IOException {
         directory = new File(newDir);
         if (!directory.exists())
-            if (!directory.mkdir())
+            if (!makeDirectory(directory))
                 throw new IOException();
+    }
+
+    public boolean makeDirectory(File newDir) {
+        return newDir.mkdir();
+    }
+
+    public boolean reset() {
+        int totalSteps = 0;
+        try {
+            totalSteps = readTotalSteps();
+            writeTotalSteps(0);
+        }
+        catch (IOException e) {
+
+        }
+
+        File toDelete;
+        boolean success = true;
+        for (int f = 0; f <= totalSteps; f++) {
+            toDelete = new File(directory, fileID + f + fileExtension);
+            if (toDelete.exists())
+                success = toDelete.delete();
+        }
+        toDelete = new File(directory, totalStepsID + fileExtension);
+        if (toDelete.exists())
+            success = toDelete.delete();
+
+        makeDirectory(directory);
+        return success;
     }
 }

@@ -32,10 +32,10 @@ public class OptionPanel extends JPanel implements TypedPanel {
     private JButton stepBackButton;
     /** Button that steps the simulation forwards one step. */
     private JButton stepForwardButton;
-    /** Button that saves the current simulation. */
-    private JButton saveButton;
     /** Button that loads a simulation from a file. */
     private JButton loadButton;
+    /** Button that resets the current simulation. */
+    private JButton resetButton;
     /** How many rows of buttons are used. */
     private final int rows = 4;
     /** How many columns of buttons are used. */
@@ -80,6 +80,7 @@ public class OptionPanel extends JPanel implements TypedPanel {
         stepBackButton = new JButton("<<");
         stepForwardButton = new JButton(">>");
         loadButton = new JButton("LOAD");
+        resetButton = new JButton("RESET");
 
         add(Box.createRigidArea(verticalSpace), BorderLayout.NORTH);
         add(Box.createRigidArea(verticalSpace), BorderLayout.SOUTH);
@@ -97,6 +98,7 @@ public class OptionPanel extends JPanel implements TypedPanel {
         innerPanel.add(stepBackButton);
         innerPanel.add(stepForwardButton);
         innerPanel.add(loadButton);
+        innerPanel.add(resetButton);
 
         ButtonClick listener = new ButtonClick();
         for (Component c : innerPanel.getComponents())
@@ -112,6 +114,7 @@ public class OptionPanel extends JPanel implements TypedPanel {
         stepBackButton.setEnabled(!lock);
         stepForwardButton.setEnabled(!lock);
         loadButton.setEnabled(!lock);
+        resetButton.setEnabled(!lock);
     }
 
     /** Listener for user mouse click for all buttons. */
@@ -131,7 +134,6 @@ public class OptionPanel extends JPanel implements TypedPanel {
             if (source == playButton) {
                 if (!parent.getPlaying()) {
                     parent.setPlaying(true);
-                    simulation.setPlaying(true);
                     playButton.setBackground(Color.green);
                     pauseButton.setBackground(Color.LIGHT_GRAY);
                 }
@@ -139,7 +141,6 @@ public class OptionPanel extends JPanel implements TypedPanel {
             if (source == pauseButton) {
                 if (parent.getPlaying()) {
                     parent.setPlaying(false);
-                    simulation.setPlaying(false);
                     playButton.setBackground(Color.LIGHT_GRAY);
                     pauseButton.setBackground(Color.RED);
                 }
@@ -169,9 +170,13 @@ public class OptionPanel extends JPanel implements TypedPanel {
                     catch (IOException ex) {
                         //handle failure
                     }
-                    parent.getSimulation().reset();
+                    parent.getSimulation().reset(false);
                     parent.updateDisplay();
                 }
+            }
+            if (source == resetButton) {
+                parent.getSimulation().reset(true);
+                parent.updateDisplay();
             }
         }
     }
