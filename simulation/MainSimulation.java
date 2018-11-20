@@ -18,7 +18,7 @@ public class MainSimulation {
 	private SimulationRecord record;
 
 	/**
-	 * Keeps track of plant dependencies
+	 * Keeps track of plant dependencies.
 	 */
 	private ArrayList<ArrayList<Entity>> depthPlant;
 	private ArrayList<ArrayList<Entity>> depthCollector;
@@ -46,30 +46,42 @@ public class MainSimulation {
 		reset(false);
 	}
 
-	// Changes the simulation up for a sample run. After initialization. #Brendon
+	/** Sets up the map as one of many potential setups. */
 	public void setDefaultOne() {
+		final int numberOfDirtLayers = 5;
+		final int numberOfAirLayers = rows - numberOfDirtLayers;
+
 		// Setting the air entities
-		for (int i = 0; i < rows - 5; i++) // Leave the bottom 5 for dirt
+		for (int i = 0; i < numberOfAirLayers; i++) {
 			for (int j = 0; j < columns; j++) {
 				setEntity(i, j, new Air(this, null, 0, i, j));
 			}
+		}
 
 		// Setting the bottom dirt layers
-		for (int i = rows - 5; i < rows; i++)
+		for (int i = numberOfAirLayers; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
-				setEntity(i, j, entityGrid[i][j] = new Dirt(this, null, 0, i, j));
+				setEntity(i, j, entityGrid[i][j] = new Dirt(
+						this, null, 0, i, j));
 			}
+		}
 
 		// Set some default plants
-		int numberOfPlants = 3;
+		final int numberOfPlants = 3;
 		Random rand = new Random();
-		int Low = 0;
-		int High = columns;
+		int randLow = 0;
+		int randHigh = columns;
 		for (int i = 0; i < numberOfPlants; i++) {
 			while (true) {
-				int Result = rand.nextInt(High - Low) + Low;
-				if (!(entityGrid[rows - 6][Result] instanceof Plant)) {
-					setEntity(rows - 6, Result, new Grass(this, null, 0, rows - 6, Result));
+				int result = rand.nextInt(randHigh - randLow)
+						+ randLow;
+				if (!(entityGrid[rows - numberOfDirtLayers - 1]
+						[result] instanceof Plant)) {
+					setEntity(rows - numberOfDirtLayers - 1,
+						result, new Grass(this,
+						null, 0,
+						rows - numberOfDirtLayers - 1,
+						result));
 					plantCount = plantCount + 1;
 					break;
 				}
@@ -78,9 +90,11 @@ public class MainSimulation {
 	}
 
 	public Entity getEntity(int row, int col) {
-		// "col > columns" -> "col >= columns" for the case of a right-most leaf error.
-		if (row < 0 || row > rows || col < 0 || col >= columns)
+		// "col > columns" -> "col >= columns" for the case of
+		// a right-most leaf error.
+		if (row < 0 || row > rows || col < 0 || col >= columns) {
 			return null;
+		}
 		return entityGrid[row][col];
 	}
 
@@ -89,10 +103,12 @@ public class MainSimulation {
 		Entity previous = getEntity(row, col);
 		int prevDepth = previous.getDepth();
 
-		if (depthCollector.size() <= depth)
+		if (depthCollector.size() <= depth) {
 			depthCollector.add(new ArrayList<>());
-		if (depthPlant.size() <= depth)
+		}
+		if (depthPlant.size() <= depth) {
 			depthPlant.add(new ArrayList<>());
+		}
 
 		//remove previous entity
 		if (previous instanceof Fruit) {
@@ -123,10 +139,18 @@ public class MainSimulation {
 		entityGrid[row][col] = e;
 	}
 
+	/**
+	 * Returns the number of rows in the simulation.
+	 * @return	The number of rows in the simulation
+	 */
 	public int getRows() {
 		return rows;
 	}
 
+	/**
+	 * Returns the number of columns in the simulation.
+	 * @return	The number of columns in the simulation.
+	 */
 	public int getColumns() {
 		return columns;
 	}
@@ -143,11 +167,19 @@ public class MainSimulation {
 		return speed;
 	}
 
-	public int setSpeed(int s) {
+	public int setSpeed(final int s) {
 		speed = s;
 		return speed;
 	}
 
+	/**
+	 * Iterates the entire simulation one time-increment forward.
+	 * 	- Calls methods for nutrient grabbing and transfer
+	 * 	- Calls plants to grow
+	 * 	- Calls fruits to do their actions
+	 * 	- Steps each entity's lifetime count
+	 * 	- Appropriately records/plays the simulation
+	 */
 	public void stepForward() {
 		currentStep++;
 		if (currentStep > totalSteps) {
@@ -156,8 +188,6 @@ public class MainSimulation {
 			nutrientTransfer();
 			growthManage();
 			fruitManage();
-
-			// TODO - Add a fruit manage functionality - Brendon
 
 			for (int i = 0; i < rows; i++) {
 				for (int j = 0; j < columns; j++) {
@@ -176,12 +206,11 @@ public class MainSimulation {
 				reset(true);
 			}
 		}
-
-		// For each plant, call doStep().
-
-
 	}
 
+	/**
+	 * Iterates the simulation backwards to allow for more user observation.
+	 */
 	public void stepBackward() {
 		if (currentStep > 0) {
 			currentStep--;
@@ -203,19 +232,21 @@ public class MainSimulation {
 
 	;
 
-	// Generates nutrients to leaves and roots from environment
+	/**
+	 * Generates the roots and leaves "receiving" of nutrients.
+	 */
 	private void nutrientReceive() {
-
-		//generate root nutrients
-		for (int i = 0; i < rows; i++)
+		// Generate root nutrients
+		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
 				Entity e = entityGrid[i][j];
 				if (e instanceof Root) {
-					e.setNutrients(e.getDepth() * NUTRIENTS_ROOT_BASE - e.getLifeSteps());
+					e.setNutrients(e.getDepth()
+				* NUTRIENTS_ROOT_BASE - e.getLifeSteps());
 				}
-
 			}
-		//give sunlight
+		}
+		// Give sunlight nutrients to leaves
 		int sunlight;
 		for (int j = 0; j < columns; j++) {
 			sunlight = getEnvironment().getSunlight();
@@ -223,18 +254,16 @@ public class MainSimulation {
 				Entity e = entityGrid[i][j];
 				if (e instanceof Leaf) {
 					if (sunlight == 0) {
-						setEntity(i,j,
-								new Air(this,null,0,i,j));
-					}
-					else {
+						setEntity(i, j,
+						new Air(this, null, 0, i, j));
+						// TODO - Set flow-to plant to not be able to grow leaves again
+					} else {
 						e.setNutrients(sunlight);
-						sunlight /= NUTRIENTS_SUNLIGHT_DIMINISH;
+					sunlight /= NUTRIENTS_SUNLIGHT_DIMINISH;
 					}
-				}
-				else if (e instanceof Air) {
+				} else if (e instanceof Air) {
 					e.setNutrients(sunlight);
-				}
-				else if (e instanceof Fruit) {
+				} else if (e instanceof Fruit) {
                     sunlight /= NUTRIENTS_SUNLIGHT_DIMINISH;
                 }
 			}
@@ -334,91 +363,57 @@ public class MainSimulation {
 	 *  2. Is the plant the fruit is connected to dead? Drop fruit.
 	 */
 	public void fruitManage() {
+		for (int i = 0; i < fruitList.size(); i++) {
+			// System.out.println("At begin of loop.");
+			// System.out.println("fruitList.size == " + fruitList.size());
+			Entity f = fruitList.get(i);
 
+			// If the fruit has lasted a certain amount of time..
+			if (f.getLifeSteps() > ((Fruit) f).getFruitDropTime()) {
+				//System.out.println("Fruit - r" + f.row + " - c" + f.col
+				//		+ " - PLANT TIMER DROP");
+				System.out.println("SeedDrop r" + f.row + " - c" + f.col);
+				((Fruit) f).seedDrop(); // This removes it from the grid.
+								// The fruitList is updated when the setEntity is called.
+								// .seedDrop calls setEntity.
+				// System.out.println("Before remove()");
+				// System.out.println("fruitList.size() == " + fruitList.size());
+				// System.out.println("i == " + i);
+				// new
+				// fruitList.remove(i);
+				// i--;
+				// fruitToDelete.add(f);
+				// iterA.remove();
+				//System.out.println("After remove()");
+				// System.out.println("fruitList.size() == " + fruitList.size());
+				// System.out.println("i == " + i);
+				continue;
+			}
 
-
-		// copy the list
+			// If the plant that the fruit is connected to is gone..
+			// This checks for difference between lifesteps of flowto() and
+			//   the new entity's lifesteps.
+			if (f.getFlowTo().getLifeSteps()
+					!= getEntity(f.getFlowTo().getRow(),
+					f.getFlowTo().getColumn()).getLifeSteps()) {
+				System.out.println("Fruit - r" + f.row + " - c" + f.col
+						+ " - PLANT DEAD");
+				((Fruit) f).seedDrop();
+				// new
+				// fruitList.remove(i);
+				//i--;
+				//fruitToDelete.add(f);
+				// iterA.remove();
+			}
+		}
+	// }
 		/*
-		ArrayList<Entity> copyFruitList = new ArrayList<>();
-		for (Entity tempCopy : fruitList) {
-			copyFruitList.add(tempCopy);
+		// Delete the chosen fruits
+		for (int i = 0; i < fruitToDelete.size(); i++) {
+			fruitList.remove(fruitToDelete.get(i));
 		}
 		*/
-
-		// fruits to remove
-		// ArrayList<Entity> fruitToDelete = new ArrayList<>();
-
-		/*
-		for(int i = 0; i<myList.size(); i++){
-			System.out.println(myList.get(i));
-			if(myList.get(i).equals("3")){
-				myList.remove(i);
-				i--;
-				myList.add("6");
-			}
-		}
-
-		 */
-
-		// synchronized(this) {
-		// Iterate through all the fruits currently existing
-		// Iterator<Entity> iterA = fruitList.iterator();
-		// synchronized(fruitList) {
-			// while (iterA.hasNext()) {
-			for (int i = 0; i < fruitList.size(); i++) {
-				System.out.println("At begin of loop.");
-				System.out.println("fruitList.size == " + fruitList.size());
-				Entity f = fruitList.get(i);
-				// Entity f = iterA.next();
-				// iterator.remove();
-
-				// for (Entity f : fruitList) {
-
-				// If the fruit has lasted a certain amount of time..
-				if (f.getLifeSteps() > ((Fruit) f).getFruitDropTime()) {
-					System.out.println("Fruit - r" + f.row + " - c" + f.col
-							+ " - PLANT TIMER DROP");
-					((Fruit) f).seedDrop(); // This removes it from the grid.
-									// The fruitList is updated when the setEntity is called.
-									// .seedDrop calls setEntity.
-					System.out.println("Before remove()");
-					System.out.println("fruitList.size() == " + fruitList.size());
-					System.out.println("i == " + i);
-					// new
-					// fruitList.remove(i);
-					// i--;
-					// fruitToDelete.add(f);
-					// iterA.remove();
-					System.out.println("After remove()");
-					System.out.println("fruitList.size() == " + fruitList.size());
-					System.out.println("i == " + i);
-					continue;
-				}
-
-				// If the plant that the fruit is connected to is gone..
-				// This checks for difference between lifesteps of flowto() and
-				//   the new entity's lifesteps.
-				if (f.getFlowTo().getLifeSteps()
-						!= getEntity(f.getFlowTo().getRow(),
-						f.getFlowTo().getColumn()).getLifeSteps()) {
-					System.out.println("Fruit - r" + f.row + " - c" + f.col
-							+ " - PLANT DEAD");
-					((Fruit) f).seedDrop();
-					// new
-					// fruitList.remove(i);
-					//i--;
-					//fruitToDelete.add(f);
-					// iterA.remove();
-				}
-			}
-		// }
-			/*
-			// Delete the chosen fruits
-			for (int i = 0; i < fruitToDelete.size(); i++) {
-				fruitList.remove(fruitToDelete.get(i));
-			}
-			*/
-		// }
+	// }
 	}
 
 	public int getCurrentStep() {

@@ -10,6 +10,10 @@ public abstract class Plant extends Entity {
 	/** A list of the collector-entities that feed to this entity. */
 	protected ArrayList<Collector> nutrientsFrom;
 
+	public void addToNutrientsFrom(final Collector c) {
+	    nutrientsFrom.add(c);
+    }
+
 	// TODO - Make this private with accessors, says CheckStyle
 	// To make these private conflicts with the way grass?..
     /** The nutrients required to grow another plant-entity. */
@@ -20,7 +24,7 @@ public abstract class Plant extends Entity {
     public int growRootRequirement;
 
     /** The nutrients required to create a single fruit on the plant. */
-	private final int fruitCreationThreshold = maxNutrients - 100;
+	private final int fruitCreationThreshold = maxNutrients - 200;
 	/** A plant stem may grow to this height. */
 	protected int maxStemDepth;
     /** Number of roots grown. Keeps track for plant-unique max roots. **/
@@ -33,6 +37,16 @@ public abstract class Plant extends Entity {
     protected int plantGrowthInterval;
 	/** A counter for limiting the root growth. */
     protected int rootGrowthTickCount = 0;
+
+    /** Is this stem, the top one? Should fruit be grown from here?
+     *  When creating a new stem, make the old one false and
+     *  new one true. */
+    protected boolean isTopStem = true; // Unimplemented - Brendon Nov 18
+    /** The number of fruits a plant-entity can create in its lifetime. */
+    protected final int maxFruitsProducable = 3;
+    /** The number of fruits a plant has created. */
+    protected int fruitsProduced = 0;
+
 
 	/**
 	 * The contructor method of the plant-entity. This sets GUI colors and
@@ -60,7 +74,7 @@ public abstract class Plant extends Entity {
 		} else {
 			// Generate initial root
 			int newRow = row + 1;
-			Root r = new Root(sim,this, depth + 1, newRow, col);
+			Root r = new Root(sim, this, depth + 1, newRow, col);
 			simulation.setEntity(newRow, col, r);
 			nutrientsFrom.add(r);
 		}
@@ -90,13 +104,32 @@ public abstract class Plant extends Entity {
 	 *
 	 * 			- Checks for the plant-entity's depth
 	 * 			- Checks for the plant-entity's nutrient-level
-	 * 			- Checks for a left or right leaf
+	 * 			- Checks for a left leaf
+     * 		    - Checks for the plant-entity as a top plant
+     * 		    - Checks that the plant has grown less than max fruits
 	 */
 	public boolean canGrowFruit() {
 		// return false;
+        if (depth > 2 && nutrients >= fruitCreationThreshold
+                &&  (checkAdjacent(AdjacentEntities.LEFT, row, col)
+                instanceof Leaf)
+                && fruitsProduced < maxFruitsProducable
+                && isTopStem) {
+
+            System.out.println("Growing Fruit - r" + row + " - c" + col);
+            System.out.println("Fruit Produced: " + fruitsProduced);
+            if (isTopStem) {
+                System.out.println("Is Top Stem!");
+            } else {
+                System.out.println("Is Not Top Stem!");
+            }
+        }
+
 		return (depth > 2 && nutrients >= fruitCreationThreshold
 			&&  (checkAdjacent(AdjacentEntities.LEFT, row, col)
-			instanceof Leaf));
+			instanceof Leaf)
+			&& fruitsProduced < maxFruitsProducable
+			&& isTopStem);
 	}
 
 	/**
@@ -108,7 +141,7 @@ public abstract class Plant extends Entity {
         return (getFlowTo() == null
 				&& nutrients >= growPlantRequirement
 				&& lifeSteps % plantGrowthInterval == 0
-				&& depth < maxStemDepth-1);
+				&& depth < maxStemDepth - 1);
     }
 
 	/**

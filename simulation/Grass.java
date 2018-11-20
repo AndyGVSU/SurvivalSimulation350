@@ -28,19 +28,28 @@ public class Grass extends Plant {
 	private final int rootREQ = 5;
 	/** Number of nutrients used to create another leaf. */
 	private final int leafREQ = 10;
-	/** Maximum depth of plant blocks. **/
-	private final int stemDEPTH = 8;
+	/** Maximum depth/height of plant blocks. **/
+	private final int stemDEPTH = 5;
 	/** Maximum number of roots. **/
-	private final int maxROOTS = 5;
+	private final int maxROOTS = 8;
 	/** Time in steps between root growth attempts. **/
 	private final int rootINTERVAL = 4;
 	/** Time in steps between plant growth attempts. **/
 	private final int plantINTERVAL = 5;
 
-	/** Is this stem, the top one? Should fruit be grown from here?
-	 *  When creating a new stem, make the old one false and
-	 *  new one true. */
-	private boolean isTopStem = true; // Unimplemented - Brendon Nov 18
+	/** Plant-entity has the ability to make leaves.
+	 * 	This may be used to disallow leaf-creation after the
+	 * 	plant has grown to be taller. */
+	private boolean canMakeLeaves = true;
+
+
+    /*
+	public int getFruitsProduced() {
+        return fruitsProduced;
+    }
+	public int getMaxFruitsProducable() { return maxFruitsProducable; }
+	public boolean getIsTopStem() { return isTopStem; }
+    */
 
 	/**
 	 * The contructor method of the grass entity. This sets GUI colors and
@@ -123,6 +132,7 @@ public class Grass extends Plant {
 					null, depth + 1, row - 1, col);
 			this.setFlowTo(g);
 			simulation.setEntity(row - 1, col, g);
+			isTopStem = false;
 		}
 	}
 
@@ -205,10 +215,11 @@ public class Grass extends Plant {
 	public void growFruit() {
 		Entity e = checkAdjacent(AdjacentEntities.LEFT, row, col);
         if (e instanceof Leaf) {
-            Fruit f = new Fruit(simulation, simulation.getEntity(row, col),
-                    0, row, col - 1);
+            Fruit f = new Fruit(simulation, this,
+                    depth + 1, row, col - 1);
             simulation.setEntity(row, col - 1, f);
             nutrientsFrom.remove(e);
+            fruitsProduced++;
         }
 	}
 
