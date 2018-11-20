@@ -73,7 +73,7 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
         }
     }
 
-    // This method allows the grid to update itself over time. #Brendon
+    /** This method allows the grid to update itself over time. */
     public void run() {
         boolean keepRunning = true;
         // Keep this running until death.
@@ -94,6 +94,7 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
         }
     }
 
+    /** Iterates through the display-grid and updates GUI elements. */
     public void updateDisplay() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {

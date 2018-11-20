@@ -17,6 +17,8 @@ import java.util.ArrayList;
  *  value of the plant-entity above it. The total nutrient value is equal to
  *  the sum of the leaf-nutrients (left and right) feeding into it, as well as
  *  the root nutrients.
+ *
+ * 	@author Brendon Murthum & Parker ***
  */
 public class Grass extends Plant {
 
@@ -41,15 +43,6 @@ public class Grass extends Plant {
 	 * 	This may be used to disallow leaf-creation after the
 	 * 	plant has grown to be taller. */
 	private boolean canMakeLeaves = true;
-
-
-    /*
-	public int getFruitsProduced() {
-        return fruitsProduced;
-    }
-	public int getMaxFruitsProducable() { return maxFruitsProducable; }
-	public boolean getIsTopStem() { return isTopStem; }
-    */
 
 	/**
 	 * The contructor method of the grass entity. This sets GUI colors and

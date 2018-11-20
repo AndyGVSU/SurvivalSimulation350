@@ -80,7 +80,10 @@ public abstract class Plant extends Entity {
 		}
 	}
 
-	/** Initiate the death of the plant AND return the dead entities. */
+	/**
+	 * Initiates the death of the plant AND returns the dead entities.
+	 * @return	An ArrayList of the now-dead entities
+	 */
 	public abstract ArrayList<Entity> die();
 	/** Grow a plant-entity off of the current entity. */
 	public abstract void growPlant();
@@ -111,12 +114,12 @@ public abstract class Plant extends Entity {
 	public boolean canGrowFruit() {
 		// return false;
         if (depth > 2 && nutrients >= fruitCreationThreshold
-                &&  (checkAdjacent(AdjacentEntities.LEFT, row, col)
+                &&  (checkAdjacent(AdjacentEntities.LEFT, this.getRow(), this.getColumn())
                 instanceof Leaf)
                 && fruitsProduced < maxFruitsProducable
                 && isTopStem) {
 
-            System.out.println("Growing Fruit - r" + row + " - c" + col);
+            System.out.println("Growing Fruit - r" + this.getRow() + " - c" + this.getColumn());
             System.out.println("Fruit Produced: " + fruitsProduced);
             if (isTopStem) {
                 System.out.println("Is Top Stem!");
@@ -126,7 +129,7 @@ public abstract class Plant extends Entity {
         }
 
 		return (depth > 2 && nutrients >= fruitCreationThreshold
-			&&  (checkAdjacent(AdjacentEntities.LEFT, row, col)
+			&&  (checkAdjacent(AdjacentEntities.LEFT, this.getRow(), this.getColumn())
 			instanceof Leaf)
 			&& fruitsProduced < maxFruitsProducable
 			&& isTopStem);

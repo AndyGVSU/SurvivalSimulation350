@@ -5,6 +5,7 @@ import java.util.Random;
 /**
  *  The fruit entity is created by a "stem-plant entity". It is created in the
  *  place of a recently removed leaf. This fruit is intended to act as a seed.
+ *  @author  Brendon Murthum
  */
 public class Fruit extends Entity {
     /**
@@ -52,12 +53,14 @@ public class Fruit extends Entity {
      */
     public void seedDrop() {
         // "Drops" regardless of if new plant is able to grow below.
-        // TODO - Note that this is GRASS specific. It may be worth changing later to PLANT.
+        // TODO - Note that this is GRASS specific.
+        // It may be worth changing later to PLANT.
 
         System.out.println("  SeedDrop Inside");
 
         // Replace the fruit with a leaf that correctly acts as a collector
-        Leaf l = new Leaf(simulation, this.getFlowTo(), getDepth(), getRow(), getColumn());
+        Leaf l = new Leaf(simulation, this.getFlowTo(), getDepth(),
+                getRow(), getColumn());
         ((Plant) this.getFlowTo()).addToNutrientsFrom(l);
         simulation.setEntity(row, col, l);
 
@@ -87,7 +90,8 @@ public class Fruit extends Entity {
             boolean addedEntry = false;
             // Is this new value worth adding?
             while (!addedEntry) {
-                int randomInt = randomSeed.nextInt(numberOfColumns) + lowestColumn;
+                int randomInt = randomSeed.nextInt(numberOfColumns)
+                        + lowestColumn;
                 boolean isInArray = false;
                 for (int j = 0; j < numberOfColumns; j++) {
                     if (columnsToCheck[j] == randomInt) {
