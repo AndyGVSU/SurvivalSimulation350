@@ -13,7 +13,6 @@ import java.awt.Font;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.util.Calendar;
 
 /**********************************************************************
  * Grid Panel for SurvivalSimulation350 GUI.
@@ -33,8 +32,6 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
     private MainSimulation simulation;
     /** Font used by the grid buttons. */
     private final Font gridFont = new Font("Times New Roman", Font.PLAIN, 9);
-    /** Initial/Last time on system clock when thread starts. */
-    private long lastTime;
     /** Grid colors. **/
     private Color[] entityColors;
 
@@ -53,7 +50,6 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
         simulation = parent.getSimulation();
         rows = simulation.getRows();
         columns = simulation.getColumns();
-        lastTime = Calendar.getInstance().get(Calendar.MILLISECOND); // For timer. #Brendon
         entityColors = new Color[]{Color.GREEN,Color.CYAN,Color.ORANGE,Color.green,Color.WHITE,Color.RED};
 
         setLayout(new GridLayout(rows, columns));
@@ -75,52 +71,29 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
                 add(grid);
             }
         }
-        //simulation.setPlaying(true); // DEBUGGING TEMP #Brendon
     }
 
     // This method allows the grid to update itself over time. #Brendon
-    public void run(){
-        System.out.println("Update thread running");
-        long currentTime;
-        int debuggingTickCount = 0;
+    public void run() {
         boolean keepRunning = true;
         // Keep this running until death.
-        while(keepRunning) {
-            // System.out.println("Running"); // Debugging
-            // System.out.println(simulation.getPlaying());
-
-            int c,r;
-            if(simulation.getPlaying()) {
-                // Delay the ticker for debugging.
+        while (keepRunning) {
+            //makes the system work
+            System.out.print("");
+            if (parent.getPlaying()) {
                 try {
                     Thread.sleep(simulation.getSpeed() * 10);
-                } catch (Exception e) { }
+                }
+                catch (Exception e) {}
 
                 // If longer than the "speed", do a tick.
-                currentTime = Calendar.getInstance().get(Calendar.MILLISECOND);
-                lastTime = currentTime;
-                System.out.println("Tick " + debuggingTickCount);
-                debuggingTickCount = debuggingTickCount + 1;
                 simulation.stepForward();
                 parent.updateCurrentEntity();
                 parent.updateDisplay();
-
-                // End timer after 20 for debugging.
-                /*
-                if (debuggingTickCount > 20) {
-                    keepRunning = false;
-                    System.out.println("End of timer...");
-                }
-                */
-            } else {
-                try {
-                    Thread.sleep(simulation.getSpeed() * 10);
-                } catch (Exception e) {
-                    System.out.println("Error on Sleep()...");
-                }
             }
         }
     }
+
     public void updateDisplay() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {

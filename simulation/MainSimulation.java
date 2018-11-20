@@ -1,6 +1,5 @@
 package simulation;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -33,12 +32,18 @@ public class MainSimulation {
 		rows = r;
 		columns = c;
 		speedRange = new int[]{0, 100};
-		record = new SimulationRecord();
+
+		try {
+			record = new SimulationRecord();
+		}
+		catch (IOException e) {
+			System.exit(1);
+		}
 
 
 		playing = false;
 
-		reset();
+		reset(false);
 	}
 
 	// Changes the simulation up for a sample run. After initialization. #Brendon
@@ -143,14 +148,6 @@ public class MainSimulation {
 		return speed;
 	}
 
-	public void setPlaying(boolean play) {
-		playing = play;
-	}
-
-	public boolean getPlaying() {
-		return playing;
-	}
-
 	public void stepForward() {
 		currentStep++;
 		if (currentStep > totalSteps) {
@@ -170,13 +167,13 @@ public class MainSimulation {
 			try {
 				record.writeStep(currentStep, this);
 			} catch (IOException e) {
-				e.printStackTrace();
+				reset(true);
 			}
 		} else {
 			try {
 				record.readStep(currentStep, this);
 			} catch (Exception e) {
-				e.printStackTrace();
+				reset(true);
 			}
 		}
 
@@ -191,7 +188,7 @@ public class MainSimulation {
 			try {
 				record.readStep(currentStep, this);
 			} catch (Exception e) {
-				reset();
+				reset(true);
 			}
 		}
 	}
@@ -436,7 +433,7 @@ public class MainSimulation {
 		return record;
 	}
 
-	public void reset() {
+	public void reset(boolean hardReset) {
 		currentStep = 0;
 		totalSteps = 0;
 		environment = new Environment();
@@ -449,6 +446,9 @@ public class MainSimulation {
 				replaceEntity(r,c,new Air(this,null,0,r,c));
 
 		setDefaultOne();
+
+		if (hardReset)
+			record.reset();
 
 		if (!record.simulationExists()) {
 			try {
