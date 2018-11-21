@@ -11,8 +11,12 @@ public abstract class Plant extends Entity {
 	protected ArrayList<Collector> nutrientsFrom;
 
 	public void addToNutrientsFrom(final Collector c) {
-	    nutrientsFrom.add(c);
+		nutrientsFrom.add(c);
     }
+
+    public void removeNutrientsFrom(final Entity c) {
+		nutrientsFrom.remove(c);
+	}
 
 	// TODO - Make this private with accessors, says CheckStyle
 	// To make these private conflicts with the way grass?..
@@ -22,9 +26,9 @@ public abstract class Plant extends Entity {
     public int growLeafRequirement;
     /** The nutrients required to grow a root-entity from the plant. */
     public int growRootRequirement;
-
     /** The nutrients required to create a single fruit on the plant. */
 	private final int fruitCreationThreshold = maxNutrients - 200;
+
 	/** A plant stem may grow to this height. */
 	protected int maxStemDepth;
     /** Number of roots grown. Keeps track for plant-unique max roots. **/
@@ -43,9 +47,13 @@ public abstract class Plant extends Entity {
      *  new one true. */
     protected boolean isTopStem = true; // Unimplemented - Brendon Nov 18
     /** The number of fruits a plant-entity can create in its lifetime. */
-    protected final int maxFruitsProducable = 3;
+    protected final int maxFruitsProducable = 2;
     /** The number of fruits a plant has created. */
     protected int fruitsProduced = 0;
+	/** The number of ticks to create a fruit & between fruits. */
+    protected int fruitCreationDelayTime = 5;
+    /** The number of ticks since the last fruit produced. */
+    protected int tickOfLastFruitMade = 0;
 
 
 	/**
@@ -117,22 +125,28 @@ public abstract class Plant extends Entity {
                 &&  (checkAdjacent(AdjacentEntities.LEFT, this.getRow(), this.getColumn())
                 instanceof Leaf)
                 && fruitsProduced < maxFruitsProducable
-                && isTopStem) {
+                && isTopStem
+				&& (simulation.getCurrentStep() - tickOfLastFruitMade) >= fruitCreationDelayTime
+				&& lifeSteps > fruitCreationDelayTime) {
 
             System.out.println("Growing Fruit - r" + this.getRow() + " - c" + this.getColumn());
-            System.out.println("Fruit Produced: " + fruitsProduced);
+            System.out.println("  Fruit Produced: " + fruitsProduced);
             if (isTopStem) {
-                System.out.println("Is Top Stem!");
+                System.out.println("  Is Top Stem!");
             } else {
-                System.out.println("Is Not Top Stem!");
+                System.out.println("  Is Not Top Stem!");
             }
+			System.out.println("  Lifetime: " + lifeSteps);
+			System.out.println("  LastFruit Time: " + tickOfLastFruitMade);
         }
 
 		return (depth > 2 && nutrients >= fruitCreationThreshold
-			&&  (checkAdjacent(AdjacentEntities.LEFT, this.getRow(), this.getColumn())
-			instanceof Leaf)
-			&& fruitsProduced < maxFruitsProducable
-			&& isTopStem);
+				&&  (checkAdjacent(AdjacentEntities.LEFT, this.getRow(), this.getColumn())
+				instanceof Leaf)
+				&& fruitsProduced < maxFruitsProducable
+				&& isTopStem
+				&& (simulation.getCurrentStep() - tickOfLastFruitMade) >= fruitCreationDelayTime
+				&& lifeSteps > fruitCreationDelayTime);
 	}
 
 	/**

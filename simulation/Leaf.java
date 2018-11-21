@@ -20,6 +20,7 @@ public class Leaf extends Collector {
         super(sim, flow, depth, row, col);
         name = "LEAF";
         symbol = 'L';
-        color = 3;
+        final int greenColor = 3;
+        color = greenColor;
     }
 }

@@ -31,7 +31,7 @@ public class Grass extends Plant {
 	/** Number of nutrients used to create another leaf. */
 	private final int leafREQ = 10;
 	/** Maximum depth/height of plant blocks. **/
-	private final int stemDEPTH = 5;
+	private final int stemDEPTH = 10;
 	/** Maximum number of roots. **/
 	private final int maxROOTS = 8;
 	/** Time in steps between root growth attempts. **/
@@ -213,6 +213,7 @@ public class Grass extends Plant {
             simulation.setEntity(row, col - 1, f);
             nutrientsFrom.remove(e);
             fruitsProduced++;
+			tickOfLastFruitMade = lifeSteps;
         }
 	}
 

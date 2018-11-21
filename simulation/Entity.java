@@ -44,7 +44,8 @@ public abstract class Entity implements Serializable {
 	 * @param col   The "x" coordinate of this entity.
 	 */
 	public Entity(final MainSimulation sim, final Entity flow,
-				  final int depth, final int row, final int col) {
+				  final int depth, final int row,
+				  final int col) {
 		this.simulation = sim;
 		this.flowTo = flow;
 		this.depth = depth;
