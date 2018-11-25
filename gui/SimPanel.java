@@ -70,6 +70,7 @@ public class SimPanel extends JPanel implements TypedPanel {
         add(detailPanel);
 
         updateDisplay();
+        lockEntityAdd();
     }
 
     public void updateDisplay() {
@@ -85,6 +86,12 @@ public class SimPanel extends JPanel implements TypedPanel {
     public void lockGUI(boolean lock) {
         detailPanel.lockGUI(lock);
         optionPanel.lockGUI(lock);
+    }
+
+    public void lockEntityAdd() {
+        detailPanel.lockEntityAdd(
+                parent.getSimulation().getCurrentStep() <
+                parent.getSimulation().getTotalSteps());
     }
 
     /** @return The detail panel. */

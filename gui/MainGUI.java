@@ -36,6 +36,10 @@ public class MainGUI extends JFrame {
     private Entity currentEntity;
     /** Whether the simulation object is playing or not. */
     private boolean playing;
+    /** Whether a click on the grid views or adds a new entity or views an entity. */
+    private boolean clickAdds;
+    /** A template entity to add using the entity selection panel. */
+    private Entity clickEntity;
 
     /** Constructor.
      * @param sim The simulation logic object. */
@@ -106,6 +110,21 @@ public class MainGUI extends JFrame {
     /** @return whether the GUI is playing. */
     public boolean getPlaying() {
         return playing;
+    }
+
+    public void setClickAdds(boolean adds) {
+        clickAdds = adds;
+    }
+
+    public void setClickEntity(Entity e) {
+        clickEntity = e;
+    }
+    public Entity getClickEntity() { return clickEntity; }
+
+    public boolean getClickAdds() { return clickAdds; }
+
+    public void lockEntityAdd() {
+        ((SimPanel) currentPanel).lockEntityAdd();
     }
 
     public void updateDisplay() {

@@ -1,7 +1,6 @@
 package gui;
 
-import simulation.Entity;
-import simulation.MainSimulation;
+import simulation.*;
 
 import javax.swing.JPanel;
 import javax.swing.BorderFactory;
@@ -34,7 +33,7 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
     private final Font gridFont = new Font("Times New Roman", Font.PLAIN, 9);
     /** Grid colors. **/
     private Color[] entityColors;
-
+    /** Two-dimensional array of buttons that hold entity data. */
     private GridPanelTile[][] buttons;
 
     /** Constructor.
@@ -111,7 +110,30 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
         @Override
         public void actionPerformed(final ActionEvent e) {
             GridPanelTile button = (GridPanelTile) e.getSource();
+            int brow = button.getRow();
+            int bcol = button.getColumn();
 
+            if(parent.getClickAdds()) {
+                Entity addType = parent.getClickEntity();
+                Entity toAdd = null;
+                Entity current = parent.getSimulation().getEntity(
+                        button.getRow(), button.getColumn());
+
+                if (addType instanceof Grass) {
+                    toAdd = new Grass(parent.getSimulation(), null,0, brow, bcol);
+                }
+                if (addType instanceof Dirt) {
+                    toAdd = new Dirt(parent.getSimulation(), null,0, brow, bcol);
+                }
+                if (addType instanceof Air) {
+                    toAdd = new Air(parent.getSimulation(), null,0, brow, bcol);
+                }
+                if (toAdd != null &&
+                        !(current instanceof Plant) &&
+                        !(current instanceof Collector))
+                    parent.getSimulation().setEntity(brow,bcol,toAdd);
+
+            }
             //set the currently selected entity to the tile you just pressed
             parent.setCurrentEntity(
                     parent.getSimulation().getEntity(

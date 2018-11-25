@@ -30,7 +30,7 @@ public class DetailPanel extends JPanel implements TypedPanel {
     /** The step panel **/
     private JLabel stepLabel;
     /** The entity adding panel. **/
-    private JPanel entityAddPanel;
+    private EntitySelectionPanel entityAddPanel;
 
     /** Constructor.
      * @param par The GUI controlling object
@@ -112,6 +112,10 @@ public class DetailPanel extends JPanel implements TypedPanel {
                 ((SliderPanel) c).lockGUI(lock);
             }
         }
-        //entityAddPanel.lockGUI(lock);
+        lockEntityAdd(lock);
+    }
+
+    public void lockEntityAdd(boolean lock) {
+        entityAddPanel.lockGUI(lock);
     }
 }

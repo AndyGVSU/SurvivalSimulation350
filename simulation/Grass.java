@@ -164,7 +164,11 @@ public class Grass extends Plant {
         // add another root. Iterate down rows, below the main
         // grass-entity.
 		while (tempRow < simulation.getRows() - 1) {
-		    // Check below the current space for dirt-entity
+			// If there's no dirt, stop checking downwards
+			if (checkAdjacent(AdjacentEntities.DOWN, tempRow, col)
+					instanceof Air)
+				break;
+			// Check below the current space for dirt-entity
 			if (checkAdjacent(AdjacentEntities.DOWN, tempRow, col)
                     instanceof Dirt) {
 				Root r = new Root(simulation,

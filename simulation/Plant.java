@@ -74,17 +74,19 @@ public abstract class Plant extends Entity {
 		name = "PLANT";
 		symbol = 'P';
 
-		// A plant must be placed above dirt-entity
-		Entity e = checkAdjacent(AdjacentEntities.DOWN, row, col);
-		if (!(e instanceof Dirt)) {
-			simulation.setEntity(row, col, new Air(sim, flow,
-					0, row, col));
-		} else {
-			// Generate initial root
-			int newRow = row + 1;
-			Root r = new Root(sim, this, depth + 1, newRow, col);
-			simulation.setEntity(newRow, col, r);
-			nutrientsFrom.add(r);
+		if (sim != null) {
+			// A plant must be placed above dirt-entity
+			Entity e = checkAdjacent(AdjacentEntities.DOWN, row, col);
+			if (!(e instanceof Dirt)) {
+				simulation.setEntity(row, col, new Air(sim, flow,
+						0, row, col));
+			} else {
+				// Generate initial root
+				int newRow = row + 1;
+				Root r = new Root(sim, this, depth + 1, newRow, col);
+				simulation.setEntity(newRow, col, r);
+				nutrientsFrom.add(r);
+			}
 		}
 	}
 

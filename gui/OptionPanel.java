@@ -149,11 +149,13 @@ public class OptionPanel extends JPanel implements TypedPanel {
                 simulation.stepBackward();
                 parent.updateDisplay();
                 parent.updateCurrentEntity();
+                parent.lockEntityAdd();
             }
             if (source == stepForwardButton) {
                 simulation.stepForward();
                 parent.updateDisplay();
                 parent.updateCurrentEntity();
+                parent.lockEntityAdd();
             }
             if (source == loadButton) {
                 //Create a file chooser
@@ -177,6 +179,7 @@ public class OptionPanel extends JPanel implements TypedPanel {
             if (source == resetButton) {
                 parent.getSimulation().reset(true);
                 parent.updateDisplay();
+                parent.lockEntityAdd();
             }
         }
     }

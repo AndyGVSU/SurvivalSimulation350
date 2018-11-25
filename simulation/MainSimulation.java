@@ -300,21 +300,21 @@ public class MainSimulation {
 				if (e instanceof Leaf) {
 					if (sunlight == 0) {
 		// When leaf-deleted, removes from plant's nutrient list.
-		((Plant) e.getFlowTo()).removeNutrientsFrom(e);
-
+						((Plant) e.getFlowTo()).removeNutrientsFrom(e);
 						setEntity(i, j,
 						new Air(this, null, 0, i, j));
-
 		// TODO - Set flow-to plant to not be able to grow leaves again
 					} else {
 						e.setNutrients(sunlight);
-					sunlight /= NUTRIENTS_SUNLIGHT_DIMINISH;
+						sunlight /= NUTRIENTS_SUNLIGHT_DIMINISH;
 					}
 				} else if (e instanceof Air) {
 					e.setNutrients(sunlight);
 				} else if (e instanceof Fruit) {
                     sunlight /= NUTRIENTS_SUNLIGHT_DIMINISH;
-                }
+                } else if (e instanceof Dirt) {
+					sunlight = 0;
+				}
 			}
 		}
 	}
