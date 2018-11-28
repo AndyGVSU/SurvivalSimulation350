@@ -44,14 +44,14 @@ public class Fruit extends Entity {
      * @author  Brendon
      * @since   Nov 18, 2018
      */
-    public int getFruitDropTime() {
+    public final int getFruitDropTime() {
         return fruitDropTime;
     }
 
     /**
      * Tries to handle the fruit removal and generation of a potential plant.
      */
-    public void seedDrop() {
+    public final void seedDrop() {
         // "Drops" regardless of if new plant is able to grow below.
         // TODO - Note that this is GRASS specific.
         // It may be worth changing later to PLANT.

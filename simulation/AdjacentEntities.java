@@ -1,9 +1,6 @@
 package simulation;
 
-enum AdjacentEntities {
-    UP,
-    RIGHT,
-    LEFT,
-    DOWN,
-    HERE
-}
+/**
+ * The enum for all relative spatially related entities.
+ */
+enum AdjacentEntities { UP, RIGHT, LEFT, DOWN, HERE }
