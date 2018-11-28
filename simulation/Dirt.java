@@ -20,6 +20,6 @@ public class Dirt extends Entity {
 		name = "DIRT";
 		symbol = 'D';
 		final int orangeColor = 2;
-		color = orangeColor;
+		this.setColor(orangeColor);
 	}
 }

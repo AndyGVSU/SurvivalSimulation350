@@ -21,7 +21,7 @@ public class Root extends Collector {
         name = "ROOTS";
         symbol = 'R';
         final int brownColor = 4;
-        color = brownColor;
+        this.setColor(brownColor);
         survivalRequirement = 2;
     }
 }

@@ -6,7 +6,7 @@ public class Air extends Entity {
 		super(sim,flow,depth,row,col);
 		name = "AIR";
 		symbol = '.';
-		color = 1;
+		this.setColor(1);
 	}
 
 	public void doStep() { }

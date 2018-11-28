@@ -21,6 +21,6 @@ public class Leaf extends Collector {
         name = "LEAF";
         symbol = 'L';
         final int greenColor = 3;
-        color = greenColor;
+        this.setColor(greenColor);
     }
 }
