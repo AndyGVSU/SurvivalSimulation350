@@ -10,7 +10,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.JSlider;
 
-import java.awt.*;
+import java.awt.Dimension;
+
 
 import java.util.Hashtable;
 
@@ -46,11 +47,8 @@ public class SliderPanel extends JPanel implements TypedPanel {
     private final Dimension panelDefaultSize = new Dimension(350, 1);
     /** Blank space for layout. */
     private final Dimension blankSpace = new Dimension(10, 1);
-    /** The slider this panel uses. **/
+    /** The slider this panel uses. */
     private JSlider slider;
-    /** The font used for the panel's sliders **/
-    private final Font sliderFont =
-            new Font("Times New Roman", Font.BOLD, 8);
 
     /** Constructor.
      * @param par The controlling GUI object.
@@ -177,6 +175,8 @@ public class SliderPanel extends JPanel implements TypedPanel {
         }
     }
 
+    /** Manually sets the sliders' values to their
+     * respective environment variables. */
     public void manualUpdate() {
         Environment env = parent.getSimulation().getEnvironment();
         switch (type) {
@@ -198,11 +198,14 @@ public class SliderPanel extends JPanel implements TypedPanel {
         updateText();
     }
 
+    /** Updates the sliders' value text with their
+     * respective values and units. */
     private void updateText() {
         valueLabel.setText(slider.getValue() + sliderUnit);
     }
 
-    public void lockGUI(boolean lock) {
+    /** @param lock Whether to lock the slider. */
+    public void lockGUI(final boolean lock) {
         slider.setEnabled(!lock);
     }
 }

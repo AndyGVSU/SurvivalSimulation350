@@ -2,12 +2,19 @@ package gui;
 
 import simulation.MainSimulation;
 
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.Box;
+import javax.swing.JFileChooser;
 
-import java.awt.*;
-
+import java.awt.Component;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import java.io.IOException;
 
 /**********************************************************************
@@ -17,7 +24,7 @@ import java.io.IOException;
  *
  * @author Anderson Hudson
  *********************************************************************/
-public class OptionPanel extends JPanel implements TypedPanel {
+public final class OptionPanel extends JPanel implements TypedPanel {
     /** The controlling GUI component. */
     private MainGUI parent;
     /** Button that sends the user to the title screen. */
@@ -101,12 +108,15 @@ public class OptionPanel extends JPanel implements TypedPanel {
         innerPanel.add(resetButton);
 
         ButtonClick listener = new ButtonClick();
-        for (Component c : innerPanel.getComponents())
-            if (c instanceof JButton)
+        for (Component c : innerPanel.getComponents()) {
+            if (c instanceof JButton) {
                 ((JButton) c).addActionListener(listener);
+            }
+        }
     }
 
-    public void lockGUI(boolean lock) {
+    /** @param lock Whether to disable buttons. */
+    public void lockGUI(final boolean lock) {
         titleButton.setEnabled(!lock);
         defaultsButton.setEnabled(!lock);
         playButton.setEnabled(!lock);
@@ -168,9 +178,8 @@ public class OptionPanel extends JPanel implements TypedPanel {
                     try {
                         parent.getSimulation().getRecord().setDirectory(
                                 fc.getSelectedFile().toString());
-                    }
-                    catch (IOException ex) {
-                        //handle failure
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
                     }
                     parent.getSimulation().reset(false);
                     parent.updateDisplay();

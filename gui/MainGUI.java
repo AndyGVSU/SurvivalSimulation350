@@ -19,7 +19,7 @@ import java.awt.Color;
  *
  * @author Anderson Hudson
  *********************************************************************/
-public class MainGUI extends JFrame {
+public final class MainGUI extends JFrame {
     /** The fixed simulation size. */
     private static final int SIM_SIZE = 32;
     /** The GUI's window height. */
@@ -36,7 +36,8 @@ public class MainGUI extends JFrame {
     private Entity currentEntity;
     /** Whether the simulation object is playing or not. */
     private boolean playing;
-    /** Whether a click on the grid views or adds a new entity or views an entity. */
+    /** Whether a click on the grid views or
+     * adds a new entity or views an entity. */
     private boolean clickAdds;
     /** A template entity to add using the entity selection panel. */
     private Entity clickEntity;
@@ -50,7 +51,7 @@ public class MainGUI extends JFrame {
         changeWindow(PanelType.TITLE_PANEL);
 
         simulation = sim;
-        currentEntity = simulation.getEntity(0,0);
+        currentEntity = simulation.getEntity(0, 0);
         generalBorder = BorderFactory.createLineBorder(Color.black, 2);
         playing = false;
     }
@@ -65,7 +66,8 @@ public class MainGUI extends JFrame {
                 break;
             case SIMULATION_PANEL:
                 currentPanel = new SimPanel(this);
-                ((SimPanel) currentPanel).startGridThread(); // Sets the running thread.
+                // Sets the running thread.
+                ((SimPanel) currentPanel).startGridThread();
                 break;
             default:
                 throw new IllegalArgumentException("INVALID PANEL TYPE");
@@ -96,13 +98,14 @@ public class MainGUI extends JFrame {
         updateDisplay();
         return currentEntity;
     }
+    /** Refreshes the current entity for display purposes,
+     * in case the entity in the selected grid button is changed.*/
     public void updateCurrentEntity() {
         int r = getCurrentEntity().getRow();
         int c = getCurrentEntity().getColumn();
-        setCurrentEntity(simulation.getEntity(r,c));
+        setCurrentEntity(simulation.getEntity(r, c));
     }
-    /** Sets whether the GUI is playing.
-     * @param play */
+    /** @param play Sets whether the GUI is playing.*/
     public void setPlaying(final boolean play) {
         playing = play;
         lockGUI(playing);
@@ -112,26 +115,34 @@ public class MainGUI extends JFrame {
         return playing;
     }
 
-    public void setClickAdds(boolean adds) {
+    /** @param adds Sets whether a click on a grid button adds an entity. */
+    public void setClickAdds(final boolean adds) {
         clickAdds = adds;
     }
-
-    public void setClickEntity(Entity e) {
+    /** @param e The new entity to set to  */
+    public void setClickEntity(final Entity e) {
         clickEntity = e;
     }
-    public Entity getClickEntity() { return clickEntity; }
-
-    public boolean getClickAdds() { return clickAdds; }
-
+    /** @return The entity type to check against
+     * when clicking on grid buttons. */
+    public Entity getClickEntity() {
+        return clickEntity;
+    }
+    /** @return Whether a mouse click on a grid button adds an entity
+     * or views it. */
+    public boolean getClickAdds() {
+        return clickAdds;
+    }
+    /** Calls lockEntityAdd for the simulation panel. */
     public void lockEntityAdd() {
         ((SimPanel) currentPanel).lockEntityAdd();
     }
-
+    /** Calls updateDisplay for the simulation panel. */
     public void updateDisplay() {
         ((SimPanel) currentPanel).updateDisplay();
     }
-
-    public void lockGUI(boolean lock) {
+    /** @param lock Whether to disable the simulation panel's components. */
+    public void lockGUI(final boolean lock) {
         ((SimPanel) currentPanel).lockGUI(lock);
     }
     /** Instantiate the GUI.
