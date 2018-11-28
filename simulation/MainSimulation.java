@@ -5,11 +5,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
+/** Represents the simulation and its parts. */
 public class MainSimulation {
 	/** Used to divide sunlight to small numbers below current entity. */
-	final private int NUTRIENTS_SUNLIGHT_DIMINISH = 5;
+	private final int nutrientsSunlightDiminish = 5;
 	/** The number of nutrients that a root intially pulls. */
-	final private int NUTRIENTS_ROOT_BASE = 10;
+	private final int nutrientsRootBase = 10;
 	/** Number of rows in the simulation. */
 	private int rows;
 	/** Number of columns in the simulation. */
@@ -24,9 +25,9 @@ public class MainSimulation {
 	private int speed = defaultSpeed;
 	/** The range of appropriate speeds given to the user. */
 	private int[] speedRange;
-	/** TODO. */
+	/** The environment object for this simulation. */
 	private Environment environment;
-	/** TODO. */
+	/** The tool to save and write simulations. */
 	private SimulationRecord record;
 
 	/** Keeps track of plant dependencies for nutrient-transfer. */
@@ -50,9 +51,9 @@ public class MainSimulation {
 	 * @param row   The number of rows in this simulation.
 	 * @param col   The number of columns in this simulation.
 	 */
-	public MainSimulation(final int r, final int c) {
-		rows = r;
-		columns = c;
+	public MainSimulation(final int row, final int col) {
+		rows = row;
+		columns = col;
 		final int speedMax = 100;
 		speedRange = new int[]{0, speedMax};
 
@@ -67,8 +68,8 @@ public class MainSimulation {
 		reset(false);
 	}
 
-	/** Sets up the map as one of many potential setups. */
-	public void setDefaultOne() {
+	/** Sets up the map as one of many potential setups.*/
+	public final void setDefaultOne() {
 		final int numberOfDirtLayers = 5;
 		final int numberOfAirLayers = rows - numberOfDirtLayers;
 
@@ -82,8 +83,8 @@ public class MainSimulation {
 		// Setting the bottom dirt layers
 		for (int i = numberOfAirLayers; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
-				setEntity(i, j, entityGrid[i][j] = new Dirt(
-						this, null, 0, i, j));
+				entityGrid[i][j] = new Dirt(this, null, 0, i, j);
+				setEntity(i, j, entityGrid[i][j]);
 			}
 		}
 
@@ -114,9 +115,9 @@ public class MainSimulation {
 	 * Returns the entity-object at the specified location.
 	 * @param row   The "y" coordinate of this entity.
 	 * @param col   The "x" coordinate of this entity.
-	 * @return
+	 * @return Entity located at row and col.
 	 */
-	public Entity getEntity(final int row, final int col) {
+	public final Entity getEntity(final int row, final int col) {
 		// "col > columns" -> "col >= columns" for the case of
 		// a right-most leaf error.
 		if (row < 0 || row > rows || col < 0 || col >= columns) {
@@ -131,7 +132,7 @@ public class MainSimulation {
 	 * @param col   The "x" coordinate of this entity.
 	 * @param e		The new entity to set to this location.
 	 */
-	public void setEntity(final int row, final int col, final Entity e) {
+	public final void setEntity(final int row, final int col, final Entity e) {
 		int depth = e.getDepth();
 		Entity previous = getEntity(row, col);
 		int prevDepth = previous.getDepth();
@@ -175,7 +176,7 @@ public class MainSimulation {
 	 * @param col   The "x" coordinate of this entity.
 	 * @param e		The new entity to set to this location.
 	 */
-	public void replaceEntity(int row, int col, Entity e) {
+	public final void replaceEntity(final int row, final int col, final Entity e) {
 		entityGrid[row][col] = e;
 	}
 
@@ -183,7 +184,7 @@ public class MainSimulation {
 	 * Returns the number of rows in the simulation.
 	 * @return	The number of rows in the simulation
 	 */
-	public int getRows() {
+	public final int getRows() {
 		return rows;
 	}
 
@@ -191,15 +192,23 @@ public class MainSimulation {
 	 * Returns the number of columns in the simulation.
 	 * @return	The number of columns in the simulation.
 	 */
-	public int getColumns() {
+	public final int getColumns() {
 		return columns;
 	}
 
-	public int[] getSpeedRange() {
+	/**
+	 * Returns the appropriate range of speeds available to the user.
+	 * @return The appropriate range of speeds available to the user.
+	 */
+	public final int[] getSpeedRange() {
 		return speedRange;
 	}
 
-	public Environment getEnvironment() {
+	/**
+	 * Returns the environment of the current simulation.
+	 * @return The environment of the current simulation.
+	 */
+	public final Environment getEnvironment() {
 		return environment;
 	}
 
@@ -207,7 +216,7 @@ public class MainSimulation {
 	 * Gets the current simulation speed.
 	 * @return	The current simulation speed.
 	 */
-	public int getSpeed() {
+	public final int getSpeed() {
 		return speed;
 	}
 
@@ -216,7 +225,7 @@ public class MainSimulation {
 	 * @param s	The new simulation speed.
 	 * @return	The new simulaiton speed.
 	 */
-	public int setSpeed(final int s) {
+	public final int setSpeed(final int s) {
 		speed = s;
 		return speed;
 	}
@@ -229,7 +238,7 @@ public class MainSimulation {
 	 * 	- Steps each entity's lifetime count
 	 * 	- Appropriately records/plays the simulation
 	 */
-	public void stepForward() {
+	public final void stepForward() {
 		currentStep++;
 		if (currentStep > totalSteps) {
 			totalSteps++;
@@ -260,7 +269,7 @@ public class MainSimulation {
 	/**
 	 * Iterates the simulation backwards to allow for more user observation.
 	 */
-	public void stepBackward() {
+	public final void stepBackward() {
 		if (currentStep > 0) {
 			currentStep--;
 			try {
@@ -287,7 +296,7 @@ public class MainSimulation {
 				Entity e = entityGrid[i][j];
 				if (e instanceof Root) {
 					e.setNutrients(e.getDepth()
-				* NUTRIENTS_ROOT_BASE - e.getLifeSteps());
+				* nutrientsRootBase - e.getLifeSteps());
 				}
 			}
 		}
@@ -306,12 +315,12 @@ public class MainSimulation {
 		// TODO - Set flow-to plant to not be able to grow leaves again
 					} else {
 						e.setNutrients(sunlight);
-						sunlight /= NUTRIENTS_SUNLIGHT_DIMINISH;
+						sunlight /= nutrientsSunlightDiminish;
 					}
 				} else if (e instanceof Air) {
 					e.setNutrients(sunlight);
 				} else if (e instanceof Fruit) {
-                    sunlight /= NUTRIENTS_SUNLIGHT_DIMINISH;
+                    sunlight /= nutrientsSunlightDiminish;
                 } else if (e instanceof Dirt) {
 					sunlight = 0;
 				}
@@ -319,6 +328,9 @@ public class MainSimulation {
 		}
 	}
 
+	/**
+	 * Passes the nutrients from each plant to its respective flowTo.
+	 */
 	private void nutrientTransfer() {
 
 		int d = depthCollector.size() - 1;
@@ -355,6 +367,9 @@ public class MainSimulation {
 		}
 	}
 
+	/**
+	 * Manages the growth logic for each plant.
+	 */
 	private void growthManage() {
 
 		// copy the list; grow() adds to the depthPlant list
@@ -416,7 +431,7 @@ public class MainSimulation {
 	 *  1. Should a fruit drop based on time? Drop a fruit.
 	 *  2. Is the plant the fruit is connected to dead? Drop fruit.
 	 */
-	public void fruitManage() {
+	public final void fruitManage() {
 		for (int i = 0; i < fruitList.size(); i++) {
 			Entity f = fruitList.get(i);
 
@@ -443,7 +458,7 @@ public class MainSimulation {
 	 * @return	The step number that the simulation is
 	 * 			currently looking at.
 	 */
-	public int getCurrentStep() {
+	public final int getCurrentStep() {
 		return currentStep;
 	}
 
@@ -452,7 +467,7 @@ public class MainSimulation {
 	 * @return	The total number of steps generated in this
 	 * 			simulation.
 	 */
-	public int getTotalSteps() {
+	public final int getTotalSteps() {
 		return totalSteps;
 	}
 
@@ -460,7 +475,7 @@ public class MainSimulation {
 	 * TODO.
 	 * @return	Description.
 	 */
-	public SimulationRecord getRecord() {
+	public final SimulationRecord getRecord() {
 		return record;
 	}
 
@@ -468,7 +483,7 @@ public class MainSimulation {
 	 * TODO.
 	 * @param hardReset	Description.
 	 */
-	public void reset(final boolean hardReset) {
+	public final void reset(final boolean hardReset) {
 		currentStep = 0;
 		totalSteps = 0;
 		environment = new Environment();
@@ -476,7 +491,7 @@ public class MainSimulation {
 		depthPlant = new ArrayList<>();
 		depthCollector = new ArrayList<>();
 
-		for(int r = 0; r < rows; r++) {
+		for (int r = 0; r < rows; r++) {
 			for (int c = 0; c < columns; c++) {
 				replaceEntity(r, c,
 				new Air(this, null, 0, r, c));
