@@ -1,6 +1,10 @@
 package gui;
 
-import javax.swing.*;
+//import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.BoxLayout;
+import javax.swing.Box;
 
 import java.awt.Color;
 import java.awt.BorderLayout;
@@ -14,7 +18,7 @@ import java.awt.Component;
  *
  * @author Anderson Hudson
  *********************************************************************/
-public class DetailPanel extends JPanel implements TypedPanel {
+public final class DetailPanel extends JPanel implements TypedPanel {
     /** The controlling GUI component. */
     private MainGUI parent;
     /** The entity viewing panel. */
@@ -27,7 +31,7 @@ public class DetailPanel extends JPanel implements TypedPanel {
     private final int largeBoxSpace = 30;
     /** The slider panel. **/
     private JPanel sliderPanel;
-    /** The step panel **/
+    /** The step panel. **/
     private JLabel stepLabel;
     /** The entity adding panel. **/
     private EntitySelectionPanel entityAddPanel;
@@ -97,16 +101,19 @@ public class DetailPanel extends JPanel implements TypedPanel {
     /** Update the text of the entity viewing panel and step panel. */
     public void updateText() {
         viewPanel.updateText();
-        stepLabel.setText("Step: " + parent.getSimulation().getCurrentStep() +
-                " / " + parent.getSimulation().getTotalSteps());
+        stepLabel.setText("Step: " + parent.getSimulation().getCurrentStep()
+                + " / " + parent.getSimulation().getTotalSteps());
     }
+    /** Calls manualUpdate for the slider panel. */
     public void updateSliders() {
-        for (Component p : sliderPanel.getComponents())
-            if (p instanceof SliderPanel)
+        for (Component p : sliderPanel.getComponents()) {
+            if (p instanceof SliderPanel) {
                 ((SliderPanel) p).manualUpdate();
+            }
+        }
     }
-
-    public void lockGUI(boolean lock) {
+    /** @param lock Whether to disable the slider panel's components. */
+    public void lockGUI(final boolean lock) {
         for (Component c : sliderPanel.getComponents()) {
             if (c instanceof SliderPanel) {
                 ((SliderPanel) c).lockGUI(lock);
@@ -114,8 +121,8 @@ public class DetailPanel extends JPanel implements TypedPanel {
         }
         lockEntityAdd(lock);
     }
-
-    public void lockEntityAdd(boolean lock) {
+    /** @param lock Whether to lock the entity add panel's components. */
+    public void lockEntityAdd(final boolean lock) {
         entityAddPanel.lockGUI(lock);
     }
 }

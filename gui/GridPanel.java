@@ -1,6 +1,12 @@
 package gui;
 
-import simulation.*;
+import simulation.MainSimulation;
+import simulation.Entity;
+import simulation.Air;
+import simulation.Grass;
+import simulation.Dirt;
+import simulation.Plant;
+import simulation.Collector;
 
 import javax.swing.JPanel;
 import javax.swing.BorderFactory;
@@ -35,6 +41,8 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
     private Color[] entityColors;
     /** Two-dimensional array of buttons that hold entity data. */
     private GridPanelTile[][] buttons;
+    /** Millisecond-decisecond conversion. */
+    private final int timeMultiplier = 10;
 
     /** Constructor.
      * @param par The controlling GUI object.
@@ -49,7 +57,12 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
         simulation = parent.getSimulation();
         rows = simulation.getRows();
         columns = simulation.getColumns();
-        entityColors = new Color[]{Color.GREEN,Color.CYAN,Color.ORANGE,Color.green,Color.WHITE,Color.RED};
+        entityColors = new Color[]{Color.GREEN,
+                Color.CYAN,
+                Color.ORANGE,
+                Color.green,
+                Color.WHITE,
+                Color.RED};
 
         setLayout(new GridLayout(rows, columns));
         setBackground(Color.BLACK);
@@ -81,9 +94,10 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
             System.out.print("");
             if (parent.getPlaying()) {
                 try {
-                    Thread.sleep(simulation.getSpeed() * 10);
+                    Thread.sleep(simulation.getSpeed() * timeMultiplier);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                catch (Exception e) {}
 
                 // If longer than the "speed", do a tick.
                 simulation.stepForward();
@@ -113,26 +127,29 @@ public class GridPanel extends JPanel implements TypedPanel, Runnable {
             int brow = button.getRow();
             int bcol = button.getColumn();
 
-            if(parent.getClickAdds()) {
+            if (parent.getClickAdds()) {
                 Entity addType = parent.getClickEntity();
                 Entity toAdd = null;
                 Entity current = parent.getSimulation().getEntity(
                         button.getRow(), button.getColumn());
 
                 if (addType instanceof Grass) {
-                    toAdd = new Grass(parent.getSimulation(), null,0, brow, bcol);
+                    toAdd = new Grass(
+                            parent.getSimulation(), null, 0, brow, bcol);
                 }
                 if (addType instanceof Dirt) {
-                    toAdd = new Dirt(parent.getSimulation(), null,0, brow, bcol);
+                    toAdd = new Dirt(
+                            parent.getSimulation(), null, 0, brow, bcol);
                 }
                 if (addType instanceof Air) {
-                    toAdd = new Air(parent.getSimulation(), null,0, brow, bcol);
+                    toAdd = new Air(
+                            parent.getSimulation(), null, 0, brow, bcol);
                 }
-                if (toAdd != null &&
-                        !(current instanceof Plant) &&
-                        !(current instanceof Collector))
-                    parent.getSimulation().setEntity(brow,bcol,toAdd);
-
+                if (toAdd != null
+                        && !(current instanceof Plant)
+                        && !(current instanceof Collector)) {
+                    parent.getSimulation().setEntity(brow, bcol, toAdd);
+                }
             }
             //set the currently selected entity to the tile you just pressed
             parent.setCurrentEntity(

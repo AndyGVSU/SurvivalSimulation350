@@ -1,9 +1,15 @@
 package gui;
 
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import javax.swing.BoxLayout;
+import javax.swing.Box;
+import javax.swing.BorderFactory;
 
-import java.awt.*;
-
+import java.awt.Font;
+import java.awt.Dimension;
+import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -48,8 +54,8 @@ public class TitlePanel extends JPanel implements TypedPanel {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(Color.BLACK);
 
-        titleLabel = new JLabel("<html> <pre class=\"tab\">     PLANT SURVIVAL<br>" +
-                "     SIMULATION 350</pre></html>");
+        titleLabel = new JLabel("<html> <pre class=\"tab\">     PLANT SURVIVAL"
+                + "<br>     SIMULATION 350</pre></html>");
         startButton = new JButton();
 
         titleLabel.setFont(titleFont);

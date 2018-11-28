@@ -13,7 +13,7 @@ import java.awt.Dimension;
  *
  * @author Anderson Hudson
  *********************************************************************/
-public class SimPanel extends JPanel implements TypedPanel {
+public final class SimPanel extends JPanel implements TypedPanel {
     /** The controlling GUI component. */
     private MainGUI parent;
     /** Panel that contains options and simulation grid. */
@@ -32,7 +32,7 @@ public class SimPanel extends JPanel implements TypedPanel {
     private final int optionWidth =  MainGUI.WINDOW_WIDTH / 3;
     /** Width of grid panel. */
     private final int gridWidth = optionWidth * 2;
-
+    /** Thread that supports the play/pause feature. */
     private Thread t1; //TODO Temp Brendon
 
     /** Constructor.
@@ -56,8 +56,10 @@ public class SimPanel extends JPanel implements TypedPanel {
         optionPanel = new OptionPanel(parent);
         optionPanel.setPreferredSize(new Dimension(optionWidth, topHeight));
 
-        // Start the grid panel in its own thread for the sake of continuous updates. #Brendon
-        t1 = new Thread(gridPanel = new GridPanel(parent));
+        // Start the grid panel in its own thread
+        // for the sake of continuous updates. #Brendon
+        gridPanel = new GridPanel(parent);
+        t1 = new Thread(gridPanel);
         gridPanel.setPreferredSize(new Dimension(gridWidth, topHeight));
 
         detailPanel = new DetailPanel(parent);
@@ -72,30 +74,26 @@ public class SimPanel extends JPanel implements TypedPanel {
         updateDisplay();
         lockEntityAdd();
     }
-
+    /** Updates GUI for grid panel, slider panel, and the detail panel. */
     public void updateDisplay() {
         gridPanel.updateDisplay();
         detailPanel.updateSliders();
         detailPanel.updateText();
     }
-
+    /** Starts the thread. */
     public void startGridThread() {
         t1.start(); // Sets the running thread.
     }
-
-    public void lockGUI(boolean lock) {
+    /** @param lock Whether to lock the detail and option panels. */
+    public void lockGUI(final boolean lock) {
         detailPanel.lockGUI(lock);
         optionPanel.lockGUI(lock);
     }
-
+    /** Locks the entity add panel only if the
+     * simulation is on the most recent step. */
     public void lockEntityAdd() {
         detailPanel.lockEntityAdd(
-                parent.getSimulation().getCurrentStep() <
-                parent.getSimulation().getTotalSteps());
-    }
-
-    /** @return The detail panel. */
-    public DetailPanel getDetailPanel() {
-        return detailPanel;
+                parent.getSimulation().getCurrentStep()
+                < parent.getSimulation().getTotalSteps());
     }
 }
