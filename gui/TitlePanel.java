@@ -32,7 +32,7 @@ public class TitlePanel extends JPanel implements TypedPanel {
             new Font("Times New Roman", Font.ITALIC, 64);
     /** Start button. **/
     private final Font startFont =
-            new Font("Times New Roman", Font.PLAIN, 64);
+            new Font("System", Font.PLAIN, 64);
     /** Medium vertical spacing for layout. */
     private final Dimension medSpace = new Dimension(1, 50);
     /** Large vertical spacing for layout. */

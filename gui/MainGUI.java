@@ -48,6 +48,7 @@ public final class MainGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
         setResizable(false);
+        setTitle("SurvivalSimulation350");
         changeWindow(PanelType.TITLE_PANEL);
 
         simulation = sim;
