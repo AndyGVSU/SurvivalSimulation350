@@ -533,18 +533,15 @@ public class MainSimulation {
     }
 
     /**
-     * TODO.
-     *
-     * @return Description.
+     * @return Gets the simulation's SimulationRecord object.
      */
     public final SimulationRecord getRecord() {
         return record;
     }
 
     /**
-     * TODO.
-     *
-     * @param hardReset Description.
+     * Resets the simulation to the starting state.
+     * @param hardReset Whether to reset the directory files or not.
      */
     public final void reset(final boolean hardReset) {
         currentStep = 0;

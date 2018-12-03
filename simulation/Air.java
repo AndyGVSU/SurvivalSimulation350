@@ -6,6 +6,7 @@ package simulation;
 public class Air extends Entity {
 
     /**
+     * The constructor for the air entity.
      * @param sim   The simulation object that contains the entire system.
      * @param flow  Unused with AIR.
      * @param depth Unused with AIR.

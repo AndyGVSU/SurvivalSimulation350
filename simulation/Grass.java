@@ -18,7 +18,7 @@ import java.util.ArrayList;
  * the sum of the leaf-nutrients (left and right) feeding into it, as well as
  * the root nutrients.
  *
- * @author Brendon Murthum & Parker
+ * @author Brendon, Parker
  */
 public class Grass extends Plant {
 
@@ -54,13 +54,6 @@ public class Grass extends Plant {
      * Time in steps between plant growth attempts.
      **/
     private final int plantINTERVAL = 5;
-
-    /**
-     * Plant-entity has the ability to make leaves.
-     * This may be used to disallow leaf-creation after the
-     * plant has grown to be taller.
-     */
-    private boolean canMakeLeaves = true;
 
     /**
      * The contructor method of the grass entity. This sets GUI colors and
@@ -122,7 +115,7 @@ public class Grass extends Plant {
      *
      * @return TRUE if this plant-entity will be allowed to spawn
      * a leaf to either the right or left.
-     * @see MainSimulation.java growthManage()
+     * @see MainSimulation growthManage()
      */
     public final boolean canGrowLeaf() {
         Entity left = checkAdjacent(
@@ -268,7 +261,7 @@ public class Grass extends Plant {
      * Handles the complete death of a plant.
      *
      * @return Returns a list of the deleted plant-entities.
-     * @see MainSimulation.java growthManage()
+     * @see MainSimulation growthManage()
      */
     public final ArrayList<Entity> die() {
         ArrayList<Entity> deletedPlants = new ArrayList<>();

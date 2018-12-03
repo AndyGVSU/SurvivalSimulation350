@@ -9,37 +9,54 @@ import java.io.IOException;
 
 /******************************************************************************
  * Simulation Record class.
+ * <p>
  * Handles reading and writing the MainSimulation class.
+ * <p>
  * Reads and writes the entity grid, a two-dimensional grid
  * of serializable Entity objects from the MainSimulation class.
+ * <p>
  * Additionally, writes the total number of steps for a
  * simulation.
  * @author Andy Hudson
  *****************************************************************************/
 public class SimulationRecord {
-    /** The default directory to save simulation files to. */
+    /**
+     * The default directory to save simulation files to.
+     */
     private final String defaultDirectory = "sim01";
-    /** The file name of a simulation file, followed by the step number. */
+    /**
+     * The file name of a simulation file, followed by the step number.
+     */
     private final String fileID = "sim";
-    /** Simulation file extension (text). */
+    /**
+     * Simulation file extension (text).
+     */
     private final String fileExtension = ".txt";
-    /** The file name of a simulation's total steps file. */
+    /**
+     * The file name of a simulation's total steps file.
+     */
     private final String totalStepsID = "total";
-    /** The current working directory. */
+    /**
+     * The current working directory.
+     */
     private File directory;
 
-    /** @throws IOException If the default directory cannot be set. */
+    /**
+     * @throws IOException If the default directory cannot be set.
+     */
     public SimulationRecord() throws IOException {
         setDirectory(defaultDirectory);
     }
 
-    /** Writes a given step from the provided simulation to a file.
+    /**
+     * Writes a given step from the provided simulation to a file.
      * This method is called automatically when a new step is entered,
      * so saving is done automatically -- the user does not control it.
+     *
      * @param step The simulation step to write to file.
-     * @param sim The MainSimulation to take data from.
+     * @param sim  The MainSimulation to take data from.
      * @throws IOException When there is an error in writing objects.
-     * */
+     */
     public void writeStep(final int step,
                           final MainSimulation sim) throws IOException {
         File newStep = new File(directory,
@@ -60,13 +77,15 @@ public class SimulationRecord {
         writeTotalSteps(sim.getTotalSteps());
     }
 
-    /** Reads a given step from the simulation.
+    /**
+     * Reads a given step from the simulation.
      * Overwrites the entities in the simulation object.
+     *
      * @param step The step to read from file.
-     * @param sim The MainSimulation object to load data into.
-     * @throws IOException When there is an error reading objects.
+     * @param sim  The MainSimulation object to load data into.
+     * @throws IOException            When there is an error reading objects.
      * @throws ClassNotFoundException When serialized data is outdated.
-     * */
+     */
     public void readStep(final int step, final MainSimulation sim)
             throws IOException, ClassNotFoundException {
         File newStep = new File(directory,
@@ -88,7 +107,9 @@ public class SimulationRecord {
         objIn.close();
     }
 
-    /** Checks whether a simulation exists in the current directory.
+    /**
+     * Checks whether a simulation exists in the current directory.
+     *
      * @return False if there is an issue reading the total step file,
      * true otherwise.
      **/
@@ -101,11 +122,13 @@ public class SimulationRecord {
         return true;
     }
 
-    /** Writes the total number of steps in the current simulation to
+    /**
+     * Writes the total number of steps in the current simulation to
      * a file.
+     *
      * @param totalSteps The given number of total steps.
      * @throws IOException When there's an issue writing the file.
-     * */
+     */
     public void writeTotalSteps(final int totalSteps) throws IOException {
         File newTotal = new File(directory, totalStepsID + fileExtension);
 
@@ -115,11 +138,13 @@ public class SimulationRecord {
         intWrite.close();
     }
 
-    /** Reads from a file the total number of steps that was in
+    /**
+     * Reads from a file the total number of steps that was in
      * a given simulation.
+     *
      * @return The total number of steps read from the file.
      * @throws IOException When there's an issue reading the file.
-     * */
+     */
     public int readTotalSteps() throws IOException {
         File newTotal = new File(directory, totalStepsID + fileExtension);
 
@@ -131,10 +156,12 @@ public class SimulationRecord {
         return totalSteps;
     }
 
-    /** Sets the current working directory to a new directory.
+    /**
+     * Sets the current working directory to a new directory.
+     *
      * @param newDir The new directory (as a string).
      * @throws IOException When the directory cannot be made.
-     * */
+     */
     public void setDirectory(final String newDir) throws IOException {
         directory = new File(newDir);
         if (!directory.exists()) {
@@ -144,17 +171,21 @@ public class SimulationRecord {
         }
     }
 
-    /** Creates a new directory.
+    /**
+     * Creates a new directory.
+     *
      * @param newDir The new directory "file."
      * @return Whether the directory was successfully created.
-     * */
+     */
     public boolean makeDirectory(final File newDir) {
         return newDir.mkdir();
     }
 
-    /** Deletes all simulation files, writes total steps to zero.
+    /**
+     * Deletes all simulation files, writes total steps to zero.
+     *
      * @return Whether all files were successfully deleted or not.
-     * */
+     */
     public boolean reset() {
         int totalSteps = 0;
         try {

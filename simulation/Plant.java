@@ -3,7 +3,7 @@ package simulation;
 import java.util.ArrayList;
 
 /**
- * The plant-entity is initially created/set  by the system to the grid.
+ * The plant-entity is initially created/set by the system to the grid.
  * The plant-entity is extended by a unique "species" like the grass-entity.
  */
 public abstract class Plant extends Entity {
@@ -70,7 +70,7 @@ public abstract class Plant extends Entity {
     int rootGrowthTickCount = 0;
 
     /**
-     * Is this stem, the top one? Should fruit be grown from here?
+     * Is this stem the top one? Should fruit be grown from here?
      * When creating a new stem, make the old one false and
      * new one true.
      */
@@ -83,16 +83,15 @@ public abstract class Plant extends Entity {
      * The number of fruits a plant has created.
      */
     int fruitsProduced = 0;
-    /** The number of ticks to create a fruit & between fruits. */
+    /** The number of ticks to create a fruit (and between fruits). */
     final int fruitCreationDelayTime = 5;
     /**
      * The number of ticks since the last fruit produced.
      */
     int tickOfLastFruitMade = 0;
 
-
     /**
-     * The contructor method of the plant-entity. This sets GUI colors and
+     * The constructor method of the plant-entity. This sets GUI colors and
      * letters. To be extended by unique species' class, like the
      * grass-entity.
      * @param sim   The simulation object that contains the entire system.
@@ -147,14 +146,13 @@ public abstract class Plant extends Entity {
     public abstract boolean canGrowRoot();
 
     /**
+     * Checks for the plant-entity's depth,
+     * checks for the plant-entity's nutrient-level,
+     * checks for a left leaf,
+     * checks for the plant-entity as a top plant,
+     * then checks that the plant has grown less than max fruits.
      * @return    returns TRUE if this plant-stem has the availability
      *             to grow a fruit to its left or right leaf.
-     *
-     *             - Checks for the plant-entity's depth
-     *             - Checks for the plant-entity's nutrient-level
-     *             - Checks for a left leaf
-     *             - Checks for the plant-entity as a top plant
-     *             - Checks that the plant has grown less than max fruits
      */
     public final boolean canGrowFruit() {
         // return false;

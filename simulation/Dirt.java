@@ -6,7 +6,7 @@ package simulation;
  */
 public class Dirt extends Entity {
     /**
-     * The contructor method of the fruit entity. This sets GUI colors and
+     * The contructor method of the dirt entity. This sets GUI colors and
      * letters.
      *
      * @param sim   The simulation object that contains the entire system.

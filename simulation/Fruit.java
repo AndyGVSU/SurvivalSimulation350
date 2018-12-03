@@ -40,7 +40,7 @@ public class Fruit extends Entity {
     /**
      * @return  The number of ticks that this particular fruit takes to drop a
      *          seed.
-     * @see     MainSimulation.java fruitManage()
+     * @see     MainSimulation fruitManage()
      * @author  Brendon
      * @since   Nov 18, 2018
      */

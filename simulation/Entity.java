@@ -37,8 +37,8 @@ public abstract class Entity implements Serializable {
     private int col;
 
     /**
-     * The contructor method of the fruit entity. This sets GUI colors and
-     * letters.
+     * The generic constructor method for every entity.
+     * This sets GUI colors and letters.
      * @param sim   The simulation object that contains the entire system.
      * @param flow  A "copy" of the entity that this fruit was born from.
      * @param initDepth The distance of entity from the original entity.
