@@ -1,5 +1,6 @@
 package simulation;
 
-enum EntityType {
-    AIR, SOIL, TREE
-}
+/**
+ * Enum for possible entities.
+ */
+enum EntityType { AIR, SOIL, TREE }

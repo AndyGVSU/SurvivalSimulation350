@@ -10,7 +10,10 @@ import javax.swing.JLabel;
 import javax.swing.BoxLayout;
 import javax.swing.Box;
 
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Component;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -20,7 +23,7 @@ import java.awt.event.ActionListener;
  *
  * @author Anderson Hudson
  *********************************************************************/
-public class EntitySelectionPanel extends JPanel implements TypedPanel {
+public final class EntitySelectionPanel extends JPanel implements TypedPanel {
     /** The controlling GUI component. */
     private MainGUI parent;
     /** Number of rows on selection grid. (to limit size) */
@@ -31,13 +34,13 @@ public class EntitySelectionPanel extends JPanel implements TypedPanel {
     private final Dimension smallSpace = new Dimension(1, 30);
     /** Large layout space. */
     private final Dimension largeSpace = new Dimension(1, 80);
-    /** Toggle add button */
+    /** Toggle add button. */
     private JButton toggleAddButton;
-    /** Grass add button */
+    /** Grass add button. */
     private JButton grassButton;
-    /** Dirt add button */
+    /** Dirt add button. */
     private JButton dirtButton;
-    /** Air add button */
+    /** Air add button. */
     private JButton airButton;
 
     /** Constructor.
@@ -62,9 +65,9 @@ public class EntitySelectionPanel extends JPanel implements TypedPanel {
         JPanel gridPanel = new JPanel();
         gridPanel.setLayout(new GridLayout(rows, columns));
 
-        Grass grassReference = new Grass(null,null,-1,-1,-1);
-        Dirt dirtReference = new Dirt(null,null,-1,-1,-1);
-        Air airReference = new Air(null,null,-1,-1,-1);
+        Grass grassReference = new Grass(null, null, -1, -1, -1);
+        Dirt dirtReference = new Dirt(null, null, -1, -1, -1);
+        Air airReference = new Air(null, null, -1, -1, -1);
 
         grassButton = new JButton(String.valueOf(grassReference.getSymbol()));
         dirtButton = new JButton(String.valueOf(dirtReference.getSymbol()));
@@ -84,13 +87,18 @@ public class EntitySelectionPanel extends JPanel implements TypedPanel {
         resetAddButtons(null);
 
         AddListener listener = new AddListener();
-        for (Component c : gridPanel.getComponents())
-            if (c instanceof JButton)
+        for (Component c : gridPanel.getComponents()) {
+            if (c instanceof JButton) {
                 ((JButton) c).addActionListener(listener);
+            }
+        }
         toggleAddButton.addActionListener(listener);
     }
 
-    public void lockGUI(boolean lock) {
+    /** @param lock Whether to disable all buttons,
+     * update the toggle button, reset button colors,
+     * and reset the currently selected entity to add.*/
+    public void lockGUI(final boolean lock) {
         dirtButton.setEnabled(!lock);
         airButton.setEnabled(!lock);
         grassButton.setEnabled(!lock);
@@ -100,33 +108,39 @@ public class EntitySelectionPanel extends JPanel implements TypedPanel {
         parent.setClickEntity(null);
     }
 
-    private void updateToggleButton(boolean adds) {
+    /** @param adds Whether to add or view entities,
+     * and to update the toggle button according. */
+    private void updateToggleButton(final boolean adds) {
         JButton source = toggleAddButton;
         parent.setClickAdds(adds);
         if (parent.getClickAdds()) {
             source.setText("  ADDING ENTITIES");
             source.setBackground(Color.GREEN);
-        }
-        else {
+        } else {
             source.setText("VIEWING ENTITIES");
             source.setBackground(Color.LIGHT_GRAY);
         }
     }
-
-    private void resetAddButtons(JButton source) {
+    /** @param source The button selected, which is
+     *                colored green. */
+    private void resetAddButtons(final JButton source) {
         //ignore toggle button
-        if (source == toggleAddButton)
+        if (source == toggleAddButton) {
             return;
+        }
 
         Color unselected = Color.LIGHT_GRAY;
         grassButton.setBackground(unselected);
         dirtButton.setBackground(unselected);
         airButton.setBackground(unselected);
 
-        if (source != null)
+        if (source != null) {
             source.setBackground(Color.GREEN);
+        }
     }
 
+    /** Listener class for all buttons in EntitySelectionPanel.
+     * Sets the entity type to add on a grid button click. */
     private class AddListener implements ActionListener {
         @Override
         public void actionPerformed(final ActionEvent e) {
@@ -134,13 +148,13 @@ public class EntitySelectionPanel extends JPanel implements TypedPanel {
 
             resetAddButtons(source);
             if (source == grassButton) {
-                parent.setClickEntity(new Grass(null,null,0,0,0));
+                parent.setClickEntity(new Grass(null, null, 0, 0, 0));
             }
             if (source == dirtButton) {
-                parent.setClickEntity(new Dirt(null,null,0,0,0));
+                parent.setClickEntity(new Dirt(null, null, 0, 0, 0));
             }
             if (source == airButton) {
-                parent.setClickEntity(new Air(null,null,0,0,0));
+                parent.setClickEntity(new Air(null, null, 0, 0, 0));
             }
             if (source == toggleAddButton) {
                 updateToggleButton(!parent.getClickAdds());

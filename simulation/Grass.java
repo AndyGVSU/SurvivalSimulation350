@@ -81,7 +81,7 @@ public class Grass extends Plant {
 	 * @return	Returns TRUE if this entire plant is allowed to
 	 * 			grow another root during this tick.
 	 */
-	public boolean canGrowRoot() {
+	public final boolean canGrowRoot() {
 		// Specifies the original-grass as responsible for this logic.
 		if (this.getDepth() == 0
 				&& nutrients >= growRootRequirement
@@ -103,11 +103,9 @@ public class Grass extends Plant {
 	 * 			a leaf to either the right or left.
 	 * @see 	MainSimulation.java growthManage()
 	 */
-	public boolean canGrowLeaf() {
-		Entity left = checkAdjacent(AdjacentEntities.LEFT,
-				this.getRow(), this.getColumn());
-		Entity right = checkAdjacent(AdjacentEntities.RIGHT,
-				this.getRow(), this.getColumn());
+	public final boolean canGrowLeaf() {
+		Entity left = checkAdjacent(AdjacentEntities.LEFT, this.getRow(), this.getColumn());
+		Entity right = checkAdjacent(AdjacentEntities.RIGHT, this.getRow(), this.getColumn());
 		return (nutrients >= growLeafRequirement
 				&& (left instanceof Air
 					&& left.getNutrients() > 0)
@@ -120,9 +118,10 @@ public class Grass extends Plant {
 	 * This handles the creation of a new plant-entity above the
 	 * current plant-entity.
 	 */
-	public void growPlant() {
-		if (checkAdjacent(AdjacentEntities.UP, this.getRow(),
-				this.getColumn()) instanceof Air) {
+
+	public final void growPlant() {
+		if (checkAdjacent(AdjacentEntities.UP, this.getRow(), this.getColumn())
+				instanceof Air) {
 			Grass g = new Grass(simulation,
 					null, this.getDepth() + 1,
 					this.getRow() - 1, this.getColumn());
@@ -140,7 +139,7 @@ public class Grass extends Plant {
 	 * left--if taken, grows a leaf to the right of the current
 	 * plant-entity.
 	 */
-	public void growLeaf() {
+	public final void growLeaf() {
 		if (checkAdjacent(AdjacentEntities.LEFT, this.getRow(), this.getColumn())
 				instanceof Air) {
 			Leaf l = new Leaf(simulation, this,
@@ -160,7 +159,7 @@ public class Grass extends Plant {
 	/** Called on the "grass" entity at depth == 0. This grows a
 	 *  root somewhere below this grass entity.
 	 */
-	public void growRoot() {
+	public final void growRoot() {
 		// Setting this helper variable to the current-entity's row.
 		int tempRow = this.getRow();
 
@@ -169,8 +168,9 @@ public class Grass extends Plant {
         // grass-entity.
 		while (tempRow < simulation.getRows() - 1) {
 			// If there's no dirt, stop checking downwards
-			if (checkAdjacent(AdjacentEntities.DOWN, tempRow,
-					this.getColumn()) instanceof Air) {
+			if (checkAdjacent(AdjacentEntities.DOWN, tempRow, this.getColumn())
+					instanceof Air) {
+
 				break;
 			}
 			// Check below the current space for dirt-entity
@@ -217,7 +217,7 @@ public class Grass extends Plant {
      *  called in the case that canGrowFruit() returns TRUE. This method
      *  destroys a left or right leaf then creates a fruit entity in its place.
 	 */
-	public void growFruit() {
+	public final void growFruit() {
 		Entity e = checkAdjacent(AdjacentEntities.LEFT, this.getRow(), this.getColumn());
         if (e instanceof Leaf) {
             Fruit f = new Fruit(simulation, this,
@@ -234,7 +234,7 @@ public class Grass extends Plant {
      * @return  Returns a list of the deleted plant-entities.
      * @see     MainSimulation.java growthManage()
      */
-	public ArrayList<Entity> die() {
+	public final ArrayList<Entity> die() {
 		ArrayList<Entity> deletedPlants = new ArrayList<>();
 
 		if (getFlowTo() instanceof Plant) {
