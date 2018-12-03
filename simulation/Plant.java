@@ -11,10 +11,17 @@ public abstract class Plant extends Entity {
     /** A list of the collector-entities that feed to this entity. */
     protected ArrayList<Collector> nutrientsFrom;
 
+    /** Adds a Collector object that feeds nutrients to this entity.
+     * @param c The Collector object to add.
+     * */
     public void addToNutrientsFrom(final Collector c) {
         nutrientsFrom.add(c);
     }
 
+    /** Removes an Entity object that fed nutrients to this entity
+     *  for cleanup.
+     * @param c The Entity object to remove.
+     */
     public void removeNutrientsFrom(final Entity c) {
         nutrientsFrom.remove(c);
     }
@@ -22,15 +29,15 @@ public abstract class Plant extends Entity {
     /**
      * The nutrients required to grow another plant-entity.
      */
-    public int growPlantRequirement;
+    int growPlantRequirement;
     /**
      * The nutrients required to grow a leaf-entity from this entity.
      */
-    public int growLeafRequirement;
+    int growLeafRequirement;
     /**
      * The nutrients required to grow a root-entity from the plant.
      */
-    public int growRootRequirement;
+    int growRootRequirement;
     /**
      * The nutrients required to create a single fruit on the plant.
      */
@@ -39,49 +46,49 @@ public abstract class Plant extends Entity {
     /**
      * A plant stem may grow to this height.
      */
-    protected int maxStemDepth;
+    int maxStemDepth;
     /**
      * Number of roots grown. Keeps track for plant-unique max roots.
      **/
-    protected int rootsGrown = 0;
+    int rootsGrown = 0;
     /**
      * Max number of roots for this particular plant.
      **/
-    protected int maxRoots;
+    int maxRoots;
     /**
      * A root may grow once every X steps.
      **/
-    protected int rootGrowthInterval;
+    int rootGrowthInterval;
     /**
      * A plant may grow once every X steps.
      **/
-    protected int plantGrowthInterval;
+    int plantGrowthInterval;
 
     /**
      * A counter for limiting the root growth.
      */
-    protected int rootGrowthTickCount = 0;
+    int rootGrowthTickCount = 0;
 
     /**
      * Is this stem, the top one? Should fruit be grown from here?
      * When creating a new stem, make the old one false and
      * new one true.
      */
-    protected boolean isTopStem = true; // Unimplemented - Brendon Nov 18
+    boolean isTopStem = true; // Unimplemented - Brendon Nov 18
     /**
      * The number of fruits a plant-entity can create in its lifetime.
      */
-    protected final int maxFruitsProducable = 2;
+    final int maxFruitsProducable = 2;
     /**
      * The number of fruits a plant has created.
      */
-    protected int fruitsProduced = 0;
+    int fruitsProduced = 0;
     /** The number of ticks to create a fruit & between fruits. */
-    protected int fruitCreationDelayTime = 5;
+    final int fruitCreationDelayTime = 5;
     /**
      * The number of ticks since the last fruit produced.
      */
-    protected int tickOfLastFruitMade = 0;
+    int tickOfLastFruitMade = 0;
 
 
     /**
@@ -159,7 +166,7 @@ public abstract class Plant extends Entity {
                 && isTopStem
                 && (simulation.getCurrentStep() - tickOfLastFruitMade)
                 >= fruitCreationDelayTime
-                && this.getLifeSteps()> fruitCreationDelayTime) {
+                && this.getLifeSteps() > fruitCreationDelayTime) {
 
             System.out.println("Growing Fruit - r"
                     + this.getRow() + " - c" + this.getColumn());

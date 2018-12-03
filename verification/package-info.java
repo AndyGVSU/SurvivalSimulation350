@@ -1,4 +1,4 @@
-package verification;
 /**********************************************************************
- * Contains all test cases for SurvivalSimulation350.
+ * Contains all JUnit tests for SurvivalSimulation350.
  *********************************************************************/
+package verification;

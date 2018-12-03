@@ -156,7 +156,7 @@ public abstract class Entity implements Serializable {
             final int initCol) {
         switch (direction) {
         case UP:
-            return simulation.getEntity(initRow - 1 , initCol);
+            return simulation.getEntity(initRow - 1, initCol);
         case DOWN:
             return simulation.getEntity(initRow + 1, initCol);
         case LEFT:
