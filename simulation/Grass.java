@@ -72,7 +72,7 @@ public class Grass extends Plant {
 		rootGrowthInterval = rootINTERVAL;
 		plantGrowthInterval = plantINTERVAL;
 
-		color = 0;
+		this.setColor(0);
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class Grass extends Plant {
 	 */
 	public final boolean canGrowRoot() {
 		// Specifies the original-grass as responsible for this logic.
-		if (depth == 0
+		if (this.getDepth() == 0
 				&& nutrients >= growRootRequirement
 				&& rootsGrown < maxRoots - 1
 				&& rootGrowthTickCount >= rootGrowthInterval) {
@@ -104,8 +104,8 @@ public class Grass extends Plant {
 	 * @see 	MainSimulation.java growthManage()
 	 */
 	public final boolean canGrowLeaf() {
-		Entity left = checkAdjacent(AdjacentEntities.LEFT, row, col);
-		Entity right = checkAdjacent(AdjacentEntities.RIGHT, row, col);
+		Entity left = checkAdjacent(AdjacentEntities.LEFT, this.getRow(), this.getColumn());
+		Entity right = checkAdjacent(AdjacentEntities.RIGHT, this.getRow(), this.getColumn());
 		return (nutrients >= growLeafRequirement
 				&& (left instanceof Air
 					&& left.getNutrients() > 0)
@@ -118,13 +118,16 @@ public class Grass extends Plant {
 	 * This handles the creation of a new plant-entity above the
 	 * current plant-entity.
 	 */
+
 	public final void growPlant() {
-		if (checkAdjacent(AdjacentEntities.UP, row, col)
+		if (checkAdjacent(AdjacentEntities.UP, this.getRow(), this.getColumn())
 				instanceof Air) {
 			Grass g = new Grass(simulation,
-					null, depth + 1, row - 1, col);
+					null, this.getDepth() + 1,
+					this.getRow() - 1, this.getColumn());
 			this.setFlowTo(g);
-			simulation.setEntity(row - 1, col, g);
+			simulation.setEntity(this.getRow() - 1,
+					this.getColumn(), g);
 			isTopStem = false;
 		}
 	}
@@ -137,18 +140,18 @@ public class Grass extends Plant {
 	 * plant-entity.
 	 */
 	public final void growLeaf() {
-		if (checkAdjacent(AdjacentEntities.LEFT, row, col)
+		if (checkAdjacent(AdjacentEntities.LEFT, this.getRow(), this.getColumn())
 				instanceof Air) {
 			Leaf l = new Leaf(simulation, this,
-					depth + 1, row, col - 1);
+					this.getDepth() + 1, this.getRow(), this.getColumn() - 1);
 			nutrientsFrom.add(l);
-			simulation.setEntity(row, col - 1, l);
-		} else if (checkAdjacent(AdjacentEntities.RIGHT, row, col)
+			simulation.setEntity(this.getRow(), this.getColumn() - 1, l);
+		} else if (checkAdjacent(AdjacentEntities.RIGHT, this.getRow(), this.getColumn())
 				instanceof Air) {
 			Leaf l = new Leaf(simulation, this,
-					depth + 1, row, col + 1);
+					this.getDepth() + 1, this.getRow(), this.getColumn() + 1);
 			nutrientsFrom.add(l);
-			simulation.setEntity(row, col + 1, l);
+			simulation.setEntity(this.getRow(), this.getColumn() + 1, l);
 		}
 	}
 
@@ -158,46 +161,50 @@ public class Grass extends Plant {
 	 */
 	public final void growRoot() {
 		// Setting this helper variable to the current-entity's row.
-		int tempRow = row;
+		int tempRow = this.getRow();
 
         // Check for dirt spots below the depth-zero grass to
         // add another root. Iterate down rows, below the main
         // grass-entity.
 		while (tempRow < simulation.getRows() - 1) {
 			// If there's no dirt, stop checking downwards
-			if (checkAdjacent(AdjacentEntities.DOWN, tempRow, col)
+			if (checkAdjacent(AdjacentEntities.DOWN, tempRow, this.getColumn())
 					instanceof Air) {
+
 				break;
 			}
 			// Check below the current space for dirt-entity
-			if (checkAdjacent(AdjacentEntities.DOWN, tempRow, col)
-                    instanceof Dirt) {
+			if (checkAdjacent(AdjacentEntities.DOWN, tempRow,
+					this.getColumn()) instanceof Dirt) {
 				Root r = new Root(simulation,
-                        simulation.getEntity(tempRow, col),
-                        tempRow - row + 1, tempRow + 1, col);
-				simulation.setEntity(tempRow + 1, col, r);
+                        simulation.getEntity(tempRow, this.getColumn()),
+                        tempRow - this.getRow() + 1,
+						tempRow + 1, this.getColumn());
+				simulation.setEntity(tempRow + 1,
+						this.getColumn(), r);
 				nutrientsFrom.add(r);
 				break;
 			}
             // Check to the right of current space for dirt-entity
-			if (checkAdjacent(AdjacentEntities.RIGHT, tempRow, col)
-                    instanceof Dirt && tempRow > row + 1) {
+			if (checkAdjacent(AdjacentEntities.RIGHT,
+					tempRow, this.getColumn())
+                    instanceof Dirt && tempRow > this.getRow() + 1) {
 				Root r = new Root(simulation,
-                        simulation.getEntity(tempRow, col),
-                        tempRow - row + 1,
-                        tempRow, col + 1);
+                        simulation.getEntity(tempRow, this.getColumn()),
+                        tempRow - this.getRow() + 1,
+                        tempRow, this.getColumn() + 1);
 				simulation.setEntity(r.getRow(),
                         r.getColumn(), r);
 				nutrientsFrom.add(r);
 				break;
 			}
             // Check to the left of current space for dirt-entity
-			if (checkAdjacent(AdjacentEntities.LEFT, tempRow, col)
-                    instanceof Dirt && tempRow > row + 1) {
+			if (checkAdjacent(AdjacentEntities.LEFT, tempRow, this.getColumn())
+                    instanceof Dirt && tempRow > this.getRow() + 1) {
 				Root r = new Root(simulation,
-                        simulation.getEntity(tempRow, col),
-                        tempRow - row + 1, tempRow, col - 1);
-				simulation.setEntity(tempRow, col - 1, r);
+                        simulation.getEntity(tempRow, this.getColumn()),
+                        tempRow - this.getRow() + 1, tempRow, this.getColumn() - 1);
+				simulation.setEntity(tempRow, this.getColumn() - 1, r);
 				nutrientsFrom.add(r);
 				break;
 			}
@@ -211,14 +218,14 @@ public class Grass extends Plant {
      *  destroys a left or right leaf then creates a fruit entity in its place.
 	 */
 	public final void growFruit() {
-		Entity e = checkAdjacent(AdjacentEntities.LEFT, row, col);
+		Entity e = checkAdjacent(AdjacentEntities.LEFT, this.getRow(), this.getColumn());
         if (e instanceof Leaf) {
             Fruit f = new Fruit(simulation, this,
-                    depth + 1, row, col - 1);
-            simulation.setEntity(row, col - 1, f);
+                    this.getDepth() + 1, this.getRow(), this.getColumn() - 1);
+            simulation.setEntity(this.getRow(), this.getColumn() - 1, f);
             nutrientsFrom.remove(e);
             fruitsProduced++;
-			tickOfLastFruitMade = lifeSteps;
+			tickOfLastFruitMade = this.getLifeSteps();
         }
 	}
 

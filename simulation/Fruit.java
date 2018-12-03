@@ -23,7 +23,7 @@ public class Fruit extends Entity {
         name = "FRUIT";
         symbol = 'F';
         final int redColor = 5;
-        color = redColor;
+        this.setColor(redColor);
     }
 
     /**
@@ -62,7 +62,7 @@ public class Fruit extends Entity {
         Leaf l = new Leaf(simulation, this.getFlowTo(), getDepth(),
                 getRow(), getColumn());
         ((Plant) this.getFlowTo()).addToNutrientsFrom(l);
-        simulation.setEntity(row, col, l);
+        simulation.setEntity(this.getRow(), this.getColumn(), l);
 
         // For all columns within the reach of side-distance from the original
         // column, check the ground for viability, then plant seed.
@@ -72,15 +72,16 @@ public class Fruit extends Entity {
         // Put columns to check into a random order
         int lowestColumn;
         int highestColumn;
-        if (col - fruitDropSideDistance < 0) {
+        if (this.getColumn() - fruitDropSideDistance < 0) {
             lowestColumn = 0;
         } else {
-            lowestColumn = col - fruitDropSideDistance;
+            lowestColumn = this.getColumn() - fruitDropSideDistance;
         }
-        if (col + fruitDropSideDistance > simulation.getColumns()) {
+        if (this.getColumn()
+                + fruitDropSideDistance > simulation.getColumns()) {
             highestColumn = simulation.getColumns();
         } else {
-            highestColumn = col + fruitDropSideDistance;
+            highestColumn = this.getColumn() + fruitDropSideDistance;
         }
         int numberOfColumns = highestColumn - lowestColumn + 1;
         int[] columnsToCheck = new int[numberOfColumns];
@@ -112,7 +113,7 @@ public class Fruit extends Entity {
             // A random column within range to check for valid planting
             tempCol = columnsToCheck[i];
             // Iterate "downward" until hitting dirt.
-            for (int tempRow = row; tempRow < simulation.getRows();
+            for (int tempRow = this.getRow(); tempRow < simulation.getRows();
                  tempRow++) {
                 // Found dirt!
                 if (simulation.getEntity(tempRow, tempCol).getSymbol() == 'D') {

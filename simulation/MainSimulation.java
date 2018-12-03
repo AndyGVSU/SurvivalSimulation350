@@ -139,10 +139,10 @@ public class MainSimulation {
                 if (!(entityGrid[rows - numberOfDirtLayers - 1]
                         [result] instanceof Plant)) {
                     setEntity(rows - numberOfDirtLayers - 1,
-                            result, new Grass(this,
-                                    null, 0,
-                                    rows - numberOfDirtLayers - 1,
-                                    result));
+                        result, new Grass(this,
+                        null, 0,
+                        rows - numberOfDirtLayers - 1,
+                        result));
                     plantCount = plantCount + 1;
                     break;
                 }
@@ -465,6 +465,7 @@ public class MainSimulation {
 
                     // Plant-based boolean on if the root should grow
                     // Brendon would suggest expanding this to leaf and stem.
+
                     // The depth-zero plant will be responsible for limiting
                     // root growth.
                     if (((Plant) e).canGrowRoot()) {
@@ -494,7 +495,8 @@ public class MainSimulation {
 
             // If the fruit has lasted a certain amount of time..
             if (f.getLifeSteps() > ((Fruit) f).getFruitDropTime()) {
-                System.out.println("SeedDrop r" + f.row + " - c" + f.col);
+                System.out.println("SeedDrop r" + f.getRow()
+                        + " - c" + f.getColumn());
                 ((Fruit) f).seedDrop();
                 continue;
             }
