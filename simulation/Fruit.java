@@ -116,10 +116,10 @@ public class Fruit extends Entity {
             for (int tempRow = this.getRow(); tempRow < simulation.getRows();
                  tempRow++) {
                 // Found dirt!
-                if (simulation.getEntity(tempRow, tempCol).getSymbol() == 'D') {
+                if (simulation.getEntity(tempRow, tempCol) instanceof Dirt) {
                     // If the spot above the dirt is air..
                     if (simulation.getEntity(tempRow - 1,
-                            tempCol).getSymbol() == '.') {
+                            tempCol) instanceof Air) {
                         simulation.setEntity(tempRow - 1, tempCol,
                                 new Grass(simulation, null, 0,
                                         tempRow - 1, tempCol));
