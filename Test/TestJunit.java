@@ -134,19 +134,8 @@ public class TestJunit {
         prevCurrentStep = prevCurrentStep - 1;
         assertEquals(prevCurrentStep, this.Testsimulation.getCurrentStep());
     }
-    @Test
-    public void T15_GrassCanGrow() throws IOException {
-       this.Testsimulation.stepForward();
-       this.Testsimulation.setEntity(26, 10, new Grass(this.Testsimulation, null, 0, 26, 10));
-       this.Testsimulation.getEntity(26,10).setNutrients(200);
-       for(int t = 0; t < 12; t++) {
-           this.Testsimulation.stepForward();
-       }
-        assertEquals('G', this.Testsimulation.getEntity(25, 10).getSymbol());
-
-    }
     @After
-    public void T16_Reset() {
+    public void T15_Reset() {
         this.Testsimulation.reset(true);
 
             for (int j = 0; j < this.Testsimulation.getColumns(); j++) {
